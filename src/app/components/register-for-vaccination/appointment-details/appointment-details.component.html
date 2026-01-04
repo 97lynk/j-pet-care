@@ -76,7 +76,7 @@
         </mat-form-field>
       }
 
-      @if (appointmentForm.valid && selectedPrefecture && selectedLocation && selectedTimeSlot) {
+      @if (selectedPrefecture && selectedLocation && selectedTimeSlot) {
         <div class="summary-label">
           {{ selectedPrefecture.name | translate }} - {{ selectedLocation.name }} - {{ appointmentForm.get('appointmentDate')?.value | date: 'mediumDate' }} - {{ selectedTimeSlot.label | translate }}
         </div>

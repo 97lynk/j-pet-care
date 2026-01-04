@@ -7,11 +7,17 @@
       <mat-form-field floatLabel="always" class="full">
         <mat-label>{{ 'customerForm.fullName' | translate }}</mat-label>
         <input matInput formControlName="fullName">
+        @if (customerForm.get('fullName')?.hasError('required')) {
+          <mat-error>{{ 'validation.required' | translate }}</mat-error>
+        }
       </mat-form-field>
 
       <mat-form-field class="full">
         <mat-label>{{ 'customerForm.furigana' | translate }}</mat-label>
         <input matInput formControlName="furigana">
+        @if (customerForm.get('furigana')?.hasError('required')) {
+          <mat-error>{{ 'validation.required' | translate }}</mat-error>
+        }
       </mat-form-field>
 
       <mat-form-field class="full">
@@ -20,6 +26,12 @@
                formControlName="postalCode"
                (input)="onPostalCodeChange()"
         >
+        @if (customerForm.get('postalCode')?.hasError('required')) {
+          <mat-error>{{ 'validation.required' | translate }}</mat-error>
+        }
+        @if (customerForm.get('postalCode')?.hasError('pattern')) {
+          <mat-error>{{ 'validation.postalCodePattern' | translate }}</mat-error>
+        }
       </mat-form-field>
 
       <mat-form-field class="full">
@@ -31,16 +43,25 @@
             </mat-option>
           }
         </mat-select>
+        @if (customerForm.get('prefecture')?.hasError('required')) {
+          <mat-error>{{ 'validation.required' | translate }}</mat-error>
+        }
       </mat-form-field>
 
       <mat-form-field class="full">
         <mat-label>{{ 'customerForm.municipality.label' | translate }}</mat-label>
         <input matInput placeholder="{{ 'customerForm.municipality.placeholder' | translate }}" formControlName="municipality">
+        @if (customerForm.get('municipality')?.hasError('required')) {
+          <mat-error>{{ 'validation.required' | translate }}</mat-error>
+        }
       </mat-form-field>
 
       <mat-form-field class="full">
         <mat-label>{{ 'customerForm.address.label' | translate }}</mat-label>
         <input matInput placeholder="{{ 'customerForm.address.placeholder' | translate }}" formControlName="address">
+        @if (customerForm.get('address')?.hasError('required')) {
+          <mat-error>{{ 'validation.required' | translate }}</mat-error>
+        }
       </mat-form-field>
 
       <mat-form-field class="full">
@@ -51,11 +72,20 @@
       <mat-form-field class="full">
         <mat-label>{{ 'customerForm.phone.label' | translate }}</mat-label>
         <input matInput placeholder="{{ 'customerForm.phone.placeholder' | translate }}" formControlName="phone">
+        @if (customerForm.get('phone')?.hasError('required')) {
+          <mat-error>{{ 'validation.required' | translate }}</mat-error>
+        }
       </mat-form-field>
 
       <mat-form-field class="full">
         <mat-label>{{ 'customerForm.email' | translate }}</mat-label>
         <input matInput formControlName="email">
+        @if (customerForm.get('email')?.hasError('required')) {
+          <mat-error>{{ 'validation.required' | translate }}</mat-error>
+        }
+        @if (customerForm.get('email')?.hasError('email')) {
+          <mat-error>{{ 'validation.email' | translate }}</mat-error>
+        }
       </mat-form-field>
 
       <app-appointment-details [form]="customerForm.get('appointment')" />

@@ -5,6 +5,8 @@ import {MatRadioModule} from '@angular/material/radio';
 import {MatTableModule} from '@angular/material/table';
 import {CommonModule} from '@angular/common';
 import {TranslateModule} from '@ngx-translate/core';
+import {MatCardModule} from "@angular/material/card";
+import {MatDivider} from "@angular/material/list";
 
 @Component({
   selector: 'app-vaccine-combo-form',
@@ -16,7 +18,9 @@ import {TranslateModule} from '@ngx-translate/core';
     ReactiveFormsModule,
     MatRadioModule,
     MatTableModule,
-    TranslateModule
+    TranslateModule,
+    MatCardModule,
+    MatDivider,
   ]
 })
 export class VaccineComboFormComponent implements OnInit {

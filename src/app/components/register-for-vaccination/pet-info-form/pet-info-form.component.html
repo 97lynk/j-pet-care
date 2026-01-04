@@ -22,6 +22,9 @@
       <mat-form-field appearance="outline" class="full">
         <mat-label>{{ 'petForm.petName' | translate }}</mat-label>
         <input matInput formControlName="petName">
+        @if (petForm.get('petName')?.hasError('required')) {
+          <mat-error>{{ 'validation.required' | translate }}</mat-error>
+        }
       </mat-form-field>
 
       <!-- PET TYPE -->
@@ -35,6 +38,9 @@
       <mat-form-field appearance="outline" class="full">
         <mat-label>{{ 'petForm.petBreed' | translate }}</mat-label>
         <input matInput formControlName="petBreed">
+        @if (petForm.get('petBreed')?.hasError('required')) {
+          <mat-error>{{ 'validation.required' | translate }}</mat-error>
+        }
       </mat-form-field>
 
       <!-- BIRTH DATE -->
@@ -47,18 +53,27 @@
         >
         <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
         <mat-datepicker #picker />
+        @if (petForm.get('birthDate')?.hasError('required')) {
+          <mat-error>{{ 'validation.required' | translate }}</mat-error>
+        }
       </mat-form-field>
 
       <!-- FUR COLOR -->
       <mat-form-field appearance="outline" class="full">
         <mat-label>{{ 'petForm.furColor' | translate }}</mat-label>
         <input matInput formControlName="furColor">
+        @if (petForm.get('furColor')?.hasError('required')) {
+          <mat-error>{{ 'validation.required' | translate }}</mat-error>
+        }
       </mat-form-field>
 
       <!-- WEIGHT -->
       <mat-form-field appearance="outline" class="full">
         <mat-label>{{ 'petForm.weight' | translate }}</mat-label>
         <input matInput type="number" formControlName="weight" (input)="onWeightChange(petForm.value.weight!)">
+        @if (petForm.get('weight')?.hasError('required')) {
+          <mat-error>{{ 'validation.required' | translate }}</mat-error>
+        }
       </mat-form-field>
 
       <!-- GENDER -->
@@ -101,7 +116,7 @@
       </mat-checkbox>
       @if (form.get('healthCommitment')?.hasError('required')) {
         <mat-error>
-          Please consent this
+          {{ 'validation.requiredTrue' | translate }}
         </mat-error>
       }
 

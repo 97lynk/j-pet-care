@@ -19,20 +19,54 @@
   background: #f8f8f5;
   position: sticky;
   top: 0;
-  z-index: 1;
+  z-index: 10; /* Higher z-index to be above stepper */
 }
-
 
 .button-group {
-  display: flex;
-  justify-content: space-between;
-  gap: 1rem;
-}
-
-.mat-horizontal-stepper-header-container {
   position: sticky;
-  z-index: 1;
+  bottom: 0;
   background: white;
-  top: 0;
+  padding: 1rem;
+  border-top: 1px solid #e0e0e0;
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
 }
 
+.total-row {
+  text-align: right;
+  font-size: 1.2rem;
+  font-weight: bold;
+}
+
+.actions-row {
+  display: flex;
+  justify-content: flex-end; /* Default to right-align for desktop */
+  gap: 1rem; /* Gap between buttons on desktop */
+  width: 100%;
+}
+
+/* Mobile-specific styles for the action row */
+@media (max-width: 600px) {
+  .actions-row {
+    justify-content: space-between; /* Spread buttons apart on mobile */
+  }
+
+  .actions-row .submit-all-button {
+    flex-grow: 1; /* Make the submit button take up more space */
+  }
+}
+
+/* --- Sticky Stepper Header --- */
+/*
+  By targeting the `::ng-deep` pseudo-element, we can style the component's
+  internally generated header. We position it sticky below the language toggle.
+*/
+:host ::ng-deep .mat-horizontal-stepper-header-container {
+  position: sticky;
+  top: 0; /* Height of the language toggle panel */
+  background-color: white;
+  z-index: 9; /* Below language toggle but above content */
+  border-bottom: 1px solid #e0e0e0;
+}

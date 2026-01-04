@@ -48,20 +48,6 @@
       </div>
 
     </form>
-
-    <div class="button-group">
-      <div></div>
-      <div>
-        <button mat-raised-button color="accent" type="button" (click)="addPet()" style="margin-right: 1rem">
-          <mat-icon>add</mat-icon> {{ 'petForm.addPet' | translate }}
-        </button>
-
-        <button mat-raised-button [disabled]="customerInfoForm.invalid || petInfoForms.invalid" color="primary" type="submit" (click)="onSubmitPetInfo(stepper)">
-          <mat-icon>check</mat-icon> {{ 'petForm.submitAll' | translate }}
-        </button>
-      </div>
-      <div>Total: ¥{{ total | number }}</div>
-    </div>
   </mat-step>
 
   <mat-step>
@@ -69,3 +55,19 @@
     <app-register-success/>
   </mat-step>
 </mat-stepper>
+
+@if (stepper.selectedIndex === 0) {
+  <div class="button-group">
+    <div class="total-row">
+      <span>Total: ¥{{ total | number }}</span>
+    </div>
+    <div class="actions-row">
+      <button mat-raised-button color="accent" type="button" (click)="addPet()" class="add-pet-button">
+        <mat-icon>add</mat-icon> {{ 'petForm.addPet' | translate }}
+      </button>
+      <button mat-raised-button [disabled]="customerInfoForm.invalid || petInfoForms.invalid" color="primary" type="submit" (click)="onSubmitPetInfo(stepper)" class="submit-all-button">
+        <mat-icon>check</mat-icon> {{ 'petForm.submitAll' | translate }}
+      </button>
+    </div>
+  </div>
+}

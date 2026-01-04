@@ -7,6 +7,8 @@ import {MatFormFieldModule} from '@angular/material/form-field';
 import {MatInputModule} from '@angular/material/input';
 import {CommonModule} from '@angular/common';
 import {TranslateModule} from '@ngx-translate/core';
+import {MatCardModule} from "@angular/material/card";
+import {MatDivider} from "@angular/material/list";
 
 @Component({
   selector: 'app-vaccine-individual-form',
@@ -20,7 +22,9 @@ import {TranslateModule} from '@ngx-translate/core';
     MatCheckboxModule,
     MatFormFieldModule,
     MatInputModule,
-    TranslateModule
+    TranslateModule,
+    MatCardModule,
+    MatDivider,
   ]
 })
 export class VaccineIndividualFormComponent implements OnInit {

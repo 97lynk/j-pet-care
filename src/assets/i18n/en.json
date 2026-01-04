@@ -142,5 +142,12 @@
       "LARGE": "Large",
       "ALL": "All"
     }
+  },
+  "validation": {
+    "required": "This field is required.",
+    "email": "Please enter a valid email address.",
+    "pattern": "Please match the requested format.",
+    "postalCodePattern": "Please enter a valid postal code (e.g., 123-4567).",
+    "requiredTrue": "This box must be checked to proceed."
   }
 }
