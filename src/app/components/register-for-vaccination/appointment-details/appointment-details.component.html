@@ -6,27 +6,27 @@
       <mat-form-field appearance="outline" class="full">
         <mat-label>{{ 'appointmentDetailFrom.prefecture.label' | translate }}</mat-label>
         <mat-select
-          formControlName="prefecture"
+          formControlName="prefectureId"
           (selectionChange)="onPrefectureChange($event.value)"
         >
           @for (pref of prefectures; track pref.id) {
-            <mat-option [value]="pref.code">
+            <mat-option [value]="pref.id">
               {{ pref.name | translate }}
             </mat-option>
           }
         </mat-select>
-        @if (appointmentForm.get('prefecture')?.invalid) {
+        @if (appointmentForm.get('prefectureId')?.invalid) {
           <mat-error>
             {{ 'appointmentDetailFrom.prefecture.required' | translate }}
           </mat-error>
         }
       </mat-form-field>
 
-      @if (appointmentForm.get('prefecture')?.value) {
+      @if (appointmentForm.get('prefectureId')?.value) {
         <mat-form-field appearance="outline" class="full">
           <mat-label>{{ 'appointmentDetailFrom.location.label' | translate }}</mat-label>
           <mat-select
-            formControlName="location"
+            formControlName="locationId"
             (selectionChange)="onLocationChange($event.value)"
           >
             @for (item of filteredLocations; track item.id) {
@@ -35,7 +35,7 @@
               </mat-option>
             }
           </mat-select>
-          @if (appointmentForm.get('location')?.invalid) {
+          @if (appointmentForm.get('locationId')?.invalid) {
             <mat-error>
               {{ 'appointmentDetailFrom.location.required' | translate }}
             </mat-error>
@@ -43,13 +43,13 @@
         </mat-form-field>
       }
 
-      @if (appointmentForm.get('location')?.value) {
+      @if (appointmentForm.get('locationId')?.value) {
         <div class="full time-slot-radio">
           <mat-label>{{ 'appointmentDetailFrom.timeSlot.label' | translate }}</mat-label>
 
-          <mat-radio-group formControlName="timeSlot">
+          <mat-radio-group formControlName="timeSlotId">
             @for (slot of currentTimeSlots; track slot.id) {
-              <mat-radio-button class="full" [value]="slot.code">
+              <mat-radio-button class="full" [value]="slot.id">
                 {{ slot.label | translate }}
               </mat-radio-button>
             }
@@ -57,7 +57,7 @@
         </div>
       }
 
-      @if (appointmentForm.get('location')?.value) {
+      @if (appointmentForm.get('locationId')?.value) {
         <mat-form-field appearance="outline" class="full">
           <mat-label>{{ 'appointmentDetailFrom.date.label' | translate }}</mat-label>
           <input
@@ -76,7 +76,7 @@
         </mat-form-field>
       }
 
-      @if (selectedPrefecture && selectedLocation && selectedTimeSlot) {
+      @if (appointmentForm.valid && selectedPrefecture && selectedLocation && selectedTimeSlot) {
         <div class="summary-label">
           {{ selectedPrefecture.name | translate }} - {{ selectedLocation.name }} - {{ appointmentForm.get('appointmentDate')?.value | date: 'mediumDate' }} - {{ selectedTimeSlot.label | translate }}
         </div>

@@ -25,18 +25,39 @@ export function mockHttpInterceptor(req: HttpRequest<unknown>, next: HttpHandler
 
   // Handle GET for locations by prefecture
   if (url.includes('/public/appointments/prefectures/') && url.endsWith('/locations') && method === 'GET') {
-      const urlParts = url.split('/');
-      const prefectureCode = urlParts[urlParts.length - 2];
-      console.log(`Mock API: Intercepted GET /public/appointments/prefectures/${prefectureCode}/locations`);
-      // @ts-ignore
-      const locations = db.locations[prefectureCode];
-      return createResponse(locations);
+    const urlParts = url.split('/');
+    const prefectureCode = urlParts[urlParts.length - 2] as keyof typeof db.locations;
+    console.log(`Mock API: Intercepted GET /public/appointments/prefectures/${prefectureCode}/locations`);
+
+    const locations = db.locations[prefectureCode] || [];
+    return createResponse(locations);
   }
 
   // Handle POST for vaccine registration
   if (url.endsWith('/public/vaccines/register') && method === 'POST') {
     console.log('Mock API: Intercepted POST /public/vaccines/register', body);
-    return createResponse({ message: 'Mock registration successful!' });
+
+    // @ts-ignore
+    const appointment = body.customerInfo.appointment;
+    const prefecture = db.prefectures.find(p => p.id === appointment.prefectureId);
+
+    let location;
+    if (prefecture) {
+      // @ts-ignore
+      location = db.locations[prefecture.code]?.find(l => l.id === appointment.locationId);
+    }
+    // @ts-ignore
+    const timeSlot = location?.timeSlots.find(ts => ts.id === appointment.timeSlotId);
+
+    const mockResponse = {
+      registrationCode: `MOCK_${new Date().getTime()}`,
+      prefectureName: prefecture?.name || 'N/A',
+      locationName: location?.name || 'N/A',
+      timeSlotLabel: timeSlot?.label || 'N/A',
+      appointmentDate: appointment.appointmentDate
+    };
+
+    return createResponse(mockResponse);
   }
 
   // If no mock route is matched, pass the request through

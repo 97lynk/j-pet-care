@@ -5,9 +5,9 @@ import moment from 'moment';
 import {ProductService} from '../../services/product.service';
 import {DisplayProductDto, VaccineProductDto} from '../../models/product/product.dto';
 import {RegisterService} from '../../services/register.service';
-import {MatStepperModule} from '@angular/material/stepper';
+import {MatStepper, MatStepperModule} from '@angular/material/stepper';
 import {MatButtonToggleModule} from '@angular/material/button-toggle';
-import {CommonModule} from '@angular/common';
+import {CommonModule, DatePipe} from '@angular/common';
 import {CustomerInfoFormComponent} from './customer-info-form/customer-info-form.component';
 import {PetInfoFormComponent} from './pet-info-form/pet-info-form.component';
 import {VaccineComboFormComponent} from './vaccine-combo-form/vaccine-combo-form.component';
@@ -36,11 +36,14 @@ import {MatDividerModule} from '@angular/material/divider';
     MatButtonModule,
     MatIconModule,
     MatDividerModule
-  ]
+  ],
+  providers: [DatePipe]
 })
 export class RegisterForVaccinationComponent implements OnInit {
 
   total = 0;
+  finalRegistrationCode: string | null = null;
+  finalAppointmentDetails: string | null = null;
 
   customerInfoForm = this.fb.group({
     fullName: ['', Validators.required],
@@ -53,9 +56,9 @@ export class RegisterForVaccinationComponent implements OnInit {
     phone: ['', Validators.required],
     email: ['', [Validators.required, Validators.email]],
     appointment: this.fb.group({
-      prefecture: [null, Validators.required],
-      location: [null, Validators.required],
-      timeSlot: [{ value: null }, Validators.required],
+      prefectureId: [null, Validators.required],
+      locationId: [null, Validators.required],
+      timeSlotId: [null, Validators.required],
       appointmentDate: [moment().add(1, 'day').toDate(), Validators.required],
     }),
   });
@@ -71,7 +74,8 @@ export class RegisterForVaccinationComponent implements OnInit {
     private fb: FormBuilder,
     translate: TranslateService,
     private productService: ProductService,
-    private registerService: RegisterService
+    private registerService: RegisterService,
+    private datePipe: DatePipe
   ) {
     this.petInfoForms = this.fb.group({
       pets: this.fb.array([]),
@@ -199,14 +203,13 @@ export class RegisterForVaccinationComponent implements OnInit {
     }
   }
 
-  onSubmitPetInfo(stepper: any): void {
+  onSubmitPetInfo(stepper: MatStepper): void {
     if (this.customerInfoForm.valid && this.petInfoForms.valid) {
-      stepper.next();
-      this.registerVaccine();
+      this.registerVaccine(stepper);
     }
   }
 
-  registerVaccine(): void {
+  registerVaccine(stepper: MatStepper): void {
     const rawPetInfos = this.petInfoForms.getRawValue().pets;
     const petInfos = rawPetInfos.map((pet: any) => {
       const individualVaccineAmount: { [key: number]: number } = {};
@@ -231,7 +234,12 @@ export class RegisterForVaccinationComponent implements OnInit {
     };
 
     this.registerService.register(request).subscribe(response => {
-      console.log(response);
+      const date = this.datePipe.transform(response.appointmentDate, 'mediumDate');
+
+      this.finalRegistrationCode = response.registrationCode;
+      this.finalAppointmentDetails = `${response.prefectureName} ${response.locationName} - ${date} - ${response.timeSlotLabel}`;
+
+      stepper.next(); // Move to the success step
     });
   }
 

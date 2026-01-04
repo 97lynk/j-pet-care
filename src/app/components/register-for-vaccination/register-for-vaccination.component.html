@@ -52,11 +52,14 @@
 
   <mat-step>
     <ng-template matStepLabel>完了しました</ng-template>
-    <app-register-success/>
+    <app-register-success
+      [registrationCode]="finalRegistrationCode"
+      [appointmentDetails]="finalAppointmentDetails"
+    />
   </mat-step>
 </mat-stepper>
 
-@if (stepper.selectedIndex === 0) {
+@if (stepper.selectedIndex === 1) {
   <div class="button-group">
     <div class="total-row">
       <span>Total: ¥{{ total | number }}</span>

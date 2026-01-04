@@ -2,6 +2,14 @@ import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {Observable} from 'rxjs';
 
+export interface RegistrationResponse {
+  registrationCode: string;
+  prefectureName: string;
+  locationName: string;
+  timeSlotLabel: string;
+  appointmentDate: string; // Comes as an ISO string
+}
+
 @Injectable({
   providedIn: 'root',
 })
@@ -11,8 +19,7 @@ export class RegisterService {
 
   constructor(private http: HttpClient) { }
 
-  register(request: any): Observable<any> {
-    console.log('public/vaccines/register', request);
-    return this.http.post(this.API, request);
+  register(request: any): Observable<RegistrationResponse> {
+    return this.http.post<RegistrationResponse>(this.API, request);
   }
 }

@@ -28,7 +28,6 @@ import {MatInput} from "@angular/material/input";
     MatCardModule,
     MatNativeDateModule,
     MatInput,
-    // Add this module
   ]
 })
 export class AppointmentDetailsComponent implements OnInit {
@@ -52,45 +51,45 @@ export class AppointmentDetailsComponent implements OnInit {
     return this.form as FormGroup;
   }
 
-  onPrefectureChange(prefectureCode: string): void {
-    this.form?.get('location')?.reset();
-    this.form?.get('timeSlot')?.reset();
+  onPrefectureChange(prefectureId: number): void {
+    this.form?.get('locationId')?.reset();
+    this.form?.get('timeSlotId')?.reset();
     this.filteredLocations = [];
     this.currentTimeSlots = [];
 
-    if (prefectureCode) {
-      this.appointmentConfigService.getLocations(prefectureCode).subscribe(data => {
+    const selectedPrefecture = this.prefectures.find(p => p.id === prefectureId);
+    if (selectedPrefecture) {
+      this.appointmentConfigService.getLocations(selectedPrefecture.code).subscribe(data => {
         this.filteredLocations = data;
       });
     }
   }
 
   onLocationChange(locationId: number): void {
-    this.form?.get('timeSlot')?.reset();
+    this.form?.get('timeSlotId')?.reset();
     this.currentTimeSlots = [];
 
     const selectedLocation = this.filteredLocations.find(loc => loc.id === locationId);
     if (selectedLocation && selectedLocation.timeSlots) {
       this.currentTimeSlots = Array.from(selectedLocation.timeSlots);
-      // Optionally, auto-select the first time slot
       if (this.currentTimeSlots.length > 0) {
-        this.form?.get('timeSlot')?.setValue(this.currentTimeSlots[0].code);
+        this.form?.get('timeSlotId')?.setValue(this.currentTimeSlots[0].id);
       }
     }
   }
 
   get selectedPrefecture(): AppointmentPrefecture | undefined {
-    const code = this.appointmentForm.get('prefecture')?.value;
-    return this.prefectures.find(p => p.code === code);
+    const id = this.appointmentForm.get('prefectureId')?.value;
+    return this.prefectures.find(p => p.id === id);
   }
 
   get selectedLocation(): AppointmentLocation | undefined {
-    const id = this.appointmentForm.get('location')?.value;
+    const id = this.appointmentForm.get('locationId')?.value;
     return this.filteredLocations.find(l => l.id === id);
   }
 
   get selectedTimeSlot(): AppointmentTimeSlot | undefined {
-    const code = this.appointmentForm.get('timeSlot')?.value;
-    return this.currentTimeSlots.find(t => t.code === code);
+    const id = this.appointmentForm.get('timeSlotId')?.value;
+    return this.currentTimeSlots.find(t => t.id === id);
   }
 }

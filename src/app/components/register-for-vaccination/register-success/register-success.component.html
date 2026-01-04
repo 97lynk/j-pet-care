@@ -1,30 +1,43 @@
-<div class="success-wrapper">
-  <mat-card class="success-card mat-elevation-z3">
+@if (registrationCode && appointmentDetails) {
+  <div class="success-wrapper">
+    <mat-card class="success-card mat-elevation-z3">
 
-    <!-- CODE -->
-    <mat-card-title class="code">
-      Code: <b>HCM_123</b>
-    </mat-card-title>
+      <!-- CODE -->
+      <mat-card-title class="code">
+        <span>Code: <b>{{ registrationCode }}</b></span>
+        <button mat-icon-button [cdkCopyToClipboard]="registrationCode" aria-label="Copy registration code">
+          <mat-icon>content_copy</mat-icon>
+        </button>
+      </mat-card-title>
 
-    <!-- QR CODE -->
-    <div class="qr">
-      <qrcode
-        [qrdata]="'HCM_123'"
-        [width]="180">
-      </qrcode>
-    </div>
+      <!-- QR CODE -->
+      <div class="qr">
+        <qrcode
+          [qrdata]="registrationCode"
+          [width]="180">
+        </qrcode>
+      </div>
 
 
-    <!-- INFO -->
-    <mat-card-content class="info">
-      <div><b>Location:</b> HCM</div>
-      <div><b>Date & Time:</b> 12-03-2025 12:00</div>
-    </mat-card-content>
+      <!-- INFO -->
+      <mat-card-content class="info">
+        <div><b>Appointment:</b></div>
+        <div>{{ appointmentDetails }}</div>
+      </mat-card-content>
 
-    <!-- MESSAGE -->
-    <mat-card-footer class="message">
-      Your vaccine appointment was registered successfully!
-    </mat-card-footer>
+      <!-- MESSAGE -->
+      <mat-card-footer class="message">
+        Your vaccine appointment was registered successfully!
+      </mat-card-footer>
 
-  </mat-card>
-</div>
+    </mat-card>
+  </div>
+} @else {
+  <div class="success-wrapper">
+    <mat-card class="success-card mat-elevation-z3">
+      <mat-card-content>
+        <p>Processing your registration...</p>
+      </mat-card-content>
+    </mat-card>
+  </div>
+}
