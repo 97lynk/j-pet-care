@@ -1,105 +1,110 @@
-<mat-card class="container pet-card" *ngIf="form">
-  <mat-card-title>
-    <div style="display: flex; justify-content: space-between">
-      <div>{{ 'petForm.title' | translate }} {{ index + 1 }}</div>
-      <!-- REMOVE BUTTON -->
-      <button
-        *ngIf="index > 0"
-        mat-icon-button
-        color="warn"
-        type="button"
-        (click)="onClickRemove()">
-        <mat-icon>close</mat-icon>
-      </button>
-    </div>
-  </mat-card-title>
+@if (form) {
+  <mat-card class="container pet-card">
+    <mat-card-title>
+      <div style="display: flex; justify-content: space-between">
+        <div>{{ 'petForm.title' | translate }} {{ index + 1 }}</div>
+        <!-- REMOVE BUTTON -->
+        @if (index > 0) {
+          <button
+            mat-icon-button
+            color="warn"
+            type="button"
+            (click)="onClickRemove()">
+            <mat-icon>close</mat-icon>
+          </button>
+        }
+      </div>
+    </mat-card-title>
 
-  <form [formGroup]="petForm">
+    <form [formGroup]="petForm">
 
-    <!-- NAME -->
-    <mat-form-field appearance="outline" class="full">
-      <mat-label>{{ 'petForm.petName' | translate }}</mat-label>
-      <input matInput formControlName="petName">
-    </mat-form-field>
+      <!-- NAME -->
+      <mat-form-field appearance="outline" class="full">
+        <mat-label>{{ 'petForm.petName' | translate }}</mat-label>
+        <input matInput formControlName="petName">
+      </mat-form-field>
 
-    <!-- PET TYPE -->
-    <label class="section">{{ 'petForm.petType' | translate }}</label>
-    <mat-radio-group formControlName="petType" class="radio-group">
-      <mat-radio-button value="DOG">{{ 'petForm.dog' | translate }}</mat-radio-button>
-      <mat-radio-button value="CAT">{{ 'petForm.cat' | translate }}</mat-radio-button>
-    </mat-radio-group>
+      <!-- PET TYPE -->
+      <label class="section">{{ 'petForm.petType' | translate }}</label>
+      <mat-radio-group formControlName="petType" class="radio-group">
+        <mat-radio-button value="DOG">{{ 'petForm.dog' | translate }}</mat-radio-button>
+        <mat-radio-button value="CAT">{{ 'petForm.cat' | translate }}</mat-radio-button>
+      </mat-radio-group>
 
-    <!-- BREED -->
-    <mat-form-field appearance="outline" class="full">
-      <mat-label>{{ 'petForm.petBreed' | translate }}</mat-label>
-      <input matInput formControlName="petBreed">
-    </mat-form-field>
+      <!-- BREED -->
+      <mat-form-field appearance="outline" class="full">
+        <mat-label>{{ 'petForm.petBreed' | translate }}</mat-label>
+        <input matInput formControlName="petBreed">
+      </mat-form-field>
 
-    <!-- BIRTH DATE -->
-    <mat-form-field appearance="outline" class="full">
-      <mat-label>{{ 'petForm.birthDate' | translate }}</mat-label>
-      <input
-        matInput
-        [matDatepicker]="picker"
-        formControlName="birthDate"
-      >
-      <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-      <mat-datepicker #picker />
-    </mat-form-field>
+      <!-- BIRTH DATE -->
+      <mat-form-field appearance="outline" class="full">
+        <mat-label>{{ 'petForm.birthDate' | translate }}</mat-label>
+        <input
+          matInput
+          [matDatepicker]="picker"
+          formControlName="birthDate"
+        >
+        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+        <mat-datepicker #picker />
+      </mat-form-field>
 
-    <!-- FUR COLOR -->
-    <mat-form-field appearance="outline" class="full">
-      <mat-label>{{ 'petForm.furColor' | translate }}</mat-label>
-      <input matInput formControlName="furColor">
-    </mat-form-field>
+      <!-- FUR COLOR -->
+      <mat-form-field appearance="outline" class="full">
+        <mat-label>{{ 'petForm.furColor' | translate }}</mat-label>
+        <input matInput formControlName="furColor">
+      </mat-form-field>
 
-    <!-- WEIGHT -->
-    <mat-form-field appearance="outline" class="full">
-      <mat-label>{{ 'petForm.weight' | translate }}</mat-label>
-      <input matInput type="number" formControlName="weight" (input)="onWeightChange(petForm.value.weight!)">
-    </mat-form-field>
+      <!-- WEIGHT -->
+      <mat-form-field appearance="outline" class="full">
+        <mat-label>{{ 'petForm.weight' | translate }}</mat-label>
+        <input matInput type="number" formControlName="weight" (input)="onWeightChange(petForm.value.weight!)">
+      </mat-form-field>
 
-    <!-- GENDER -->
-    <label class="section">{{ 'petForm.gender' | translate }}</label>
-    <mat-radio-group formControlName="gender" class="radio-group">
-      <mat-radio-button value="male">{{ 'petForm.male' | translate }}</mat-radio-button>
-      <mat-radio-button value="female">{{ 'petForm.female' | translate }}</mat-radio-button>
-    </mat-radio-group>
+      <!-- GENDER -->
+      <label class="section">{{ 'petForm.gender' | translate }}</label>
+      <mat-radio-group formControlName="gender" class="radio-group">
+        <mat-radio-button value="male">{{ 'petForm.male' | translate }}</mat-radio-button>
+        <mat-radio-button value="female">{{ 'petForm.female' | translate }}</mat-radio-button>
+      </mat-radio-group>
 
-    <!-- SIZE -->
-    <label class="section">{{ 'petForm.size' | translate }}</label>
-    <mat-button-toggle-group formControlName="size" class="full button-toggle-group" (valueChange)="onPetSizeChange($event)">
-      <mat-button-toggle class="button-toggle" [value]="'SMALL'">
-        <div>{{ 'petForm.sizeSmall' | translate }}</div>
-        <small>({{ 'petForm.sizeSmallHint' | translate }})</small>
-      </mat-button-toggle>
-      <mat-button-toggle class="button-toggle" [value]="'MEDIUM'">
-        <div>{{ 'petForm.sizeMedium' | translate }}</div>
-        <small>({{ 'petForm.sizeMediumHint' | translate }})</small>
-      </mat-button-toggle>
-      <mat-button-toggle class="button-toggle" [value]="'LARGE'">
-        <div>{{ 'petForm.sizeLarge' | translate }}</div>
-        <small>({{ 'petForm.sizeLargeHint' | translate }})</small>
-      </mat-button-toggle>
-    </mat-button-toggle-group>
+      <!-- SIZE -->
+      <label class="section">{{ 'petForm.size' | translate }}</label>
+      <mat-button-toggle-group formControlName="size" class="full button-toggle-group" (valueChange)="onPetSizeChange($event)">
+        <mat-button-toggle class="button-toggle" [value]="'SMALL'">
+          <div>{{ 'petForm.sizeSmall' | translate }}</div>
+          <small>({{ 'petForm.sizeSmallHint' | translate }})</small>
+        </mat-button-toggle>
+        <mat-button-toggle class="button-toggle" [value]="'MEDIUM'">
+          <div>{{ 'petForm.sizeMedium' | translate }}</div>
+          <small>({{ 'petForm.sizeMediumHint' | translate }})</small>
+        </mat-button-toggle>
+        <mat-button-toggle class="button-toggle" [value]="'LARGE'">
+          <div>{{ 'petForm.sizeLarge' | translate }}</div>
+          <small>({{ 'petForm.sizeLargeHint' | translate }})</small>
+        </mat-button-toggle>
+      </mat-button-toggle-group>
 
-    <!-- HEALTH STATUS -->
-    <label class="section">{{ 'petForm.healthStatus' | translate }}</label>
-    <div formGroupName="healthStatus" class="checkbox-group">
-      <mat-checkbox formControlName="healthy">{{ 'petForm.healthy' | translate }}</mat-checkbox>
-      <mat-checkbox formControlName="eatingWell">{{ 'petForm.eatingWell' | translate }}</mat-checkbox>
-      <mat-checkbox formControlName="digestionGood">{{ 'petForm.digestionGood' | translate }}</mat-checkbox>
-    </div>
+      <!-- HEALTH STATUS -->
+      <label class="section">{{ 'petForm.healthStatus' | translate }}</label>
+      <div formGroupName="healthStatus" class="checkbox-group">
+        <mat-checkbox formControlName="healthy">{{ 'petForm.healthy' | translate }}</mat-checkbox>
+        <mat-checkbox formControlName="eatingWell">{{ 'petForm.eatingWell' | translate }}</mat-checkbox>
+        <mat-checkbox formControlName="digestionGood">{{ 'petForm.digestionGood' | translate }}</mat-checkbox>
+      </div>
 
-    <mat-divider></mat-divider>
+      <mat-divider></mat-divider>
 
-    <!-- HEALTH COMMITMENT -->
-    <mat-checkbox formControlName="healthCommitment" class="commitment">
-      {{ 'petForm.healthCommitment' | translate }}
-    </mat-checkbox>
-    <mat-error *ngIf="form.get('healthCommitment')?.hasError('required')">
-      Please consent this
-    </mat-error>
+      <!-- HEALTH COMMITMENT -->
+      <mat-checkbox formControlName="healthCommitment" class="commitment">
+        {{ 'petForm.healthCommitment' | translate }}
+      </mat-checkbox>
+      @if (form.get('healthCommitment')?.hasError('required')) {
+        <mat-error>
+          Please consent this
+        </mat-error>
+      }
 
-  </form>
-</mat-card>
+    </form>
+  </mat-card>
+}

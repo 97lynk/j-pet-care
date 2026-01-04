@@ -19,30 +19,32 @@
 
     <form [formGroup]="petInfoForms">
       <div formArrayName="pets">
-        <div *ngFor="let pet of pets.controls; let i = index" [formGroupName]="i">
-          <div class="pet-step-grid">
-            <!-- LEFT: Pet info -->
-            <div class="left">
-              <app-pet-info-form [form]="pet" [index]="i" (onRemove)="removePet(i)" />
+        @for (pet of pets.controls; track i; let i = $index) {
+          <div [formGroupName]="i">
+            <div class="pet-step-grid">
+              <!-- LEFT: Pet info -->
+              <div class="left">
+                <app-pet-info-form [form]="pet" [index]="i" (onRemove)="removePet(i)" />
+              </div>
+
+              <!-- RIGHT: Vaccine selection -->
+              <div class="right">
+                <app-vaccine-combo-form
+                  [products]="comboProducts"
+                  [selectedVaccine]="getPetControl(i, 'comboVaccine')"
+                  [petSize]="getPetControl(i, 'size')"/>
+                <app-vaccine-individual-form
+                  [products]="singleProducts"
+                  [selectedVaccine]="getPetFormGroup(i, 'individualVaccineSelection')"
+                  [amountVaccine]="getPetFormGroup(i, 'individualVaccineAmount')"
+                  [petSize]="getPetControl(i, 'size')"/>
+              </div>
             </div>
 
-            <!-- RIGHT: Vaccine selection -->
-            <div class="right">
-              <app-vaccine-combo-form
-                [products]="comboProducts"
-                [selectedVaccine]="getPetControl(i, 'comboVaccine')"
-                [petSize]="getPetControl(i, 'size')"/>
-              <app-vaccine-individual-form
-                [products]="singleProducts"
-                [selectedVaccine]="getPetFormGroup(i, 'individualVaccineSelection')"
-                [amountVaccine]="getPetFormGroup(i, 'individualVaccineAmount')"
-                [petSize]="getPetControl(i, 'size')"/>
-            </div>
+            <mat-divider style="padding: 1rem"></mat-divider>
+
           </div>
-
-          <mat-divider style="padding: 1rem"></mat-divider>
-
-        </div>
+        }
       </div>
 
     </form>

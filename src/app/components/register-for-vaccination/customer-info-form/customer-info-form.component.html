@@ -1,69 +1,73 @@
-<mat-card class="container" *ngIf="form">
-  <mat-card-title>{{ 'customerForm.title' | translate }}</mat-card-title>
+@if (form) {
+  <mat-card class="container">
+    <mat-card-title>{{ 'customerForm.title' | translate }}</mat-card-title>
 
-  <form [formGroup]="customerForm" autocomplete="off">
+    <form [formGroup]="customerForm" autocomplete="off">
 
-    <mat-form-field floatLabel="always" class="full">
-      <mat-label>{{ 'customerForm.fullName' | translate }}</mat-label>
-      <input matInput formControlName="fullName">
-    </mat-form-field>
+      <mat-form-field floatLabel="always" class="full">
+        <mat-label>{{ 'customerForm.fullName' | translate }}</mat-label>
+        <input matInput formControlName="fullName">
+      </mat-form-field>
 
-    <mat-form-field class="full">
-      <mat-label>{{ 'customerForm.furigana' | translate }}</mat-label>
-      <input matInput formControlName="furigana">
-    </mat-form-field>
+      <mat-form-field class="full">
+        <mat-label>{{ 'customerForm.furigana' | translate }}</mat-label>
+        <input matInput formControlName="furigana">
+      </mat-form-field>
 
-    <mat-form-field class="full">
-      <mat-label>{{ 'customerForm.postalCode.label' | translate }}</mat-label>
-      <input matInput placeholder="{{ 'customerForm.postalCode.placeholder' | translate }}"
-             formControlName="postalCode"
-             (input)="onPostalCodeChange()"
-      >
-    </mat-form-field>
+      <mat-form-field class="full">
+        <mat-label>{{ 'customerForm.postalCode.label' | translate }}</mat-label>
+        <input matInput placeholder="{{ 'customerForm.postalCode.placeholder' | translate }}"
+               formControlName="postalCode"
+               (input)="onPostalCodeChange()"
+        >
+      </mat-form-field>
 
-    <mat-form-field class="full">
-      <mat-label>{{ 'customerForm.prefecture' | translate }}</mat-label>
-      <mat-select formControlName="prefecture">
-        <mat-option *ngFor="let p of prefectureOptions" [value]="p.value">
-          {{ p.label | translate }}
-        </mat-option>
-      </mat-select>
-    </mat-form-field>
+      <mat-form-field class="full">
+        <mat-label>{{ 'customerForm.prefecture' | translate }}</mat-label>
+        <mat-select formControlName="prefecture">
+          @for (p of prefectureOptions; track p.value) {
+            <mat-option [value]="p.value">
+              {{ p.label | translate }}
+            </mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
 
-    <mat-form-field class="full">
-      <mat-label>{{ 'customerForm.municipality.label' | translate }}</mat-label>
-      <input matInput placeholder="{{ 'customerForm.municipality.placeholder' | translate }}" formControlName="municipality">
-    </mat-form-field>
+      <mat-form-field class="full">
+        <mat-label>{{ 'customerForm.municipality.label' | translate }}</mat-label>
+        <input matInput placeholder="{{ 'customerForm.municipality.placeholder' | translate }}" formControlName="municipality">
+      </mat-form-field>
 
-    <mat-form-field class="full">
-      <mat-label>{{ 'customerForm.address.label' | translate }}</mat-label>
-      <input matInput placeholder="{{ 'customerForm.address.placeholder' | translate }}" formControlName="address">
-    </mat-form-field>
+      <mat-form-field class="full">
+        <mat-label>{{ 'customerForm.address.label' | translate }}</mat-label>
+        <input matInput placeholder="{{ 'customerForm.address.placeholder' | translate }}" formControlName="address">
+      </mat-form-field>
 
-    <mat-form-field class="full">
-      <mat-label>{{ 'customerForm.building' | translate }}</mat-label>
-      <input matInput formControlName="building">
-    </mat-form-field>
+      <mat-form-field class="full">
+        <mat-label>{{ 'customerForm.building' | translate }}</mat-label>
+        <input matInput formControlName="building">
+      </mat-form-field>
 
-    <mat-form-field class="full">
-      <mat-label>{{ 'customerForm.phone.label' | translate }}</mat-label>
-      <input matInput placeholder="{{ 'customerForm.phone.placeholder' | translate }}" formControlName="phone">
-    </mat-form-field>
+      <mat-form-field class="full">
+        <mat-label>{{ 'customerForm.phone.label' | translate }}</mat-label>
+        <input matInput placeholder="{{ 'customerForm.phone.placeholder' | translate }}" formControlName="phone">
+      </mat-form-field>
 
-    <mat-form-field class="full">
-      <mat-label>{{ 'customerForm.email' | translate }}</mat-label>
-      <input matInput formControlName="email">
-    </mat-form-field>
+      <mat-form-field class="full">
+        <mat-label>{{ 'customerForm.email' | translate }}</mat-label>
+        <input matInput formControlName="email">
+      </mat-form-field>
 
-    <app-appointment-details [form]="customerForm.get('appointment')" />
+      <app-appointment-details [form]="customerForm.get('appointment')" />
 
-    <!-- SUBMIT -->
-    <button mat-raised-button color="primary"
-            class="submit"
-            (click)="submit()"
-            [disabled]="form.invalid">
-      {{ 'customerForm.submit' | translate }}
-    </button>
+      <!-- SUBMIT -->
+      <button mat-raised-button color="primary"
+              class="submit"
+              (click)="submit()"
+              [disabled]="form.invalid">
+        {{ 'customerForm.submit' | translate }}
+      </button>
 
-  </form>
-</mat-card>
+    </form>
+  </mat-card>
+}

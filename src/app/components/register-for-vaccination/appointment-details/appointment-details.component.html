@@ -1,69 +1,87 @@
-<mat-card class="container appointment-panel" *ngIf="form">
-  <mat-card-title>{{ 'appointmentDetailFrom.title' | translate }}</mat-card-title>
+@if (form) {
+  <mat-card class="container appointment-panel">
+    <mat-card-title>{{ 'appointmentDetailFrom.title' | translate }}</mat-card-title>
 
-  <form [formGroup]="appointmentForm">
-    <mat-form-field appearance="outline" class="full">
-      <mat-label>{{ 'appointmentDetailFrom.prefecture.label' | translate }}</mat-label>
-      <mat-select
-        formControlName="prefecture"
-        (selectionChange)="onPrefectureChange($event.value)"
-      >
-        <mat-option *ngFor="let pref of prefectures" [value]="pref.code">
-          {{ pref.name | translate }}
-        </mat-option>
-      </mat-select>
-      <mat-error *ngIf="appointmentForm.get('prefecture')?.invalid">
-        {{ 'appointmentDetailFrom.prefecture.required' | translate }}
-      </mat-error>
-    </mat-form-field>
+    <form [formGroup]="appointmentForm">
+      <mat-form-field appearance="outline" class="full">
+        <mat-label>{{ 'appointmentDetailFrom.prefecture.label' | translate }}</mat-label>
+        <mat-select
+          formControlName="prefecture"
+          (selectionChange)="onPrefectureChange($event.value)"
+        >
+          @for (pref of prefectures; track pref.id) {
+            <mat-option [value]="pref.code">
+              {{ pref.name | translate }}
+            </mat-option>
+          }
+        </mat-select>
+        @if (appointmentForm.get('prefecture')?.invalid) {
+          <mat-error>
+            {{ 'appointmentDetailFrom.prefecture.required' | translate }}
+          </mat-error>
+        }
+      </mat-form-field>
 
-    <mat-form-field appearance="outline" class="full" *ngIf="appointmentForm.get('prefecture')?.value">
-      <mat-label>{{ 'appointmentDetailFrom.location.label' | translate }}</mat-label>
-      <mat-select
-        formControlName="location"
-        (selectionChange)="onLocationChange($event.value)"
-      >
-        <mat-option *ngFor="let item of filteredLocations" [value]="item.id">
-          {{ item.name }} - {{ item.address }} ({{ item.phone }})
-        </mat-option>
-      </mat-select>
-      <mat-error *ngIf="appointmentForm.get('location')?.invalid">
-        {{ 'appointmentDetailFrom.location.required' | translate }}
-      </mat-error>
-    </mat-form-field>
+      @if (appointmentForm.get('prefecture')?.value) {
+        <mat-form-field appearance="outline" class="full">
+          <mat-label>{{ 'appointmentDetailFrom.location.label' | translate }}</mat-label>
+          <mat-select
+            formControlName="location"
+            (selectionChange)="onLocationChange($event.value)"
+          >
+            @for (item of filteredLocations; track item.id) {
+              <mat-option [value]="item.id">
+                {{ item.name }} - {{ item.address }} ({{ item.phone }})
+              </mat-option>
+            }
+          </mat-select>
+          @if (appointmentForm.get('location')?.invalid) {
+            <mat-error>
+              {{ 'appointmentDetailFrom.location.required' | translate }}
+            </mat-error>
+          }
+        </mat-form-field>
+      }
 
+      @if (appointmentForm.get('location')?.value) {
+        <div class="full time-slot-radio">
+          <mat-label>{{ 'appointmentDetailFrom.timeSlot.label' | translate }}</mat-label>
 
-    <!-- Time Slot as Radio Buttons -->
-    <div class="full time-slot-radio" *ngIf="appointmentForm.get('location')?.value">
-      <mat-label>{{ 'appointmentDetailFrom.timeSlot.label' | translate }}</mat-label>
+          <mat-radio-group formControlName="timeSlot">
+            @for (slot of currentTimeSlots; track slot.id) {
+              <mat-radio-button class="full" [value]="slot.code">
+                {{ slot.label | translate }}
+              </mat-radio-button>
+            }
+          </mat-radio-group>
+        </div>
+      }
 
-      <mat-radio-group formControlName="timeSlot">
-        <mat-radio-button class="full"
-                          *ngFor="let slot of currentTimeSlots"
-                          [value]="slot.code">
-          {{ slot.label | translate }}
-        </mat-radio-button>
-      </mat-radio-group>
-    </div>
+      @if (appointmentForm.get('location')?.value) {
+        <mat-form-field appearance="outline" class="full">
+          <mat-label>{{ 'appointmentDetailFrom.date.label' | translate }}</mat-label>
+          <input
+            matInput
+            [matDatepicker]="picker"
+            formControlName="appointmentDate"
+            [min]="minDate"
+          >
+          <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+          <mat-datepicker #picker></mat-datepicker>
+          @if (appointmentForm.get('appointmentDate')?.invalid) {
+            <mat-error>
+              {{ 'appointmentDetailFrom.date.required' | translate }}
+            </mat-error>
+          }
+        </mat-form-field>
+      }
 
-    <mat-form-field appearance="outline" class="full" *ngIf="appointmentForm.get('location')?.value">
-      <mat-label>{{ 'appointmentDetailFrom.date.label' | translate }}</mat-label>
-      <input
-        matInput
-        [matDatepicker]="picker"
-        formControlName="appointmentDate"
-        [min]="minDate"
-      >
-      <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-      <mat-datepicker #picker></mat-datepicker>
-      <mat-error *ngIf="appointmentForm.get('appointmentDate')?.invalid">
-        {{ 'appointmentDetailFrom.date.required' | translate }}
-      </mat-error>
-    </mat-form-field>
+      @if (appointmentForm.valid && selectedPrefecture && selectedLocation && selectedTimeSlot) {
+        <div class="summary-label">
+          {{ selectedPrefecture.name | translate }} - {{ selectedLocation.name }} - {{ appointmentForm.get('appointmentDate')?.value | date: 'mediumDate' }} - {{ selectedTimeSlot.label | translate }}
+        </div>
+      }
 
-    <div class="summary-label" *ngIf="appointmentForm.valid && selectedPrefecture && selectedLocation && selectedTimeSlot">
-      {{ selectedPrefecture.name | translate }} - {{ selectedLocation.name }} - {{ appointmentForm.get('appointmentDate')?.value | date: 'mediumDate' }} - {{ selectedTimeSlot.label | translate }}
-    </div>
-
-  </form>
-</mat-card>
+    </form>
+  </mat-card>
+}
