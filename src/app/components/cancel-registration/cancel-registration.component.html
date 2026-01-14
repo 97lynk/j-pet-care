@@ -1,0 +1,24 @@
+<div class="cancel-container">
+  <mat-card>
+    <mat-card-title>{{ 'cancel.title' | translate }}</mat-card-title>
+    <mat-card-content>
+      <p>{{ 'cancel.description' | translate }}</p>
+      <form [formGroup]="cancelForm" (ngSubmit)="onSubmit()">
+        <mat-form-field class="full-width">
+          <mat-label>{{ 'cancel.registrationCode' | translate }}</mat-label>
+          <input matInput formControlName="registrationCode" placeholder="e.g., TOK_A1B2C3D4E5">
+          @if (cancelForm.get('registrationCode')?.hasError('required')) {
+            <mat-error>{{ 'validation.required' | translate }}</mat-error>
+          }
+          @if (cancelForm.get('registrationCode')?.hasError('minlength')) {
+            <mat-error>{{ 'validation.minLength' | translate: { min: 10 } }}</mat-error>
+          }
+        </mat-form-field>
+
+        <button mat-raised-button color="warn" type="submit" [disabled]="cancelForm.invalid" class="full-width">
+          {{ 'cancel.submit' | translate }}
+        </button>
+      </form>
+    </mat-card-content>
+  </mat-card>
+</div>

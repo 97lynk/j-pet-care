@@ -48,6 +48,22 @@
     "kagoshima": "Kagoshima",
     "okinawa": "Okinawa"
   },
+  "home": {
+    "register": {
+      "title": "New Registration",
+      "description": "Book a new vaccination appointment for your pet."
+    },
+    "cancel": {
+      "title": "Cancel Registration",
+      "description": "Cancel an existing appointment using your registration code."
+    }
+  },
+  "cancel": {
+    "title": "Cancel Registration",
+    "description": "Please enter your registration code to find and cancel your appointment.",
+    "registrationCode": "Registration Code",
+    "submit": "Find & Cancel Appointment"
+  },
   "customerForm": {
     "title": "Customer Information Details",
     "fullName": "Full Name",
@@ -148,6 +164,7 @@
     "email": "Please enter a valid email address.",
     "pattern": "Please match the requested format.",
     "postalCodePattern": "Please enter a valid postal code (e.g., 123-4567).",
-    "requiredTrue": "This box must be checked to proceed."
+    "requiredTrue": "This box must be checked to proceed.",
+    "minLength": "Please enter at least {{min}} characters."
   }
 }

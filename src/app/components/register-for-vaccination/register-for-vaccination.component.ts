@@ -1,5 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import {TranslateModule, TranslateService} from '@ngx-translate/core';
+import {TranslateModule} from '@ngx-translate/core';
 import {AbstractControl, FormArray, FormBuilder, FormGroup, ReactiveFormsModule, Validators} from '@angular/forms';
 import moment from 'moment';
 import {ProductService} from '../../services/product.service';
@@ -35,7 +35,7 @@ import {MatDividerModule} from '@angular/material/divider';
     RegisterSuccessComponent,
     MatButtonModule,
     MatIconModule,
-    MatDividerModule
+    MatDividerModule,
   ],
   providers: [DatePipe]
 })
@@ -68,11 +68,9 @@ export class RegisterForVaccinationComponent implements OnInit {
   singleProductPrice: { [key: number]: number } = {}; // Use productId as key
 
   petInfoForms: FormGroup;
-  private translate: TranslateService;
 
   constructor(
     private fb: FormBuilder,
-    translate: TranslateService,
     private productService: ProductService,
     private registerService: RegisterService,
     private datePipe: DatePipe
@@ -80,7 +78,6 @@ export class RegisterForVaccinationComponent implements OnInit {
     this.petInfoForms = this.fb.group({
       pets: this.fb.array([]),
     });
-    this.translate = translate;
   }
 
   ngOnInit(): void {
@@ -149,10 +146,6 @@ export class RegisterForVaccinationComponent implements OnInit {
 
   getPetFormGroup(index: number, controlName: string): FormGroup | null {
     return this.pets.at(index)?.get(controlName) as FormGroup | null;
-  }
-
-  useLanguage(language: string): void {
-    this.translate.use(language);
   }
 
   createPetGroup(): FormGroup {

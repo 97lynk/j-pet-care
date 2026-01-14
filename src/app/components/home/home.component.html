@@ -1,0 +1,26 @@
+<div class="home-container">
+  <div class="card-wrapper">
+    <!-- Card 1: Register New Vaccine -->
+    <mat-card class="home-card" [routerLink]="['/register']">
+      <mat-card-header>
+        <mat-card-title>{{ 'home.register.title' | translate }}</mat-card-title>
+      </mat-card-header>
+      <img mat-card-image src="assets/icon/vaccine_register.png" alt="Photo of a Shiba Inu">
+      <mat-card-content>
+        <p>{{ 'home.register.description' | translate }}</p>
+      </mat-card-content>
+    </mat-card>
+
+    <!-- Card 2: Cancel Registration -->
+    <mat-card class="home-card" [routerLink]="['/cancel']">
+      <mat-card-header>
+        <mat-card-title>{{ 'home.cancel.title' | translate }}</mat-card-title>
+      </mat-card-header>
+      <img mat-card-image src="assets/icon/vaccine_cancel.png" alt="Photo of a Shiba Inu">
+
+      <mat-card-content>
+        <p>{{ 'home.cancel.description' | translate }}</p>
+      </mat-card-content>
+    </mat-card>
+  </div>
+</div>

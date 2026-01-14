@@ -15,13 +15,6 @@
   }
 }
 
-.sticky-panel {
-  background: #f8f8f5;
-  position: sticky;
-  top: 0;
-  z-index: 10; /* Higher z-index to be above stepper */
-}
-
 .button-group {
   position: sticky;
   bottom: 0;
@@ -58,15 +51,10 @@
   }
 }
 
-/* --- Sticky Stepper Header --- */
-/*
-  By targeting the `::ng-deep` pseudo-element, we can style the component's
-  internally generated header. We position it sticky below the language toggle.
-*/
-:host ::ng-deep .mat-horizontal-stepper-header-container {
+
+.mat-horizontal-stepper-header-container {
   position: sticky;
-  top: 0; /* Height of the language toggle panel */
-  background-color: white;
-  z-index: 9; /* Below language toggle but above content */
-  border-bottom: 1px solid #e0e0e0;
+  z-index: 1;
+  background: white;
+  top: 0;
 }
