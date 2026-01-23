@@ -50,7 +50,7 @@
   },
   "home": {
     "register": {
-      "title": "New Registration",
+      "title": "New Vaccination Registration",
       "description": "Book a new vaccination appointment for your pet."
     },
     "cancel": {
@@ -62,7 +62,9 @@
     "title": "Cancel Registration",
     "description": "Please enter your registration code to find and cancel your appointment.",
     "registrationCode": "Registration Code",
-    "submit": "Find & Cancel Appointment"
+    "submit": "Find & Cancel Appointment",
+    "success": "Your appointment has been successfully cancelled.",
+    "error": "Could not cancel appointment. Please check the code and try again."
   },
   "customerForm": {
     "title": "Customer Information Details",
@@ -165,6 +167,15 @@
     "pattern": "Please match the requested format.",
     "postalCodePattern": "Please enter a valid postal code (e.g., 123-4567).",
     "requiredTrue": "This box must be checked to proceed.",
-    "minLength": "Please enter at least {{min}} characters."
+    "minLength": "Please enter at least {{min}} characters.",
+    "min": "Minimum value is {{min}}.",
+    "max": "Maximum value is {{max}}."
+  },
+  "registerSuccess": {
+    "code": "Code:",
+    "copyCode": "Copy registration code",
+    "appointment": "Appointment:",
+    "successMessage": "Your vaccine appointment was registered successfully!",
+    "processing": "Processing your registration..."
   }
 }

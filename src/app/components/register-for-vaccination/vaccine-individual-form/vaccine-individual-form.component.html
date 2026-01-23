@@ -50,7 +50,10 @@
             <mat-form-field style="margin-top: 1rem">
               <input matInput [formControl]="getAmountControl(row.productId)!" type="number"/>
               @if (getAmountControl(row.productId)?.hasError('min')) {
-                <mat-error>The minimum amount is 1.</mat-error>
+                <mat-error>{{ 'validation.min' | translate: {min: 1} }}</mat-error>
+              }
+              @if (getAmountControl(row.productId)?.hasError('max')) {
+                <mat-error>{{ 'validation.max' | translate: {max: 12} }}</mat-error>
               }
             </mat-form-field>
           }
@@ -85,7 +88,10 @@
             <mat-form-field class="amount-field">
               <input matInput [formControl]="getAmountControl(row.productId)!" type="number"/>
               @if (getAmountControl(row.productId)?.hasError('min')) {
-                <mat-error>Min is 1.</mat-error>
+                <mat-error>{{ 'validation.min' | translate: {min: 1} }}</mat-error>
+              }
+              @if (getAmountControl(row.productId)?.hasError('max')) {
+                <mat-error>{{ 'validation.max' | translate: {max: 12} }}</mat-error>
               }
             </mat-form-field>
           }

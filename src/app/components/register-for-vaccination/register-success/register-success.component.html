@@ -4,8 +4,8 @@
 
       <!-- CODE -->
       <mat-card-title class="code">
-        <span>Code: <b>{{ registrationCode }}</b></span>
-        <button mat-icon-button [cdkCopyToClipboard]="registrationCode" aria-label="Copy registration code">
+        <span>{{ 'registerSuccess.code' | translate }} <b>{{ registrationCode }}</b></span>
+        <button mat-icon-button [cdkCopyToClipboard]="registrationCode" [attr.aria-label]="'registerSuccess.copyCode' | translate">
           <mat-icon>content_copy</mat-icon>
         </button>
       </mat-card-title>
@@ -21,13 +21,13 @@
 
       <!-- INFO -->
       <mat-card-content class="info">
-        <div><b>Appointment:</b></div>
+        <div><b>{{ 'registerSuccess.appointment' | translate }}</b></div>
         <div>{{ appointmentDetails }}</div>
       </mat-card-content>
 
       <!-- MESSAGE -->
       <mat-card-footer class="message">
-        Your vaccine appointment was registered successfully!
+        {{ 'registerSuccess.successMessage' | translate }}
       </mat-card-footer>
 
     </mat-card>
@@ -36,7 +36,7 @@
   <div class="success-wrapper">
     <mat-card class="success-card mat-elevation-z3">
       <mat-card-content>
-        <p>Processing your registration...</p>
+        <p>{{ 'registerSuccess.processing' | translate }}</p>
       </mat-card-content>
     </mat-card>
   </div>

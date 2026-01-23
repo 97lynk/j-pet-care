@@ -6,11 +6,11 @@
         <!-- REMOVE BUTTON -->
         @if (index > 0) {
           <button
-            mat-icon-button
+            mat-button
             color="warn"
             type="button"
             (click)="onClickRemove()">
-            <mat-icon>close</mat-icon>
+            削除
           </button>
         }
       </div>
@@ -31,7 +31,7 @@
       <label class="section">{{ 'petForm.petType' | translate }}</label>
       <mat-radio-group formControlName="petType" class="radio-group">
         <mat-radio-button value="DOG">{{ 'petForm.dog' | translate }}</mat-radio-button>
-        <mat-radio-button value="CAT">{{ 'petForm.cat' | translate }}</mat-radio-button>
+<!--        <mat-radio-button value="CAT">{{ 'petForm.cat' | translate }}</mat-radio-button>-->
       </mat-radio-group>
 
       <!-- BREED -->
@@ -103,6 +103,7 @@
       <!-- HEALTH STATUS -->
       <label class="section">{{ 'petForm.healthStatus' | translate }}</label>
       <div formGroupName="healthStatus" class="checkbox-group">
+        <div>該当する□にレ点をお願い致します。</div>
         <mat-checkbox formControlName="healthy">{{ 'petForm.healthy' | translate }}</mat-checkbox>
         <mat-checkbox formControlName="eatingWell">{{ 'petForm.eatingWell' | translate }}</mat-checkbox>
         <mat-checkbox formControlName="digestionGood">{{ 'petForm.digestionGood' | translate }}</mat-checkbox>
@@ -112,7 +113,7 @@
 
       <!-- HEALTH COMMITMENT -->
       <mat-checkbox formControlName="healthCommitment" class="commitment">
-        {{ 'petForm.healthCommitment' | translate }}
+        <div [innerHTML]="'petForm.healthCommitment' | translate"></div>
       </mat-checkbox>
       @if (form.get('healthCommitment')?.hasError('required')) {
         <mat-error>

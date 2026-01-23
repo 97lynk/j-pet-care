@@ -18,6 +18,12 @@
         <button mat-raised-button color="warn" type="submit" [disabled]="cancelForm.invalid" class="full-width">
           {{ 'cancel.submit' | translate }}
         </button>
+
+        @if (message) {
+          <div class="message" [class.error]="isError" [class.success]="!isError">
+            {{ message | translate }}
+          </div>
+        }
       </form>
     </mat-card-content>
   </mat-card>

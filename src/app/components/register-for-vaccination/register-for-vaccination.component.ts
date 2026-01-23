@@ -156,7 +156,7 @@ export class RegisterForVaccinationComponent implements OnInit {
       }]])
     );
     const amountVaccineControls = Object.fromEntries(
-      this.singleProducts.map(p => [p.productId, [{ value: 0, disabled: true }, Validators.min(1)]])
+      this.singleProducts.map(p => [p.productId, [{ value: 0, disabled: true }, [Validators.min(1), Validators.max(12)]]])
     );
 
     return this.fb.group({

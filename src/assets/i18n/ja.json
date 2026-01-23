@@ -50,11 +50,11 @@
   },
   "home": {
     "register": {
-      "title": "新規ワクチン接種登録",
-      "description": "ペットの新しいワクチン接種の予約をします。"
+      "title": "予防接種の予約はこちら",
+      "description": ""
     },
     "cancel": {
-      "title": "登録のキャンセル",
+      "title": "予防接種の予約キャンセルはこちら",
       "description": "登録コードを使用して既存の予約をキャンセルします。"
     }
   },
@@ -62,12 +62,14 @@
     "title": "登録のキャンセル",
     "description": "予約を見つけてキャンセルするには、登録コードを入力してください。",
     "registrationCode": "登録コード",
-    "submit": "予約の検索とキャンセル"
+    "submit": "予約の検索とキャンセル",
+    "success": "予約は正常にキャンセルされました。",
+    "error": "予約をキャンセルできませんでした。コードを確認して、もう一度お試しください。"
   },
   "customerForm": {
-    "title": "お客様情報の詳細",
-    "fullName": "氏名（フルネーム）",
-    "furigana": "フリガナ ",
+    "title": "飼主様の情報",
+    "fullName": "飼主様の情報 ",
+    "furigana": "フリガナ以外でも入力できてしまうので規制する ",
     "postalCode": {
       "label": "郵便番号 ",
       "placeholder": "郵便番号（半角数字）000-0000"
@@ -110,11 +112,11 @@
     "sizeSmallHint": "10kg未満",
     "sizeMediumHint": "10〜20kg",
     "sizeLargeHint": "20kg以上",
-    "healthStatus": "健康状態",
-    "healthy": "健康",
-    "eatingWell": "よく食べる",
-    "digestionGood": "排泄良好",
-    "healthCommitment": "現在ペットは健康です。予防接種の登録をお願いします",
+    "healthStatus": "問 診",
+    "healthy": "元気がいい",
+    "eatingWell": "食欲がある",
+    "digestionGood": "糞尿状態が良い",
+    "healthCommitment": "現在、下記のような異常は<br/>認められないので<br/>予防接種をお願いします。",
     "submit": "登録",
     "addPet": "ペットを追加",
     "remove": "削除",
@@ -165,6 +167,15 @@
     "pattern": "要求された形式に合わせてください。",
     "postalCodePattern": "有効な郵便番号を入力してください (例: 123-4567)。",
     "requiredTrue": "続行するには、このボックスにチェックを入れる必要があります。",
-    "minLength": "少なくとも{{min}}文字入力してください。"
+    "minLength": "少なくとも{{min}}文字入力してください。",
+    "min": "最小値は{{min}}です。",
+    "max": "最大値は{{max}}です。"
+  },
+  "registerSuccess": {
+    "code": "コード:",
+    "copyCode": "登録コードをコピー",
+    "appointment": "予約:",
+    "successMessage": "予防接種の予約が正常に登録されました！",
+    "processing": "登録を処理しています..."
   }
 }

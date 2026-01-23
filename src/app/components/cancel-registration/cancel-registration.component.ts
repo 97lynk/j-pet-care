@@ -5,6 +5,8 @@ import {MatInputModule} from '@angular/material/input';
 import {MatButtonModule} from '@angular/material/button';
 import {FormBuilder, ReactiveFormsModule, Validators} from '@angular/forms';
 import {TranslateModule} from '@ngx-translate/core';
+import {RegisterService} from '../../services/register.service';
+import {CommonModule} from '@angular/common';
 
 @Component({
   selector: 'app-cancel-registration',
@@ -12,6 +14,7 @@ import {TranslateModule} from '@ngx-translate/core';
   styleUrls: ['./cancel-registration.component.scss'],
   standalone: true,
   imports: [
+    CommonModule,
     MatCardModule,
     ReactiveFormsModule,
     MatFormFieldModule,
@@ -25,12 +28,32 @@ export class CancelRegistrationComponent {
     registrationCode: ['', [Validators.required, Validators.minLength(10)]],
   });
 
-  constructor(private fb: FormBuilder) {}
+  message: string | null = null;
+  isError = false;
+
+  constructor(
+    private fb: FormBuilder,
+    private registerService: RegisterService
+  ) {}
 
   onSubmit(): void {
     if (this.cancelForm.valid) {
-      console.log('Cancelling registration with code:', this.cancelForm.value.registrationCode);
-      // TODO: Implement cancellation logic by calling a service
+      this.message = null;
+      this.isError = false;
+      const code = this.cancelForm.value.registrationCode!;
+
+      this.registerService.cancelRegistration(code).subscribe({
+        next: () => {
+          this.message = 'cancel.success';
+          this.isError = false;
+          this.cancelForm.reset();
+        },
+        error: (err) => {
+          console.error(err);
+          this.message = 'cancel.error';
+          this.isError = true;
+        },
+      });
     }
   }
 }
