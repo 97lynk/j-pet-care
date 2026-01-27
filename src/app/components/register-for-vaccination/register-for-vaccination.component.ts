@@ -47,7 +47,7 @@ export class RegisterForVaccinationComponent implements OnInit {
 
   customerInfoForm = this.fb.group({
     fullName: ['', Validators.required],
-    furigana: ['', Validators.required],
+    furigana: ['', [Validators.required, Validators.pattern(/^[ァ-ンヴー]+$/)]],
     postalCode: ['', [Validators.required, Validators.pattern(/^\d{3}-?\d{4}$/)]],
     prefecture: ['', Validators.required],
     municipality: ['', Validators.required],
@@ -59,7 +59,6 @@ export class RegisterForVaccinationComponent implements OnInit {
       prefectureId: [null, Validators.required],
       locationId: [null, Validators.required],
       timeSlotId: [null, Validators.required],
-      appointmentDate: [moment().add(1, 'day').toDate(), Validators.required],
     }),
   });
 
@@ -90,6 +89,10 @@ export class RegisterForVaccinationComponent implements OnInit {
       const singleProducts: VaccineProductDto[] = [];
 
       products.forEach(product => {
+        product.displayNameEn = this.formatDescription(product.displayNameEn);
+        product.displayNameJp = this.formatDescription(product.displayNameJp);
+        product.descriptionEn = this.formatDescription(product.descriptionEn);
+        product.descriptionJp = this.formatDescription(product.descriptionJp);
         if (product.isCombo) {
           comboProducts.push(product);
         } else {
@@ -103,6 +106,10 @@ export class RegisterForVaccinationComponent implements OnInit {
 
       this.addPet();
     });
+  }
+
+  formatDescription(description: string = ''): string {
+    return description.replace(/\\n/g, '\n');
   }
 
   populateRowspan(data: VaccineProductDto[], column: keyof VaccineProductDto): DisplayProductDto[] {
@@ -156,7 +163,7 @@ export class RegisterForVaccinationComponent implements OnInit {
       }]])
     );
     const amountVaccineControls = Object.fromEntries(
-      this.singleProducts.map(p => [p.productId, [{ value: 0, disabled: true }, [Validators.min(1), Validators.max(12)]]])
+      this.singleProducts.map(p => [p.productId, [{ value: 0, disabled: true }, [Validators.min(p.validations.minAmount), Validators.max(p.validations.maxAmount)]]])
     );
 
     return this.fb.group({
@@ -227,10 +234,9 @@ export class RegisterForVaccinationComponent implements OnInit {
     };
 
     this.registerService.register(request).subscribe(response => {
-      const date = this.datePipe.transform(response.appointmentDate, 'mediumDate');
 
       this.finalRegistrationCode = response.registrationCode;
-      this.finalAppointmentDetails = `${response.prefectureName} ${response.locationName} - ${date} - ${response.timeSlotLabel}`;
+      this.finalAppointmentDetails = `${response.prefectureName} ${response.locationName} - ${response.appointmentDate} - ${response.timeSlotLabel}`;
 
       stepper.next(); // Move to the success step
     });

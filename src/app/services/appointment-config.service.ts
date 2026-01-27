@@ -17,7 +17,11 @@ export class AppointmentConfigService {
     return this.http.get<AppointmentPrefecture[]>(`${this.apiUrl}/prefectures`);
   }
 
-  getLocations(prefectureCode: string): Observable<AppointmentLocation[]> {
-    return this.http.get<AppointmentLocation[]>(`${this.apiUrl}/prefectures/${prefectureCode}/locations`);
+  getLocations(prefectureId: number, timeSlotType?: string): Observable<AppointmentLocation[]> {
+    let url = `${this.apiUrl}/prefectures/${prefectureId}/locations`;
+    if (timeSlotType) {
+      url += `?timeSlotType=${timeSlotType}`;
+    }
+    return this.http.get<AppointmentLocation[]>(url);
   }
 }

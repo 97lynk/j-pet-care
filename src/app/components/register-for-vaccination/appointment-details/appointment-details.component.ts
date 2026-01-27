@@ -10,7 +10,8 @@ import {CommonModule} from '@angular/common';
 import {TranslateModule} from '@ngx-translate/core';
 import {MatCardModule} from '@angular/material/card';
 import {MatNativeDateModule} from '@angular/material/core';
-import {MatInput} from "@angular/material/input";
+import {MatInputModule} from "@angular/material/input";
+import {MatButtonToggleModule} from "@angular/material/button-toggle";
 
 @Component({
   selector: 'app-appointment-details',
@@ -27,17 +28,19 @@ import {MatInput} from "@angular/material/input";
     TranslateModule,
     MatCardModule,
     MatNativeDateModule,
-    MatInput,
+    MatInputModule,
+    MatButtonToggleModule
   ]
 })
 export class AppointmentDetailsComponent implements OnInit {
 
   @Input() form!: AbstractControl | null;
-  minDate = new Date();
 
   prefectures: AppointmentPrefecture[] = [];
   filteredLocations: AppointmentLocation[] = [];
+  groupedLocations: { date: string, locations: AppointmentLocation[] }[] = [];
   currentTimeSlots: AppointmentTimeSlot[] = [];
+  timeSlotType: string | undefined = 'MORNING'; // Initialize to MORNING
 
   constructor(private appointmentConfigService: AppointmentConfigService) { }
 
@@ -55,14 +58,42 @@ export class AppointmentDetailsComponent implements OnInit {
     this.form?.get('locationId')?.reset();
     this.form?.get('timeSlotId')?.reset();
     this.filteredLocations = [];
+    this.groupedLocations = [];
     this.currentTimeSlots = [];
+    this.loadLocations(prefectureId, this.timeSlotType);
+  }
 
-    const selectedPrefecture = this.prefectures.find(p => p.id === prefectureId);
-    if (selectedPrefecture) {
-      this.appointmentConfigService.getLocations(selectedPrefecture.code).subscribe(data => {
-        this.filteredLocations = data;
-      });
+  onTimeSlotTypeChange(type: string): void {
+    this.timeSlotType = type;
+    const prefectureId = this.appointmentForm.get('prefectureId')?.value;
+    if (prefectureId) {
+      this.loadLocations(prefectureId, this.timeSlotType);
     }
+  }
+
+  private loadLocations(prefectureId: number, timeSlotType?: string): void {
+    this.appointmentConfigService.getLocations(prefectureId, timeSlotType).subscribe(data => {
+      this.filteredLocations = data;
+      this.groupLocationsByDate();
+    });
+  }
+
+  private groupLocationsByDate(): void {
+    const groups = this.filteredLocations.reduce((acc, location) => {
+      const date = location.date;
+      if (!acc[date]) {
+        acc[date] = [];
+      }
+      acc[date].push(location);
+      return acc;
+    }, {} as { [key: string]: AppointmentLocation[] });
+
+    this.groupedLocations = Object.keys(groups).map(date => {
+      return {
+        date: date,
+        locations: groups[date]
+      };
+    });
   }
 
   onLocationChange(locationId: number): void {
@@ -72,10 +103,26 @@ export class AppointmentDetailsComponent implements OnInit {
     const selectedLocation = this.filteredLocations.find(loc => loc.id === locationId);
     if (selectedLocation && selectedLocation.timeSlots) {
       this.currentTimeSlots = Array.from(selectedLocation.timeSlots);
+
+      // Auto-select time slot based on type or default to first
       if (this.currentTimeSlots.length > 0) {
-        this.form?.get('timeSlotId')?.setValue(this.currentTimeSlots[0].id);
+        let slotToSelect = this.currentTimeSlots[0];
+
+        if (this.timeSlotType && this.timeSlotType !== 'ALLDAY') {
+           const matchingSlot = this.currentTimeSlots.find(slot => slot.type === this.timeSlotType);
+           if (matchingSlot) {
+             slotToSelect = matchingSlot;
+           }
+        }
+
+        this.form?.get('timeSlotId')?.setValue(slotToSelect.id);
       }
     }
+  }
+
+  onTimeSlotChange(): void {
+    // This method is intentionally left empty.
+    // Its purpose is to trigger change detection when the radio button selection changes.
   }
 
   get selectedPrefecture(): AppointmentPrefecture | undefined {

@@ -69,7 +69,7 @@
   "customerForm": {
     "title": "飼主様の情報",
     "fullName": "飼主様の情報 ",
-    "furigana": "フリガナ以外でも入力できてしまうので規制する ",
+    "furigana": "フリガナ ",
     "postalCode": {
       "label": "郵便番号 ",
       "placeholder": "郵便番号（半角数字）000-0000"
@@ -138,6 +138,12 @@
     "date": {
       "label": "日付",
       "required": "Date is required"
+    },
+    "timeSlotType": {
+      "label": "希望時間帯",
+      "morning": "午前",
+      "afternoon": "午後",
+      "allday": "全日"
     }
   },
   "vaccineComboForm": {

@@ -23,16 +23,30 @@
       </mat-form-field>
 
       @if (appointmentForm.get('prefectureId')?.value) {
+        <div class="full time-slot-type-toggle">
+          <mat-label>{{ 'appointmentDetailFrom.timeSlotType.label' | translate }}</mat-label>
+          <mat-button-toggle-group (change)="onTimeSlotTypeChange($event.value)" [value]="timeSlotType" class="full button-toggle-group">
+            <mat-button-toggle value="MORNING" class="button-toggle">{{ 'appointmentDetailFrom.timeSlotType.morning' | translate }}</mat-button-toggle>
+            <mat-button-toggle value="AFTERNOON" class="button-toggle">{{ 'appointmentDetailFrom.timeSlotType.afternoon' | translate }}</mat-button-toggle>
+            <mat-button-toggle value="ALLDAY" class="button-toggle">{{ 'appointmentDetailFrom.timeSlotType.allday' | translate }}</mat-button-toggle>
+          </mat-button-toggle-group>
+        </div>
+
         <mat-form-field appearance="outline" class="full">
           <mat-label>{{ 'appointmentDetailFrom.location.label' | translate }}</mat-label>
           <mat-select
+            placeholder="Date - name - address"
             formControlName="locationId"
             (selectionChange)="onLocationChange($event.value)"
           >
-            @for (item of filteredLocations; track item.id) {
-              <mat-option [value]="item.id">
-                {{ item.name }} - {{ item.address }} ({{ item.phone }})
-              </mat-option>
+            @for (group of groupedLocations; track group.date) {
+              <mat-optgroup [label]="(group.date | date: 'yyyy-MM-dd')||''">
+                @for (item of group.locations; track item.id) {
+                  <mat-option [value]="item.id">
+                    {{ item.name }} - {{ item.address }}
+                  </mat-option>
+                }
+              </mat-optgroup>
             }
           </mat-select>
           @if (appointmentForm.get('locationId')?.invalid) {
@@ -47,7 +61,7 @@
         <div class="full time-slot-radio">
           <mat-label>{{ 'appointmentDetailFrom.timeSlot.label' | translate }}</mat-label>
 
-          <mat-radio-group formControlName="timeSlotId">
+          <mat-radio-group formControlName="timeSlotId" (change)="onTimeSlotChange()">
             @for (slot of currentTimeSlots; track slot.id) {
               <mat-radio-button class="full" [value]="slot.id">
                 {{ slot.label | translate }}
@@ -57,28 +71,14 @@
         </div>
       }
 
-      @if (appointmentForm.get('locationId')?.value) {
-        <mat-form-field appearance="outline" class="full">
-          <mat-label>{{ 'appointmentDetailFrom.date.label' | translate }}</mat-label>
-          <input
-            matInput
-            [matDatepicker]="picker"
-            formControlName="appointmentDate"
-            [min]="minDate"
-          >
-          <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-          <mat-datepicker #picker></mat-datepicker>
-          @if (appointmentForm.get('appointmentDate')?.invalid) {
-            <mat-error>
-              {{ 'appointmentDetailFrom.date.required' | translate }}
-            </mat-error>
-          }
-        </mat-form-field>
-      }
-
       @if (appointmentForm.valid && selectedPrefecture && selectedLocation && selectedTimeSlot) {
         <div class="summary-label">
-          {{ selectedPrefecture.name | translate }} - {{ selectedLocation.name }} - {{ appointmentForm.get('appointmentDate')?.value | date: 'mediumDate' }} - {{ selectedTimeSlot.label | translate }}
+          <p><strong>Time:</strong> {{ selectedTimeSlot.label | translate }}</p>
+          <p><strong>Date:</strong> {{ selectedLocation.dayOfWeek }} {{ selectedLocation.date | date: 'yyyy-MM-dd' }}</p>
+          <p><strong>Location:</strong> {{ selectedLocation.venue }}</p>
+          <p><strong>Address:</strong> {{ selectedLocation.address }}</p>
+          <p><strong>Prefecture:</strong> {{ selectedPrefecture.name }}</p>
+          <p><strong>Phone:</strong> {{ selectedLocation.phone }}</p>
         </div>
       }
 

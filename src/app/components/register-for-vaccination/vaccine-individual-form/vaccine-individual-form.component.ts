@@ -50,28 +50,36 @@ export class VaccineIndividualFormComponent implements OnInit {
             amountControl.disable();
             if (product.petSize === 'ALL' || product.petSize === size) {
               selectionControl.enable();
-            } else {
-              selectionControl.disable();
             }
           }
         });
       });
+
+      this.petSize.setValue('SMALL');
     }
   }
 
   onSelectVaccine(productId: number): void {
     const amountControl = this.getAmountControl(productId);
     const selectionControl = this.getSelectionControl(productId);
+    const product = this.getProductById(productId);
 
     if (selectionControl?.value) {
       amountControl?.enable();
-      if (amountControl?.value < 1) {
+      if (product && product.validations && product.validations.minAmount === product.validations.maxAmount) {
+        amountControl?.setValue(product.validations.minAmount);
+        amountControl?.disable();
+      } else if (amountControl?.value < 1) {
         amountControl?.setValue(1);
       }
     } else {
       amountControl?.setValue(0);
       amountControl?.disable();
     }
+  }
+
+  getProductById(productId: number): DisplayProductDto | undefined {
+    return this.products.find(p => p.productId === productId);
   }
 
   getSelectionControl(productId: number): FormControl | null {

@@ -18,6 +18,9 @@
         @if (customerForm.get('furigana')?.hasError('required')) {
           <mat-error>{{ 'validation.required' | translate }}</mat-error>
         }
+        @if (customerForm.get('furigana')?.hasError('pattern')) {
+          <mat-error>{{ 'validation.pattern' | translate }}</mat-error>
+        }
       </mat-form-field>
 
       <mat-form-field class="full">

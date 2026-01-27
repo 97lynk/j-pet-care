@@ -92,8 +92,6 @@ export class PetInfoFormComponent implements OnInit {
 
   onPetSizeChange(size: any) {
     if (!this.form || !size) return;
-
-    console.log('onSizeChange', size);
   }
 
   onClickRemove() {

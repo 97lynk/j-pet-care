@@ -138,6 +138,12 @@
     "date": {
       "label": "Date",
       "required": "Date is required"
+    },
+    "timeSlotType": {
+      "label": "Time Preference",
+      "morning": "Morning",
+      "afternoon": "Afternoon",
+      "allday": "All Day"
     }
   },
   "vaccineComboForm": {
