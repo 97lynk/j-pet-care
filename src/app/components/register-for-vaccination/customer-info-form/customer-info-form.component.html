@@ -74,7 +74,11 @@
 
       <mat-form-field class="full">
         <mat-label>{{ 'customerForm.phone.label' | translate }}</mat-label>
+        <span matTextPrefix>+84 &nbsp;</span>
         <input matInput placeholder="{{ 'customerForm.phone.placeholder' | translate }}" formControlName="phone">
+        @if (isPhoneVerified) {
+          <span matSuffix class="verified-postfix">{{ 'customerForm.verified' | translate }}</span>
+        }
         @if (customerForm.get('phone')?.hasError('required')) {
           <mat-error>{{ 'validation.required' | translate }}</mat-error>
         }
@@ -83,6 +87,9 @@
       <mat-form-field class="full">
         <mat-label>{{ 'customerForm.email' | translate }}</mat-label>
         <input matInput formControlName="email">
+        @if (isEmailVerified) {
+          <span matSuffix class="verified-postfix">{{ 'customerForm.verified' | translate }}</span>
+        }
         @if (customerForm.get('email')?.hasError('required')) {
           <mat-error>{{ 'validation.required' | translate }}</mat-error>
         }
@@ -91,15 +98,26 @@
         }
       </mat-form-field>
 
+      <div>error {{ getFormValidationErrors(customerForm) | json }}</div>
+
       <app-appointment-details [form]="customerForm.get('appointment')" />
 
-      <!-- SUBMIT -->
-      <button mat-raised-button color="primary"
-              class="submit"
-              (click)="submit()"
-              [disabled]="form.invalid">
-        {{ 'customerForm.submit' | translate }}
-      </button>
+      <!-- ACTIONS -->
+      @if (!isPhoneVerified && !isEmailVerified) {
+        <button mat-raised-button color="accent"
+                class="submit"
+                (click)="openVerificationDialog()"
+                [disabled]="!isContactInfoValid">
+          {{ 'customerForm.verifyButton' | translate }}
+        </button>
+      } @else {
+        <button mat-raised-button color="primary"
+                class="submit"
+                (click)="submit()"
+                [disabled]="form.invalid">
+          {{ 'customerForm.submit' | translate }}
+        </button>
+      }
 
     </form>
   </mat-card>

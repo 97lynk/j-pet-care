@@ -1,5 +1,5 @@
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
-import {AbstractControl, FormGroup, ReactiveFormsModule, UntypedFormBuilder} from '@angular/forms';
+import {AbstractControl, FormGroup, ReactiveFormsModule, UntypedFormBuilder, ValidationErrors} from '@angular/forms';
 import {PostalCodeService} from '../../../services/postal-code.service';
 import {PREFECTURE_OPTIONS} from '../../../constants/prefectures';
 import {MatFormFieldModule} from '@angular/material/form-field';
@@ -10,6 +10,9 @@ import {TranslateModule} from '@ngx-translate/core';
 import {AppointmentDetailsComponent} from '../appointment-details/appointment-details.component';
 import {MatButtonModule} from '@angular/material/button';
 import {MatCardModule} from '@angular/material/card';
+import {MatDialog, MatDialogModule} from '@angular/material/dialog';
+import {VerificationDialogComponent} from '../verification-dialog/verification-dialog.component';
+import {MatIconModule} from '@angular/material/icon';
 
 @Component({
   selector: 'app-customer-info-form',
@@ -25,7 +28,9 @@ import {MatCardModule} from '@angular/material/card';
     TranslateModule,
     AppointmentDetailsComponent,
     MatButtonModule,
-    MatCardModule
+    MatCardModule,
+    MatDialogModule,
+    MatIconModule
   ]
 })
 export class CustomerInfoFormComponent implements OnInit {
@@ -41,8 +46,12 @@ export class CustomerInfoFormComponent implements OnInit {
 
   pattern = '[0-9]{3}[-]{0,1}[0-9]{4}';
 
+  isPhoneVerified = false;
+  isEmailVerified = false;
+
   constructor(private fb: UntypedFormBuilder,
-              private postalCodeService: PostalCodeService
+              private postalCodeService: PostalCodeService,
+              private dialog: MatDialog
   ) {
   }
 
@@ -52,6 +61,12 @@ export class CustomerInfoFormComponent implements OnInit {
   // Getter to safely cast for the template
   get customerForm(): FormGroup {
     return this.form as FormGroup;
+  }
+
+  get isContactInfoValid(): boolean {
+    const phoneValid = this.customerForm.get('phone')?.valid;
+    const emailValid = this.customerForm.get('email')?.valid;
+    return !!(phoneValid && emailValid);
   }
 
   submit() {
@@ -104,5 +119,47 @@ export class CustomerInfoFormComponent implements OnInit {
         this.statusType = 'error';
       }
     });
+  }
+
+  openVerificationDialog(): void {
+    const phone = this.customerForm.get('phone')?.value;
+    const email = this.customerForm.get('email')?.value;
+
+    const dialogRef = this.dialog.open(VerificationDialogComponent, {
+      width: '400px',
+      data: { phone, email }
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result && result.verified) {
+        if (result.method === 'sms') {
+          this.isPhoneVerified = true;
+          this.customerForm.get('phone')?.disable();
+        } else {
+          this.isEmailVerified = true;
+          this.customerForm.get('email')?.disable();
+        }
+        this.customerForm.get('verificationMethod')?.setValue(result.method);
+        this.customerForm.get('token')?.setValue(result.code);
+      }
+    });
+  }
+
+  getFormValidationErrors(form: FormGroup) {
+    const result: { control: string; error: string; value: any; }[] = [];
+    Object.keys(form.controls).forEach(key => {
+      // @ts-ignore
+      const controlErrors: ValidationErrors = form.get(key).errors;
+      if (controlErrors) {
+        Object.keys(controlErrors).forEach(keyError => {
+          result.push({
+            'control': key,
+            'error': keyError,
+            'value': controlErrors[keyError]
+          });
+        });
+      }
+    });
+    return result;
   }
 }

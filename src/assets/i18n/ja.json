@@ -89,7 +89,18 @@
       "placeholder": "00-0000-0000"
     },
     "email": "メールアドレス ",
-    "submit": "送信"
+    "submit": "送信",
+    "verifyMethod": "確認方法",
+    "verifySms": "SMS",
+    "verifyEmail": "メール",
+    "sendCode": "確認コードを送信",
+    "verificationCode": "確認コード",
+    "verify": "確認",
+    "verified": "確認済み！",
+    "verifyButton": "電話番号 / メールアドレスを確認",
+    "verifyTitle": "連絡先の確認",
+    "cancel": "キャンセル",
+    "confirm": "確認"
   },
   "petForm": {
     "title": "ペット情報",
@@ -175,7 +186,8 @@
     "requiredTrue": "続行するには、このボックスにチェックを入れる必要があります。",
     "minLength": "少なくとも{{min}}文字入力してください。",
     "min": "最小値は{{min}}です。",
-    "max": "最大値は{{max}}です。"
+    "max": "最大値は{{max}}です。",
+    "invalidCode": "入力されたコードが正しくありません。"
   },
   "registerSuccess": {
     "code": "コード:",

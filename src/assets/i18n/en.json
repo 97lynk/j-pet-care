@@ -89,7 +89,18 @@
       "placeholder": "00-0000-0000"
     },
     "email": "Email Address",
-    "submit": "Submit"
+    "submit": "Submit",
+    "verifyMethod": "Verification Method",
+    "verifySms": "SMS",
+    "verifyEmail": "Email",
+    "sendCode": "Send Verification Code",
+    "verificationCode": "Verification Code",
+    "verify": "Verify",
+    "verified": "Verified!",
+    "verifyButton": "Verify Phone / Email",
+    "verifyTitle": "Verify Contact Information",
+    "cancel": "Cancel",
+    "confirm": "Confirm"
   },
   "petForm": {
     "title": "Pet Information",
@@ -175,7 +186,8 @@
     "requiredTrue": "This box must be checked to proceed.",
     "minLength": "Please enter at least {{min}} characters.",
     "min": "Minimum value is {{min}}.",
-    "max": "Maximum value is {{max}}."
+    "max": "Maximum value is {{max}}.",
+    "invalidCode": "The code you entered is incorrect."
   },
   "registerSuccess": {
     "code": "Code:",

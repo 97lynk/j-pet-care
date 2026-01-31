@@ -55,6 +55,9 @@ export class RegisterForVaccinationComponent implements OnInit {
     building: [''],
     phone: ['', Validators.required],
     email: ['', [Validators.required, Validators.email]],
+    verificationMethod: ['', Validators.required],
+    verificationCode: [''],
+    token: ['', Validators.required],
     appointment: this.fb.group({
       prefectureId: [null, Validators.required],
       locationId: [null, Validators.required],
@@ -228,9 +231,16 @@ export class RegisterForVaccinationComponent implements OnInit {
       };
     });
 
+    const customerInfo = this.customerInfoForm.getRawValue();
+    if (customerInfo.verificationMethod === 'sms') {
+      customerInfo.phone = this.formatPhoneNumber(customerInfo.phone);
+    }
+
     const request = {
-      customerInfo: this.customerInfoForm.getRawValue(),
+      customerInfo: customerInfo,
       petInfos: petInfos,
+      token: this.customerInfoForm.get('token')?.value,
+      verificationMethod: customerInfo.verificationMethod
     };
 
     this.registerService.register(request).subscribe(response => {
@@ -240,6 +250,13 @@ export class RegisterForVaccinationComponent implements OnInit {
 
       stepper.next(); // Move to the success step
     });
+  }
+
+  private formatPhoneNumber(phone: string | null): string {
+    if (!phone) return '';
+    // Remove leading zero if present
+    const cleanPhone = phone.replace(/^0+/, '');
+    return `+84${cleanPhone}`;
   }
 
   recalculateTotal(): void {
