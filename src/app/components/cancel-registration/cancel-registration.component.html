@@ -6,7 +6,7 @@
       <form [formGroup]="cancelForm" (ngSubmit)="onSubmit()">
         <mat-form-field class="full-width">
           <mat-label>{{ 'cancel.registrationCode' | translate }}</mat-label>
-          <input matInput formControlName="registrationCode" placeholder="e.g., TOK_A1B2C3D4E5">
+          <input matInput formControlName="registrationCode" placeholder="{{ 'cancel.placeholder' | translate }}">
           @if (cancelForm.get('registrationCode')?.hasError('required')) {
             <mat-error>{{ 'validation.required' | translate }}</mat-error>
           }

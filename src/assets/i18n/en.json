@@ -64,7 +64,8 @@
     "registrationCode": "Registration Code",
     "submit": "Find & Cancel Appointment",
     "success": "Your appointment has been successfully cancelled.",
-    "error": "Could not cancel appointment. Please check the code and try again."
+    "error": "Could not cancel appointment. Please check the code and try again.",
+    "placeholder": "e.g., TOK_A1B2C3D4E5"
   },
   "customerForm": {
     "title": "Customer Information Details",
@@ -131,7 +132,8 @@
     "submit": "Register",
     "addPet": "Add Another Pet",
     "remove": "Remove",
-    "submitAll": "Submit All Pets"
+    "submitAll": "Submit All Pets",
+    "healthCheckInstruction": "Please check the applicable boxes."
   },
   "appointmentDetailFrom": {
     "title": "Appointment Details",
@@ -195,5 +197,19 @@
     "appointment": "Appointment:",
     "successMessage": "Your vaccine appointment was registered successfully!",
     "processing": "Processing your registration..."
+  },
+  "register": {
+    "healthCheckTitle": "Health Status & Vaccination History Confirmation",
+    "healthCheckList": {
+      "1": "Never received rabies or mixed vaccine",
+      "2": "Currently has health issues (lethargy, diarrhea, vomiting, coughing, collapsing during walks, etc.)",
+      "3": "Currently sick/under treatment, or pregnant/nursing",
+      "4": "Has had adverse reactions to heartworm prevention or vaccinations in the past (diarrhea, vomiting, facial swelling, lethargy, etc.)",
+      "5": "Received rabies or mixed vaccine within the last month"
+    },
+    "total": "Total",
+    "step": {
+      "complete": "Completed"
+    }
   }
 }

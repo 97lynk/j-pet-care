@@ -10,7 +10,7 @@
             color="warn"
             type="button"
             (click)="onClickRemove()">
-            削除
+            {{ 'petForm.remove' | translate }}
           </button>
         }
       </div>
@@ -103,7 +103,7 @@
       <!-- HEALTH STATUS -->
       <label class="section">{{ 'petForm.healthStatus' | translate }}</label>
       <div formGroupName="healthStatus" class="checkbox-group">
-        <div>該当する□にレ点をお願い致します。</div>
+        <div>{{ 'petForm.healthCheckInstruction' | translate }}</div>
         <mat-checkbox formControlName="healthy">{{ 'petForm.healthy' | translate }}</mat-checkbox>
         <mat-checkbox formControlName="eatingWell">{{ 'petForm.eatingWell' | translate }}</mat-checkbox>
         <mat-checkbox formControlName="digestionGood">{{ 'petForm.digestionGood' | translate }}</mat-checkbox>

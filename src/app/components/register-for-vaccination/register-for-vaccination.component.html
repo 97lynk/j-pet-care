@@ -41,7 +41,7 @@
   </mat-step>
 
   <mat-step>
-    <ng-template matStepLabel>完了しました</ng-template>
+    <ng-template matStepLabel>{{ 'register.step.complete' | translate }}</ng-template>
     <app-register-success
       [registrationCode]="finalRegistrationCode"
       [appointmentDetails]="finalAppointmentDetails"
@@ -51,15 +51,15 @@
 
 @if (stepper.selectedIndex === 1) {
   <div class="button-group">
-    <div><b>健康状態・ワクチン接種歴に関する確認事項</b><br/>
-      • 	狂犬病または混合ワクチンを一度も接種したことがない<br/>
-      • 	現在、愛犬の体調に悪いところがある（元気がない、下痢、嘔吐、せき、散歩中に倒れるなど）<br/>
-      • 	現在、病気・治療中、あるいは妊娠中・授乳中である<br/>
-      • 	過去にフィラリア症予防薬や予防注射で調子が悪くなったことがある（下痢、嘔吐、顔の腫れ、元気がないなど）<br/>
-      • 	1ヶ月以内に狂犬病または混合ワクチンの接種を受けた
+    <div><b>{{ 'register.healthCheckTitle' | translate }}</b><br/>
+      • {{ 'register.healthCheckList.1' | translate }}<br/>
+      • {{ 'register.healthCheckList.2' | translate }}<br/>
+      • {{ 'register.healthCheckList.3' | translate }}<br/>
+      • {{ 'register.healthCheckList.4' | translate }}<br/>
+      • {{ 'register.healthCheckList.5' | translate }}
     </div>
     <div class="total-row">
-      <span>Total: ¥{{ total | number }}</span>
+      <span>{{ 'register.total' | translate }}: ¥{{ total | number }}</span>
     </div>
     <div class="actions-row">
       <button mat-raised-button color="accent" type="button" (click)="addPet()" class="add-pet-button">
