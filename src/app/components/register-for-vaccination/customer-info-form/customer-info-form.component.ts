@@ -13,6 +13,7 @@ import {MatCardModule} from '@angular/material/card';
 import {MatDialog, MatDialogModule} from '@angular/material/dialog';
 import {VerificationDialogComponent} from '../verification-dialog/verification-dialog.component';
 import {MatIconModule} from '@angular/material/icon';
+import { environment } from '../../../../environments/environment';
 
 @Component({
   selector: 'app-customer-info-form',
@@ -39,6 +40,7 @@ export class CustomerInfoFormComponent implements OnInit {
   @Output() onSubmit = new EventEmitter<any>();
 
   prefectureOptions = PREFECTURE_OPTIONS;
+  phonePrefix = environment.phonePrefix;
 
   loading = false;
   statusMessage = '';

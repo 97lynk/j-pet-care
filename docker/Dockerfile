@@ -14,8 +14,7 @@ FROM nginx:alpine
 
 COPY --from=build /app/dist/jpet-care-register-app/browser /usr/share/nginx/html
 
-# Copy a custom nginx config if you have one, otherwise the default is usually fine for simple SPAs
-# COPY nginx.conf /etc/nginx/conf.d/default.conf
+COPY docker/nginx.conf /etc/nginx/conf.d/default.conf
 
 EXPOSE 80
 

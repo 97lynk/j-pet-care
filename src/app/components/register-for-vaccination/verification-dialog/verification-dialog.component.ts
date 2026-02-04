@@ -8,6 +8,7 @@ import {MatFormFieldModule} from '@angular/material/form-field';
 import {MatInputModule} from '@angular/material/input';
 import {CommonModule} from '@angular/common';
 import {TranslateModule} from '@ngx-translate/core';
+import { environment } from '../../../../environments/environment';
 
 export interface VerificationDialogData {
   phone: string;
@@ -93,6 +94,6 @@ export class VerificationDialogComponent {
   private formatPhoneNumber(phone: string): string {
     if (!phone) return '';
     const cleanPhone = phone.replace(/^0+/, '');
-    return `+84${cleanPhone}`;
+    return `${environment.phonePrefix}${cleanPhone}`;
   }
 }

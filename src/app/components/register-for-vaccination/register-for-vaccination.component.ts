@@ -16,6 +16,7 @@ import {RegisterSuccessComponent} from './register-success/register-success.comp
 import {MatButtonModule} from '@angular/material/button';
 import {MatIconModule} from '@angular/material/icon';
 import {MatDividerModule} from '@angular/material/divider';
+import { environment } from '../../../environments/environment';
 
 @Component({
   selector: 'app-register-for-vaccination',
@@ -256,7 +257,7 @@ export class RegisterForVaccinationComponent implements OnInit {
     if (!phone) return '';
     // Remove leading zero if present
     const cleanPhone = phone.replace(/^0+/, '');
-    return `+84${cleanPhone}`;
+    return `${environment.phonePrefix}${cleanPhone}`;
   }
 
   recalculateTotal(): void {

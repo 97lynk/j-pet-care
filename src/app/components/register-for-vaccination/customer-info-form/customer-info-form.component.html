@@ -74,7 +74,7 @@
 
       <mat-form-field class="full">
         <mat-label>{{ 'customerForm.phone.label' | translate }}</mat-label>
-        <span matTextPrefix>+84 &nbsp;</span>
+        <span matTextPrefix>{{ phonePrefix }} &nbsp;</span>
         <input matInput placeholder="{{ 'customerForm.phone.placeholder' | translate }}" formControlName="phone">
         @if (isPhoneVerified) {
           <span matSuffix class="verified-postfix">{{ 'customerForm.verified' | translate }}</span>
@@ -100,9 +100,6 @@
 
 <!--      <div>error {{ getFormValidationErrors(customerForm) | json  }}</div>-->
 
-      <app-appointment-details [form]="customerForm.get('appointment')" />
-
-      <!-- ACTIONS -->
       @if (!isPhoneVerified && !isEmailVerified) {
         <button mat-raised-button color="accent"
                 class="submit"
@@ -110,7 +107,12 @@
                 [disabled]="!isContactInfoValid">
           {{ 'customerForm.verifyButton' | translate }}
         </button>
-      } @else {
+      }
+
+      @if (isPhoneVerified || isEmailVerified) {
+        <app-appointment-details [form]="customerForm.get('appointment')" />
+
+        <!-- ACTIONS -->
         <button mat-raised-button color="primary"
                 class="submit"
                 (click)="submit()"
