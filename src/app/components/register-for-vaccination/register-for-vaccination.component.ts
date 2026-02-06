@@ -257,7 +257,7 @@ export class RegisterForVaccinationComponent implements OnInit {
     if (!phone) return '';
     // Remove leading zero if present
     const cleanPhone = phone.replace(/^0+/, '');
-    return `${environment.phonePrefix}${cleanPhone}`;
+    return `${cleanPhone}`;
   }
 
   recalculateTotal(): void {

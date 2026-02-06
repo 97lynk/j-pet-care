@@ -94,6 +94,6 @@ export class VerificationDialogComponent {
   private formatPhoneNumber(phone: string): string {
     if (!phone) return '';
     const cleanPhone = phone.replace(/^0+/, '');
-    return `${environment.phonePrefix}${cleanPhone}`;
+    return `${cleanPhone}`;
   }
 }

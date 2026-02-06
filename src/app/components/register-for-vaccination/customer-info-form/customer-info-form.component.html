@@ -74,7 +74,6 @@
 
       <mat-form-field class="full">
         <mat-label>{{ 'customerForm.phone.label' | translate }}</mat-label>
-        <span matTextPrefix>{{ phonePrefix }} &nbsp;</span>
         <input matInput placeholder="{{ 'customerForm.phone.placeholder' | translate }}" formControlName="phone">
         @if (isPhoneVerified) {
           <span matSuffix class="verified-postfix">{{ 'customerForm.verified' | translate }}</span>
