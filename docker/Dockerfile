@@ -1,13 +1,15 @@
 # Stage 1: Build the Angular application
 FROM node:22-alpine AS build
 
+ARG TENANT_ID=${TENANT_ID}
+
 WORKDIR /app
 
 COPY package*.json ./
 RUN npm install
 
 COPY . .
-RUN npm run build --configuration=production
+RUN npm run build --configuration=production.${TENANT_ID}
 
 # Stage 2: Serve the application with Nginx
 FROM nginx:alpine

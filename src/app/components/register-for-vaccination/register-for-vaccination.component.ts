@@ -1,6 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {TranslateModule} from '@ngx-translate/core';
-import {AbstractControl, FormArray, FormBuilder, FormGroup, ReactiveFormsModule, Validators} from '@angular/forms';
+import {AbstractControl, FormArray, FormBuilder, FormGroup, ReactiveFormsModule, ValidationErrors, Validators} from '@angular/forms';
 import moment from 'moment';
 import {ProductService} from '../../services/product.service';
 import {DisplayProductDto, VaccineProductDto} from '../../models/product/product.dto';
@@ -16,7 +16,25 @@ import {RegisterSuccessComponent} from './register-success/register-success.comp
 import {MatButtonModule} from '@angular/material/button';
 import {MatIconModule} from '@angular/material/icon';
 import {MatDividerModule} from '@angular/material/divider';
-import { environment } from '../../../environments/environment';
+import {MatError} from "@angular/material/input";
+
+export function requireVaccineSelection(control: AbstractControl): ValidationErrors | null {
+  const comboVaccine = control.get('comboVaccine');
+  const individualVaccineSelection = control.get('individualVaccineSelection');
+
+  const hasCombo = comboVaccine && comboVaccine.value;
+  const hasIndividual = individualVaccineSelection && Object.values(individualVaccineSelection.value).some(v => v);
+
+  if (hasCombo && hasIndividual) {
+    return { comboAndIndividual: true };
+  }
+
+  if (!hasCombo && !hasIndividual) {
+    return { requireVaccine: true };
+  }
+
+  return null;
+}
 
 @Component({
   selector: 'app-register-for-vaccination',
@@ -37,6 +55,7 @@ import { environment } from '../../../environments/environment';
     MatButtonModule,
     MatIconModule,
     MatDividerModule,
+    MatError,
   ],
   providers: [DatePipe]
 })
@@ -54,10 +73,10 @@ export class RegisterForVaccinationComponent implements OnInit {
     municipality: ['', Validators.required],
     address: ['', Validators.required],
     building: [''],
-    phone: ['', Validators.required],
-    email: ['', [Validators.required, Validators.email]],
-    verificationMethod: ['', Validators.required],
-    verificationCode: [''],
+    phone: ['3', Validators.required],
+    email: ['3@213', [Validators.required, Validators.email]],
+    verificationMethod: ['sms', Validators.required],
+    verificationCode: ['212'],
     token: ['', Validators.required],
     appointment: this.fb.group({
       prefectureId: [null, Validators.required],
@@ -147,6 +166,7 @@ export class RegisterForVaccinationComponent implements OnInit {
   }
 
   get pets(): FormArray {
+    console.log(this.petInfoForms.getRawValue())
     return this.petInfoForms.get('pets') as FormArray;
   }
 
@@ -188,7 +208,7 @@ export class RegisterForVaccinationComponent implements OnInit {
       comboVaccine: [null], // This will hold the product object
       individualVaccineSelection: this.fb.group(selectVaccineControls),
       individualVaccineAmount: this.fb.group(amountVaccineControls),
-    });
+    }, { validators: requireVaccineSelection });
   }
 
   addPet(): void {
@@ -247,7 +267,8 @@ export class RegisterForVaccinationComponent implements OnInit {
     this.registerService.register(request).subscribe(response => {
 
       this.finalRegistrationCode = response.registrationCode;
-      this.finalAppointmentDetails = `${response.prefectureName} ${response.locationName} - ${response.appointmentDate} - ${response.timeSlotLabel}`;
+      const formattedDate = this.datePipe.transform(response.appointmentDate, 'yyyy年M月d日');
+      this.finalAppointmentDetails = `日付：${formattedDate}\n時間: ${response.timeSlotLabel}\n会場（店舗名): ${response.locationName}`;
 
       stepper.next(); // Move to the success step
     });

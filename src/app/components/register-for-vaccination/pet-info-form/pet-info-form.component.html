@@ -113,7 +113,13 @@
 
       <!-- HEALTH COMMITMENT -->
       <mat-checkbox formControlName="healthCommitment" class="commitment">
-        <div [innerHTML]="'petForm.healthCommitment' | translate"></div>
+        <div><b>{{ 'register.healthCheckTitle' | translate }}</b><br/>
+          • {{ 'register.healthCheckList.1' | translate }}<br/>
+          • {{ 'register.healthCheckList.2' | translate }}<br/>
+          • {{ 'register.healthCheckList.3' | translate }}<br/>
+          • {{ 'register.healthCheckList.4' | translate }}<br/>
+          • {{ 'register.healthCheckList.5' | translate }}
+        </div>
       </mat-checkbox>
       @if (form.get('healthCommitment')?.hasError('required')) {
         <mat-error>

@@ -28,9 +28,15 @@
                   [selectedVaccine]="getPetFormGroup(i, 'individualVaccineSelection')"
                   [amountVaccine]="getPetFormGroup(i, 'individualVaccineAmount')"
                   [petSize]="getPetControl(i, 'size')"/>
+
+                @if (pet.hasError('requireVaccine')) {
+                  <mat-error>{{ 'validation.requireVaccine' | translate }}</mat-error>
+                }
+                @if (pet.hasError('comboAndIndividual')) {
+                  <mat-error>{{ 'validation.comboAndIndividual' | translate }}</mat-error>
+                }
               </div>
             </div>
-
             <mat-divider style="padding: 1rem"></mat-divider>
 
           </div>
@@ -51,13 +57,6 @@
 
 @if (stepper.selectedIndex === 1) {
   <div class="button-group">
-    <div><b>{{ 'register.healthCheckTitle' | translate }}</b><br/>
-      • {{ 'register.healthCheckList.1' | translate }}<br/>
-      • {{ 'register.healthCheckList.2' | translate }}<br/>
-      • {{ 'register.healthCheckList.3' | translate }}<br/>
-      • {{ 'register.healthCheckList.4' | translate }}<br/>
-      • {{ 'register.healthCheckList.5' | translate }}
-    </div>
     <div class="total-row">
       <span>{{ 'register.total' | translate }}: ¥{{ total | number }}</span>
     </div>

@@ -4,7 +4,7 @@ import moment from 'moment/moment';
 import {MatFormFieldModule} from '@angular/material/form-field';
 import {MatInputModule} from '@angular/material/input';
 import {MatDatepickerModule} from '@angular/material/datepicker';
-import {MatNativeDateModule} from '@angular/material/core';
+import {MAT_DATE_FORMATS, MatNativeDateModule} from '@angular/material/core';
 import {MatRadioModule} from '@angular/material/radio';
 import {MatSliderModule} from '@angular/material/slider';
 import {MatCheckboxModule} from '@angular/material/checkbox';
@@ -15,6 +15,9 @@ import {MatIconModule} from '@angular/material/icon';
 import {MatDividerModule} from '@angular/material/divider';
 import {MatCardModule} from '@angular/material/card';
 import {MatButtonToggleModule} from '@angular/material/button-toggle';
+import {JP_DATE_FORMATS} from "../../../date-format";
+import {MomentDateAdapter} from "@angular/material-moment-adapter";
+import {DateAdapter} from "@angular/material/core";
 
 @Component({
   selector: 'app-pet-info-form',
@@ -37,6 +40,10 @@ import {MatButtonToggleModule} from '@angular/material/button-toggle';
     MatDividerModule,
     MatCardModule,
     MatButtonToggleModule
+  ],
+  providers: [
+    { provide: DateAdapter, useClass: MomentDateAdapter },
+    { provide: MAT_DATE_FORMATS, useValue: JP_DATE_FORMATS },
   ]
 })
 export class PetInfoFormComponent implements OnInit {

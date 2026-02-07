@@ -101,7 +101,8 @@
     "verifyButton": "Verify Phone / Email",
     "verifyTitle": "Verify Contact Information",
     "cancel": "Cancel",
-    "confirm": "Confirm"
+    "confirm": "Confirm",
+    "spamHint": "If you don't see the email in your inbox, please check your spam folder."
   },
   "petForm": {
     "title": "Pet Information",
@@ -157,6 +158,11 @@
       "morning": "Morning",
       "afternoon": "Afternoon",
       "allday": "All Day"
+    },
+    "summary": {
+      "time": "Time",
+      "date": "Date",
+      "venue": "Venue"
     }
   },
   "vaccineComboForm": {
@@ -189,7 +195,9 @@
     "minLength": "Please enter at least {{min}} characters.",
     "min": "Minimum value is {{min}}.",
     "max": "Maximum value is {{max}}.",
-    "invalidCode": "The code you entered is incorrect."
+    "invalidCode": "The code you entered is incorrect.",
+    "requireVaccine": "Please select at least one vaccine.",
+    "comboAndIndividual": "Please select either a combo or individual vaccine, not both."
   },
   "registerSuccess": {
     "code": "Code:",

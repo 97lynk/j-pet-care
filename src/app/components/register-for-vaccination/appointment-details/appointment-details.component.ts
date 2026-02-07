@@ -6,7 +6,7 @@ import {MatFormFieldModule} from '@angular/material/form-field';
 import {MatSelectModule} from '@angular/material/select';
 import {MatDatepickerModule} from '@angular/material/datepicker';
 import {MatRadioModule} from '@angular/material/radio';
-import {CommonModule} from '@angular/common';
+import {CommonModule, DatePipe} from '@angular/common';
 import {TranslateModule} from '@ngx-translate/core';
 import {MatCardModule} from '@angular/material/card';
 import {MatNativeDateModule} from '@angular/material/core';
@@ -30,7 +30,8 @@ import {MatButtonToggleModule} from "@angular/material/button-toggle";
     MatNativeDateModule,
     MatInputModule,
     MatButtonToggleModule
-  ]
+  ],
+  providers: [DatePipe]
 })
 export class AppointmentDetailsComponent implements OnInit {
 
@@ -42,7 +43,7 @@ export class AppointmentDetailsComponent implements OnInit {
   currentTimeSlots: AppointmentTimeSlot[] = [];
   timeSlotType: string | undefined = 'MORNING'; // Initialize to MORNING
 
-  constructor(private appointmentConfigService: AppointmentConfigService) { }
+  constructor(private appointmentConfigService: AppointmentConfigService, private datePipe: DatePipe) { }
 
   ngOnInit(): void {
     this.appointmentConfigService.getPrefectures().subscribe(data => {
@@ -60,16 +61,9 @@ export class AppointmentDetailsComponent implements OnInit {
     this.filteredLocations = [];
     this.groupedLocations = [];
     this.currentTimeSlots = [];
-    this.loadLocations(prefectureId, this.timeSlotType);
+    this.loadLocations(prefectureId, 'ALLDAY');
   }
 
-  onTimeSlotTypeChange(type: string): void {
-    this.timeSlotType = type;
-    const prefectureId = this.appointmentForm.get('prefectureId')?.value;
-    if (prefectureId) {
-      this.loadLocations(prefectureId, this.timeSlotType);
-    }
-  }
 
   private loadLocations(prefectureId: number, timeSlotType?: string): void {
     this.appointmentConfigService.getLocations(prefectureId, timeSlotType).subscribe(data => {
@@ -80,7 +74,8 @@ export class AppointmentDetailsComponent implements OnInit {
 
   private groupLocationsByDate(): void {
     const groups = this.filteredLocations.reduce((acc, location) => {
-      const date = location.date;
+    const date = this.datePipe.transform(location.date, 'yyyy年M月d日') || location.date;
+      // const date = location.date;
       if (!acc[date]) {
         acc[date] = [];
       }

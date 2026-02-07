@@ -3,6 +3,7 @@
   <form [formGroup]="verificationForm" class="dialog-form">
 
     @if (!isVerified) {
+      <div>{{ 'customerForm.spamHint' | translate }}</div>
       <mat-radio-group formControlName="method" class="radio-group">
         <mat-radio-button value="sms" [disabled]="isVerificationSent">
           {{ 'customerForm.verifySms' | translate }} ({{ data.phone }})
