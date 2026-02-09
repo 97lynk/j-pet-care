@@ -1,3 +1,7 @@
+<div class="loading-overlay" *ngIf="loading">
+  <mat-spinner diameter="50"></mat-spinner>
+</div>
+
 <mat-stepper headerPosition="top" linear #stepper>
   <mat-step [stepControl]="customerInfoForm">
     <ng-template matStepLabel>{{ 'customerForm.title' | translate }}</ng-template>
@@ -61,10 +65,10 @@
       <span>{{ 'register.total' | translate }}: ¥{{ total | number }}</span>
     </div>
     <div class="actions-row">
-      <button mat-raised-button color="accent" type="button" (click)="addPet()" class="add-pet-button">
+      <button mat-raised-button color="accent" type="button" (click)="addPet()" class="add-pet-button" [disabled]="loading">
         <mat-icon>add</mat-icon> {{ 'petForm.addPet' | translate }}
       </button>
-      <button mat-raised-button [disabled]="customerInfoForm.invalid || petInfoForms.invalid" color="primary" type="submit" (click)="onSubmitPetInfo(stepper)" class="submit-all-button">
+      <button mat-raised-button [disabled]="customerInfoForm.invalid || petInfoForms.invalid || loading" color="primary" type="submit" (click)="onSubmitPetInfo(stepper)" class="submit-all-button">
         <mat-icon>check</mat-icon> {{ 'petForm.submitAll' | translate }}
       </button>
     </div>

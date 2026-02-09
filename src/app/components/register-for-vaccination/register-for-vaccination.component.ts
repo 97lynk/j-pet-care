@@ -17,6 +17,7 @@ import {MatButtonModule} from '@angular/material/button';
 import {MatIconModule} from '@angular/material/icon';
 import {MatDividerModule} from '@angular/material/divider';
 import {MatError} from "@angular/material/input";
+import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
 
 export function requireVaccineSelection(control: AbstractControl): ValidationErrors | null {
   const comboVaccine = control.get('comboVaccine');
@@ -56,6 +57,7 @@ export function requireVaccineSelection(control: AbstractControl): ValidationErr
     MatIconModule,
     MatDividerModule,
     MatError,
+    MatProgressSpinnerModule
   ],
   providers: [DatePipe]
 })
@@ -64,6 +66,7 @@ export class RegisterForVaccinationComponent implements OnInit {
   total = 0;
   finalRegistrationCode: string | null = null;
   finalAppointmentDetails: string | null = null;
+  loading = false;
 
   customerInfoForm = this.fb.group({
     fullName: ['', Validators.required],
@@ -233,6 +236,7 @@ export class RegisterForVaccinationComponent implements OnInit {
   }
 
   registerVaccine(stepper: MatStepper): void {
+    this.loading = true;
     const rawPetInfos = this.petInfoForms.getRawValue().pets;
     const petInfos = rawPetInfos.map((pet: any) => {
       const individualVaccineAmount: { [key: number]: number } = {};
@@ -263,13 +267,19 @@ export class RegisterForVaccinationComponent implements OnInit {
       verificationMethod: customerInfo.verificationMethod
     };
 
-    this.registerService.register(request).subscribe(response => {
+    this.registerService.register(request).subscribe({
+      next: (response) => {
+        this.loading = false;
+        this.finalRegistrationCode = response.registrationCode;
+        const formattedDate = this.datePipe.transform(response.appointmentDate, 'yyyy年M月d日');
+        this.finalAppointmentDetails = `日付：${formattedDate}\n時間: ${response.timeSlotLabel}\n会場（店舗名): ${response.locationName}`;
 
-      this.finalRegistrationCode = response.registrationCode;
-      const formattedDate = this.datePipe.transform(response.appointmentDate, 'yyyy年M月d日');
-      this.finalAppointmentDetails = `日付：${formattedDate}\n時間: ${response.timeSlotLabel}\n会場（店舗名): ${response.locationName}`;
-
-      stepper.next(); // Move to the success step
+        stepper.next(); // Move to the success step
+      },
+      error: () => {
+        this.loading = false;
+        // Handle error (e.g., show a snackbar)
+      }
     });
   }
 
