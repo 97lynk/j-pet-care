@@ -9,7 +9,7 @@ COPY package*.json ./
 RUN npm install
 
 COPY . .
-RUN npm run build --configuration=production.${TENANT_ID}
+RUN npm run build-${TENANT_ID}
 
 # Stage 2: Serve the application with Nginx
 FROM nginx:alpine

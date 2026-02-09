@@ -47,7 +47,7 @@
             "browser": "src/main.ts"
           },
           "configurations": {
-            "production": {
+            "production-hm": {
               "budgets": [
                 {
                   "type": "initial",
@@ -63,7 +63,28 @@
               "fileReplacements": [
                 {
                   "replace": "src/environments/environment.ts",
-                  "with": "src/environments/environment.production.ts"
+                  "with": "src/environments/environment.production.hm.ts"
+                }
+              ],
+              "outputHashing": "all"
+            },
+            "production-ha": {
+              "budgets": [
+                {
+                  "type": "initial",
+                  "maximumWarning": "2mb",
+                  "maximumError": "5mb"
+                },
+                {
+                  "type": "anyComponentStyle",
+                  "maximumWarning": "2kb",
+                  "maximumError": "4kb"
+                }
+              ],
+              "fileReplacements": [
+                {
+                  "replace": "src/environments/environment.ts",
+                  "with": "src/environments/environment.production.ha.ts"
                 }
               ],
               "outputHashing": "all"

@@ -73,10 +73,10 @@ export class RegisterForVaccinationComponent implements OnInit {
     municipality: ['', Validators.required],
     address: ['', Validators.required],
     building: [''],
-    phone: ['3', Validators.required],
-    email: ['3@213', [Validators.required, Validators.email]],
-    verificationMethod: ['sms', Validators.required],
-    verificationCode: ['212'],
+    phone: ['', Validators.required],
+    email: ['', [Validators.required, Validators.email]],
+    verificationMethod: ['', Validators.required],
+    verificationCode: [''],
     token: ['', Validators.required],
     appointment: this.fb.group({
       prefectureId: [null, Validators.required],
@@ -166,7 +166,6 @@ export class RegisterForVaccinationComponent implements OnInit {
   }
 
   get pets(): FormArray {
-    console.log(this.petInfoForms.getRawValue())
     return this.petInfoForms.get('pets') as FormArray;
   }
 

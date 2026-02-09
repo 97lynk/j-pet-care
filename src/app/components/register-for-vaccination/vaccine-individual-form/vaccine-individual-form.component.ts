@@ -48,6 +48,7 @@ export class VaccineIndividualFormComponent implements OnInit {
 
           if (selectionControl && amountControl) {
             amountControl.disable();
+            selectionControl.disable();
             if (product.petSize === 'ALL' || product.petSize === size) {
               selectionControl.enable();
             }

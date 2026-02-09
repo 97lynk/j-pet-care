@@ -93,7 +93,7 @@ export class PetInfoFormComponent implements OnInit {
 
   submit() {
     if (this.form?.valid) {
-      console.log(this.form.getRawValue());
+      // console.log(this.form.getRawValue());
     }
   }
 
