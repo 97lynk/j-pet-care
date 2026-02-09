@@ -196,7 +196,7 @@ export class RegisterForVaccinationComponent implements OnInit {
       birthDate: [moment().toDate(), Validators.required],
       gender: ['male', Validators.required],
       furColor: ['', Validators.required],
-      weight: ['', Validators.required],
+      weight: ['', [Validators.required, Validators.min(1)]],
       size: ['SMALL', Validators.required],
       healthStatus: this.fb.group({
         healthy: [false],

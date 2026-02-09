@@ -129,11 +129,11 @@
     "healthy": "元気がいい",
     "eatingWell": "食欲がある",
     "digestionGood": "糞尿状態が良い",
-    "healthCommitment": "現在、下記のような異常は<br/>認められないので<br/>予防接種をお願いします。",
+    "healthCommitment": "現在、下記のような異常は。認められないので。予防接種をお願いします。",
     "submit": "登録",
     "addPet": "2頭以上の予約はこちら",
     "remove": "削除",
-    "submitAll": "全てのペットを登録",
+    "submitAll": "予約する",
     "healthCheckInstruction": "該当する□にレ点をお願い致します。"
   },
   "appointmentDetailFrom": {
@@ -162,7 +162,8 @@
     "summary": {
       "time": "時間",
       "date": "日付",
-      "venue": "会場"
+      "venue": "会場",
+      "address": "住所"
     }
   },
   "vaccineComboForm": {

@@ -162,7 +162,8 @@
     "summary": {
       "time": "Time",
       "date": "Date",
-      "venue": "Venue"
+      "venue": "Venue",
+      "address": "Address"
     }
   },
   "vaccineComboForm": {
