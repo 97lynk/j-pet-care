@@ -26,31 +26,57 @@ import {CommonModule} from '@angular/common';
 export class CancelRegistrationComponent {
   cancelForm = this.fb.group({
     registrationCode: ['', [Validators.required, Validators.minLength(10)]],
+    otp: [''],
   });
 
   message: string | null = null;
   isError = false;
+  otpSent = false;
 
   constructor(
     private fb: FormBuilder,
     private registerService: RegisterService
   ) {}
 
-  onSubmit(): void {
-    if (this.cancelForm.valid) {
+  onSearch(): void {
+    if (this.cancelForm.get('registrationCode')?.valid) {
       this.message = null;
       this.isError = false;
       const code = this.cancelForm.value.registrationCode!;
 
-      this.registerService.cancelRegistration(code).subscribe({
+      this.registerService.sendCancellationOtp(code).subscribe({
         next: () => {
-          this.message = 'cancel.success';
-          this.isError = false;
-          this.cancelForm.reset();
+          this.otpSent = true;
+          this.message = 'cancel.otpSent';
+          this.cancelForm.get('otp')?.setValidators([Validators.required, Validators.minLength(6)]);
+          this.cancelForm.get('otp')?.updateValueAndValidity();
         },
         error: (err) => {
           console.error(err);
           this.message = 'cancel.error';
+          this.isError = true;
+        },
+      });
+    }
+  }
+
+  onConfirm(): void {
+    if (this.cancelForm.valid) {
+      this.message = null;
+      this.isError = false;
+      const code = this.cancelForm.value.registrationCode!;
+      const otp = this.cancelForm.value.otp!;
+
+      this.registerService.confirmCancellation(code, otp).subscribe({
+        next: () => {
+          this.message = 'cancel.success';
+          this.isError = false;
+          this.otpSent = false;
+          this.cancelForm.reset();
+        },
+        error: (err) => {
+          console.error(err);
+          this.message = 'cancel.otpError';
           this.isError = true;
         },
       });

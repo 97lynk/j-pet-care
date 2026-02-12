@@ -29,8 +29,12 @@ export class RegisterService {
     return this.http.post<RegistrationResponse>(`${this.BASE_API}/register`, request);
   }
 
-  cancelRegistration(registrationCode: string): Observable<void> {
-    return this.http.post<void>(`${this.BASE_API}/cancel/${registrationCode}`, {});
+  sendCancellationOtp(registrationCode: string): Observable<VerificationResponse> {
+    return this.http.post<VerificationResponse>(`${this.BASE_API}/cancel/${registrationCode}/send-otp`, {});
+  }
+
+  confirmCancellation(registrationCode: string, otp: string): Observable<void> {
+    return this.http.post<void>(`${this.BASE_API}/cancel/${registrationCode}/confirm`, { otp });
   }
 
   sendVerification(target: string, channel: string): Observable<VerificationResponse> {

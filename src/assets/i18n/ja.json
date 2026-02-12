@@ -62,10 +62,15 @@
     "title": "登録のキャンセル",
     "description": "予約を見つけてキャンセルするには、登録コードを入力してください。",
     "registrationCode": "登録コード",
-    "submit": "予約の検索とキャンセル",
+    "submit": "キャンセルを確定する",
     "success": "予約は正常にキャンセルされました。",
-    "error": "予約をキャンセルできませんでした。コードを確認して、もう一度お試しください。",
-    "placeholder": "例：TOK_A1B2C3D4E5"
+    "error": "予約が見つかりませんでした。コードを確認してもう一度お試しください。",
+    "placeholder": "例：TOK_A1B2C3D4E5",
+    "otp": "OTPコード",
+    "otpPlaceholder": "メールに送信されたコードを入力してください",
+    "otpSent": "OTPがメールアドレスに送信されました。",
+    "otpError": "OTPが正しくありません。もう一度お試しください。",
+    "search": "検索"
   },
   "customerForm": {
     "title": "飼主様の情報",

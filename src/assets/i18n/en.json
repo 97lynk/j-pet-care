@@ -62,10 +62,15 @@
     "title": "Cancel Registration",
     "description": "Please enter your registration code to find and cancel your appointment.",
     "registrationCode": "Registration Code",
-    "submit": "Find & Cancel Appointment",
+    "submit": "Confirm Cancellation",
     "success": "Your appointment has been successfully cancelled.",
-    "error": "Could not cancel appointment. Please check the code and try again.",
-    "placeholder": "e.g., TOK_A1B2C3D4E5"
+    "error": "Could not find appointment. Please check the code and try again.",
+    "placeholder": "e.g., TOK_A1B2C3D4E5",
+    "otp": "OTP Code",
+    "otpPlaceholder": "Enter the code sent to your email",
+    "otpSent": "An OTP has been sent to your email address.",
+    "otpError": "The OTP is incorrect. Please try again.",
+    "search": "Search"
   },
   "customerForm": {
     "title": "Customer Information Details",
