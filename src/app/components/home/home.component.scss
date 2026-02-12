@@ -1,9 +1,19 @@
 .home-container {
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
   min-height: 100vh;
   background-color: #f5f7fa;
+}
+
+.logo-container {
+  margin-bottom: 2rem;
+}
+
+.tenant-logo {
+  max-width: 400px;
+  height: auto;
 }
 
 .card-wrapper {

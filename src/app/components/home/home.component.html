@@ -1,4 +1,7 @@
 <div class="home-container">
+  <div class="logo-container">
+    <img [src]="'assets/logos/' + tenantId + '-logo.jpeg'" alt="Logo" class="tenant-logo">
+  </div>
   <div class="card-wrapper">
     <!-- Card 1: Register New Vaccine -->
     <mat-card class="home-card" [routerLink]="['/register']">

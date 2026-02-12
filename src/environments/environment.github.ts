@@ -1,4 +1,5 @@
 export const environment = {
   production: true,
-  useMock: true
+  useMock: true,
+  tenantId: 'HA'
 };

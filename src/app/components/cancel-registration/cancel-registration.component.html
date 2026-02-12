@@ -10,7 +10,7 @@
           @if (cancelForm.get('registrationCode')?.hasError('required')) {
             <mat-error>{{ 'validation.required' | translate }}</mat-error>
           }
-          @if (cancel_form.get('registrationCode')?.hasError('minlength')) {
+          @if (cancelForm.get('registrationCode')?.hasError('minlength')) {
             <mat-error>{{ 'validation.minLength' | translate: { min: 10 } }}</mat-error>
           }
         </mat-form-field>
