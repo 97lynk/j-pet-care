@@ -10,7 +10,7 @@
           @if (cancelForm.get('registrationCode')?.hasError('required')) {
             <mat-error>{{ 'validation.required' | translate }}</mat-error>
           }
-          @if (cancelForm.get('registrationCode')?.hasError('minlength')) {
+          @if (cancel_form.get('registrationCode')?.hasError('minlength')) {
             <mat-error>{{ 'validation.minLength' | translate: { min: 10 } }}</mat-error>
           }
         </mat-form-field>
@@ -29,11 +29,11 @@
         }
 
         @if (!otpSent) {
-          <button mat-raised-button color="primary" (click)="onSearch()" [disabled]="cancelForm.get('registrationCode')?.invalid" class="full-width">
+          <button mat-raised-button color="primary" (click)="onSearch()" [disabled]="cancelForm.get('registrationCode')?.invalid || submitting" class="full-width">
             {{ 'cancel.search' | translate }}
           </button>
         } @else {
-          <button mat-raised-button color="warn" (click)="onConfirm()" [disabled]="cancelForm.invalid" class="full-width">
+          <button mat-raised-button color="warn" (click)="onConfirm()" [disabled]="cancelForm.invalid || submitting" class="full-width">
             {{ 'cancel.submit' | translate }}
           </button>
         }

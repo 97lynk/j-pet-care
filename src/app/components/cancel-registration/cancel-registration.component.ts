@@ -7,6 +7,7 @@ import {FormBuilder, ReactiveFormsModule, Validators} from '@angular/forms';
 import {TranslateModule} from '@ngx-translate/core';
 import {RegisterService} from '../../services/register.service';
 import {CommonModule} from '@angular/common';
+import { finalize } from 'rxjs/operators';
 
 @Component({
   selector: 'app-cancel-registration',
@@ -32,6 +33,7 @@ export class CancelRegistrationComponent {
   message: string | null = null;
   isError = false;
   otpSent = false;
+  submitting = false;
 
   constructor(
     private fb: FormBuilder,
@@ -39,12 +41,15 @@ export class CancelRegistrationComponent {
   ) {}
 
   onSearch(): void {
-    if (this.cancelForm.get('registrationCode')?.valid) {
+    if (this.cancelForm.get('registrationCode')?.valid && !this.submitting) {
+      this.submitting = true;
       this.message = null;
       this.isError = false;
       const code = this.cancelForm.value.registrationCode!;
 
-      this.registerService.sendCancellationOtp(code).subscribe({
+      this.registerService.sendCancellationOtp(code).pipe(
+        finalize(() => this.submitting = false)
+      ).subscribe({
         next: () => {
           this.otpSent = true;
           this.message = 'cancel.otpSent';
@@ -61,13 +66,16 @@ export class CancelRegistrationComponent {
   }
 
   onConfirm(): void {
-    if (this.cancelForm.valid) {
+    if (this.cancelForm.valid && !this.submitting) {
+      this.submitting = true;
       this.message = null;
       this.isError = false;
       const code = this.cancelForm.value.registrationCode!;
       const otp = this.cancelForm.value.otp!;
 
-      this.registerService.confirmCancellation(code, otp).subscribe({
+      this.registerService.confirmCancellation(code, otp).pipe(
+        finalize(() => this.submitting = false)
+      ).subscribe({
         next: () => {
           this.message = 'cancel.success';
           this.isError = false;
