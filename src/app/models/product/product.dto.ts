@@ -14,6 +14,7 @@ export interface VaccineProductDto {
   descriptionJp?: string;
   descriptionEn?: string;
   isCombo: boolean;
+  isKitTest: boolean;
   priority: number;
   validations: ValidationDto;
 }

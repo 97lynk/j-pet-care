@@ -199,6 +199,17 @@
       "ALL": "All"
     }
   },
+  "kitTestForm": {
+    "name": "Test Kits",
+    "sizeLabel": "Size",
+    "price": "Price incl. tax",
+    "size": {
+      "SMALL": "Small",
+      "MEDIUM": "Medium",
+      "LARGE": "Large",
+      "ALL": "All"
+    }
+  },
   "validation": {
     "required": "This field is required.",
     "email": "Please enter a valid email address.",

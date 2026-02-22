@@ -27,6 +27,13 @@
                   [products]="comboProducts"
                   [selectedVaccine]="getPetControl(i, 'comboVaccine')"
                   [petSize]="getPetControl(i, 'size')"/>
+
+                <app-kit-test-form
+                  [products]="kitTestProducts"
+                  [selectedVaccine]="getPetFormGroup(i, 'kitTestSelection')"
+                  [petSize]="getPetControl(i, 'size')"/>
+
+
                 <app-vaccine-individual-form
                   [products]="singleProducts"
                   [selectedVaccine]="getPetFormGroup(i, 'individualVaccineSelection')"
