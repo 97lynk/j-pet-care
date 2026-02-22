@@ -102,7 +102,7 @@ export class RegisterForVaccinationComponent implements OnInit, OnDestroy {
 
   private rabiesShotProductId: number | null = null;
   private mixedProductId: number | null = null;
-  private setDComboProduct: DisplayProductDto | null = null;
+  private setDComboProducts: DisplayProductDto[] = [];
   private productCodeToProductMap: Map<string, VaccineProductDto> = new Map();
   private ngUnsubscribe = new Subject<void>();
   private declinedRecommendationIndices = new Set<number>();
@@ -158,7 +158,7 @@ export class RegisterForVaccinationComponent implements OnInit, OnDestroy {
       // Identify specific products for recommendation logic
       this.rabiesShotProductId = this.productCodeToProductMap.get('RABIES_SHOT')?.productId || null;
       this.mixedProductId = this.productCodeToProductMap.get('MIXED')?.productId || null;
-      this.setDComboProduct = this.comboProducts.find(p => p.productCode === 'SET_D') || null;
+      this.setDComboProducts = this.comboProducts.filter(p => p.productCode === 'SET_D');
 
       this.addPet();
     });
@@ -363,7 +363,7 @@ export class RegisterForVaccinationComponent implements OnInit, OnDestroy {
   }
 
   private checkVaccineRecommendation(): void {
-    if (!this.rabiesShotProductId || !this.mixedProductId || !this.setDComboProduct || this.isDialogOpened) {
+    if (!this.rabiesShotProductId || !this.mixedProductId || this.setDComboProducts.length === 0 || this.isDialogOpened) {
       return; // Products not yet loaded or identified or dialog open
     }
 
@@ -378,7 +378,7 @@ export class RegisterForVaccinationComponent implements OnInit, OnDestroy {
 
       const isRabiesSelected = individualSelection.get(this.rabiesShotProductId!.toString())?.value;
       const isMixedSelected = individualSelection.get(this.mixedProductId!.toString())?.value;
-      const isSetDSelected = comboVaccineControl?.value?.productCode === this.setDComboProduct!.productCode;
+      const isSetDSelected = this.setDComboProducts.some(p => p.productId === comboVaccineControl?.value?.productId);
 
       if (isRabiesSelected && isMixedSelected && !isSetDSelected) {
         if (!this.declinedRecommendationIndices.has(i)) {
@@ -418,21 +418,26 @@ export class RegisterForVaccinationComponent implements OnInit, OnDestroy {
   }
 
   private applySetDRecommendation(petFormGroup: FormGroup, individualSelection: FormGroup): void {
-    // Set SET_D combo
-    petFormGroup.get('comboVaccine')?.setValue(this.setDComboProduct);
+    const petSize = petFormGroup.get('size')?.value;
+    const setDForPet = this.setDComboProducts.find(p => p.petSize === petSize);
 
-    // Deselect individual RABIES_SHOT and MIXED
-    individualSelection.get(this.rabiesShotProductId!.toString())?.setValue(false);
-    individualSelection.get(this.mixedProductId!.toString())?.setValue(false);
+    if (setDForPet) {
+      // Set SET_D combo
+      petFormGroup.get('comboVaccine')?.setValue(setDForPet);
 
-    // Set amounts to 0 for deselected individual vaccines
-    const individualAmount = petFormGroup.get('individualVaccineAmount') as FormGroup;
-    individualAmount.get(this.rabiesShotProductId!.toString())?.setValue(0);
-    individualAmount.get(this.mixedProductId!.toString())?.setValue(0);
+      // Deselect individual RABIES_SHOT and MIXED
+      individualSelection.get(this.rabiesShotProductId!.toString())?.setValue(false);
+      individualSelection.get(this.mixedProductId!.toString())?.setValue(false);
 
-    // Trigger recalculation and form updates
-    petFormGroup.updateValueAndValidity();
-    this.recalculateTotal();
+      // Set amounts to 0 for deselected individual vaccines
+      const individualAmount = petFormGroup.get('individualVaccineAmount') as FormGroup;
+      individualAmount.get(this.rabiesShotProductId!.toString())?.setValue(0);
+      individualAmount.get(this.mixedProductId!.toString())?.setValue(0);
+
+      // Trigger recalculation and form updates
+      petFormGroup.updateValueAndValidity();
+      this.recalculateTotal();
+    }
   }
 
   private handleComboChange(petFormGroup: FormGroup, selectedCombo: DisplayProductDto | null): void {
@@ -446,7 +451,7 @@ export class RegisterForVaccinationComponent implements OnInit, OnDestroy {
     const rabiesAmountControl = individualAmount.get(this.rabiesShotProductId.toString());
     const mixedAmountControl = individualAmount.get(this.mixedProductId.toString());
 
-    if (selectedCombo && selectedCombo.productCode === 'SET_D') {
+    if (selectedCombo && this.setDComboProducts.some(p => p.productId === selectedCombo.productId)) {
       // User selected SET_D, so clear and disable individual selections
       rabiesControl?.setValue(false);
       rabiesControl?.disable();

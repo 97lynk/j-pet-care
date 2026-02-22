@@ -8,9 +8,9 @@
         <mat-radio-button value="sms" [disabled]="isVerificationSent">
           {{ 'customerForm.verifySms' | translate }} ({{ data.phone }})
         </mat-radio-button>
-<!--        <mat-radio-button value="email" [disabled]="isVerificationSent">-->
-<!--          {{ 'customerForm.verifyEmail' | translate }} ({{ data.email }})-->
-<!--        </mat-radio-button>-->
+        <mat-radio-button value="email" [disabled]="isVerificationSent">
+          {{ 'customerForm.verifyEmail' | translate }} ({{ data.email }})
+        </mat-radio-button>
       </mat-radio-group>
 
       @if (isVerificationSent) {
