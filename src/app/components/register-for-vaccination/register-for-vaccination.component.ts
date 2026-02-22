@@ -206,7 +206,7 @@ export class RegisterForVaccinationComponent implements OnInit {
         eatingWell: [false],
         digestionGood: [false],
       }),
-      healthCommitment: [true, Validators.requiredTrue],
+      healthCommitment: [false, Validators.requiredTrue],
       comboVaccine: [null], // This will hold the product object
       individualVaccineSelection: this.fb.group(selectVaccineControls),
       individualVaccineAmount: this.fb.group(amountVaccineControls),

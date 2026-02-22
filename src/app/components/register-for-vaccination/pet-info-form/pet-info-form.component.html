@@ -47,7 +47,9 @@
       <mat-form-field appearance="outline" class="full">
         <mat-label>{{ 'petForm.birthDate' | translate }}</mat-label>
         <input
+          readonly
           matInput
+          [max]="maxDate"
           [matDatepicker]="picker"
           formControlName="birthDate"
         >
@@ -69,8 +71,8 @@
 
       <!-- WEIGHT -->
       <mat-form-field appearance="outline" class="full">
-        <mat-label>{{ 'petForm.weight' | translate }}</mat-label>
-        <input matInput type="number" formControlName="weight" (input)="onWeightChange(petForm.value.weight!)">
+        <mat-label>{{ 'petForm.weight.label' | translate }}</mat-label>
+        <input matInput type="number" formControlName="weight" placeholder="{{ 'petForm.weight.placeholder'  | translate }}" (input)="onWeightChange(petForm.value.weight!)">
         @if (petForm.get('weight')?.hasError('required')) {
           <mat-error>{{ 'validation.required' | translate }}</mat-error>
         }
@@ -86,15 +88,15 @@
       <!-- SIZE -->
       <label class="section">{{ 'petForm.size' | translate }}</label>
       <mat-button-toggle-group formControlName="size" class="full button-toggle-group" (valueChange)="onPetSizeChange($event)">
-        <mat-button-toggle class="button-toggle" [value]="'SMALL'">
+        <mat-button-toggle class="button-toggle" [value]="'SMALL'" [disabled]="true">
           <div>{{ 'petForm.sizeSmall' | translate }}</div>
           <small>({{ 'petForm.sizeSmallHint' | translate }})</small>
         </mat-button-toggle>
-        <mat-button-toggle class="button-toggle" [value]="'MEDIUM'">
+        <mat-button-toggle class="button-toggle" [value]="'MEDIUM'" [disabled]="true">
           <div>{{ 'petForm.sizeMedium' | translate }}</div>
           <small>({{ 'petForm.sizeMediumHint' | translate }})</small>
         </mat-button-toggle>
-        <mat-button-toggle class="button-toggle" [value]="'LARGE'">
+        <mat-button-toggle class="button-toggle" [value]="'LARGE'" [disabled]="true">
           <div>{{ 'petForm.sizeLarge' | translate }}</div>
           <small>({{ 'petForm.sizeLargeHint' | translate }})</small>
         </mat-button-toggle>

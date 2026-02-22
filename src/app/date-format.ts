@@ -2,12 +2,13 @@ import { MatDateFormats } from '@angular/material/core';
 
 export const JP_DATE_FORMATS: MatDateFormats = {
   parse: {
-    dateInput: 'YYYY/MM/DD',
+    dateInput:  'yyyy年M月d日'
   },
   display: {
-    dateInput: 'YYYY年M月D日',
-    monthYearLabel: 'YYYY年 M月',
+    dateInput: 'yyyy年M月d日',
+    monthLabel: 'M月',
+    monthYearLabel: 'yyyy年 M月',
     dateA11yLabel: 'LL',
-    monthYearA11yLabel: 'YYYY年 M月',
+    monthYearA11yLabel: 'yyyy年 M月',
   },
 };

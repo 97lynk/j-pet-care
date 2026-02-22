@@ -1,5 +1,7 @@
 @if (form) {
   <mat-card class="container">
+    <div class="disclaimer-note">{{ 'customerForm.note' | translate }}</div>
+
     <mat-card-title>{{ 'customerForm.title' | translate }}</mat-card-title>
 
     <form [formGroup]="customerForm" autocomplete="off">
@@ -13,8 +15,8 @@
       </mat-form-field>
 
       <mat-form-field class="full">
-        <mat-label>{{ 'customerForm.furigana' | translate }}</mat-label>
-        <input matInput formControlName="furigana">
+        <mat-label>{{ 'customerForm.furigana.label' | translate }}</mat-label>
+        <input matInput formControlName="furigana" placeholder="{{ 'customerForm.furigana.placeholder' | translate }}">
         @if (customerForm.get('furigana')?.hasError('required')) {
           <mat-error>{{ 'validation.required' | translate }}</mat-error>
         }

@@ -4,7 +4,7 @@ import moment from 'moment/moment';
 import {MatFormFieldModule} from '@angular/material/form-field';
 import {MatInputModule} from '@angular/material/input';
 import {MatDatepickerModule} from '@angular/material/datepicker';
-import {MAT_DATE_FORMATS, MatNativeDateModule} from '@angular/material/core';
+import {MAT_DATE_FORMATS, MAT_DATE_LOCALE, MatNativeDateModule} from '@angular/material/core';
 import {MatRadioModule} from '@angular/material/radio';
 import {MatSliderModule} from '@angular/material/slider';
 import {MatCheckboxModule} from '@angular/material/checkbox';
@@ -15,9 +15,9 @@ import {MatIconModule} from '@angular/material/icon';
 import {MatDividerModule} from '@angular/material/divider';
 import {MatCardModule} from '@angular/material/card';
 import {MatButtonToggleModule} from '@angular/material/button-toggle';
-import {JP_DATE_FORMATS} from "../../../date-format";
-import {MomentDateAdapter} from "@angular/material-moment-adapter";
 import {DateAdapter} from "@angular/material/core";
+import {LuxonDateAdapter} from "@angular/material-luxon-adapter";
+import {JP_DATE_FORMATS} from "../../../date-format";
 
 @Component({
   selector: 'app-pet-info-form',
@@ -42,13 +42,14 @@ import {DateAdapter} from "@angular/material/core";
     MatButtonToggleModule
   ],
   providers: [
-    { provide: DateAdapter, useClass: MomentDateAdapter },
+    { provide: DateAdapter, useClass: LuxonDateAdapter },
     { provide: MAT_DATE_FORMATS, useValue: JP_DATE_FORMATS },
   ]
 })
 export class PetInfoFormComponent implements OnInit {
   @Input() form!: AbstractControl | null;
   @Input() index!: number;
+  maxDate = moment().toDate();
 
   @Output() onRemove = new EventEmitter<number>();
   constructor(private fb: UntypedFormBuilder) {}
@@ -83,9 +84,9 @@ export class PetInfoFormComponent implements OnInit {
     if (!this.form) return;
 
     let sizeValue = 'SMALL';
-    if (weight >= 10 && weight <= 20) {
+    if (weight >= 10 && weight < 20) {
       sizeValue = 'MEDIUM';
-    } else if (weight > 20) {
+    } else if (weight >= 20) {
       sizeValue = 'LARGE';
     }
     this.form.patchValue({ size: sizeValue }, { emitEvent: true });

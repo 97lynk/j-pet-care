@@ -73,9 +73,13 @@
     "search": "Search"
   },
   "customerForm": {
+    "note": "Certificates will be issued based on the information provided. Please ensure you include your full address, including house and apartment numbers.",
     "title": "Customer Information Details",
     "fullName": "Full Name",
-    "furigana": "Furigana",
+    "furigana": {
+      "label": "Furigana",
+      "placeholder": "No space required"
+    },
     "postalCode": {
       "label": "Postal Code",
       "placeholder": "Format 000-0000"
@@ -121,15 +125,18 @@
     "male": "Male",
     "female": "Female",
     "furColor": "Fur Color",
-    "weight": "Weight (kg)",
+    "weight": {
+      "label": "Weight (kg)",
+      "placeholder": "Number only"
+    },
     "size": "Size",
-    "sizeHint": "Under 10kg: Small · 10–20kg: Medium · Over 20kg: Large",
+    "sizeHint": "Under 10kg: Small · 10–19.9kg: Medium · 20kg and over: Large",
     "sizeSmall": "Small",
     "sizeMedium": "Medium",
     "sizeLarge": "Large",
     "sizeSmallHint": "Under 10kg",
-    "sizeMediumHint": "10 – 20kg",
-    "sizeLargeHint": "Over 20kg",
+    "sizeMediumHint": "10 – 19.9kg",
+    "sizeLargeHint": "20kg and over",
     "healthStatus": "Health Status",
     "healthy": "Healthy",
     "eatingWell": "Eating Well",
