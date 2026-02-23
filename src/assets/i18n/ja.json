@@ -96,7 +96,7 @@
     "building": "建物名 / 部屋番号",
     "phone": {
       "label": "電話番号 ",
-      "placeholder": "00-0000-0000"
+      "placeholder": " "
     },
     "email": "メールアドレス ",
     "submit": "送信",
@@ -220,7 +220,7 @@
     "min": "最小値は{{min}}です。",
     "max": "最大値は{{max}}です。",
     "invalidCode": "入力されたコードが正しくありません。",
-    "requireVaccine": "少なくとも1つのワクチンを選択してください。",
+    "requireVaccine": "少なくとも1つのワクチンまたはお薬を選択してください。",
     "comboAndIndividual": "セットメニューと単体メニューの両方を選択することはできません。"
   },
   "registerSuccess": {

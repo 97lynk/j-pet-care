@@ -58,7 +58,6 @@
 @if (products) {
   <mat-card class="container mobile-view">
     <mat-card-title>{{ 'kitTestForm.name' | translate }}</mat-card-title>
-    <mat-radio-group [formControl]="selectedVaccineControl">
       @for (row of products; track row.productId) {
         <div>
           @if (row.rowspan.productCode !== 0) {
@@ -69,12 +68,13 @@
             </div>
           }
           <div>
-            <mat-radio-button [value]="row">
+            <mat-checkbox
+              [checked]="selectedVaccineControl.value?.productId === row.productId"
+              (change)="selectedVaccineControl.setValue($event.checked ? row : null)">
               {{ 'kitTestForm.size.' + row.petSize | translate }} - ¥{{ row.price | number }}
-            </mat-radio-button>
+            </mat-checkbox>
           </div>
         </div>
       }
-    </mat-radio-group>
   </mat-card>
 }

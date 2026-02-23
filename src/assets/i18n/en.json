@@ -96,7 +96,7 @@
     "building": "Building / Room Number",
     "phone": {
       "label": "Phone Number",
-      "placeholder": "00-0000-0000"
+      "placeholder": " "
     },
     "email": "Email Address",
     "submit": "Submit",
