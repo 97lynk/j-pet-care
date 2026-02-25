@@ -1,6 +1,15 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
-import {TranslateModule} from '@ngx-translate/core';
-import {AbstractControl, FormArray, FormBuilder, FormGroup, ReactiveFormsModule, ValidationErrors, Validators} from '@angular/forms';
+import {TranslateModule, TranslateService} from '@ngx-translate/core';
+import {
+  AbstractControl,
+  FormArray,
+  FormBuilder,
+  FormGroup,
+  ReactiveFormsModule,
+  ValidationErrors,
+  ValidatorFn,
+  Validators
+} from '@angular/forms';
 import moment from 'moment';
 import {ProductService} from '../../services/product.service';
 import {DisplayProductDto, VaccineProductDto} from '../../models/product/product.dto';
@@ -22,24 +31,6 @@ import {Subject, takeUntil} from "rxjs";
 import {MatDialog} from '@angular/material/dialog';
 import {ConfirmationDialogComponent} from './confirmation-dialog/confirmation-dialog.component';
 import {KitTestFormComponent} from "./kit-test-form/kit-test-form.component";
-
-export function requireVaccineSelection(control: AbstractControl): ValidationErrors | null {
-  const comboVaccine = control.get('comboVaccine');
-  const individualVaccineSelection = control.get('individualVaccineSelection');
-
-  const hasCombo = comboVaccine && comboVaccine.value;
-  const hasIndividual = individualVaccineSelection && Object.values(individualVaccineSelection.value).some(v => v);
-
-  if (hasCombo && hasIndividual) {
-    return { comboAndIndividual: true };
-  }
-
-  if (!hasCombo && !hasIndividual) {
-    return { requireVaccine: true };
-  }
-
-  return null;
-}
 
 @Component({
   selector: 'app-register-for-vaccination',
@@ -104,6 +95,7 @@ export class RegisterForVaccinationComponent implements OnInit, OnDestroy {
   private mixedProductId: number | null = null;
   private setDComboProducts: DisplayProductDto[] = [];
   private productCodeToProductMap: Map<string, VaccineProductDto> = new Map();
+  private productIdToProductCodeMap: Map<number, string> = new Map();
   private ngUnsubscribe = new Subject<void>();
   private declinedRecommendationIndices = new Set<number>();
   private isDialogOpened = false;
@@ -114,7 +106,8 @@ export class RegisterForVaccinationComponent implements OnInit, OnDestroy {
     private productService: ProductService,
     private registerService: RegisterService,
     private datePipe: DatePipe,
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    private translate: TranslateService
   ) {
     this.petInfoForms = this.fb.group({
       pets: this.fb.array([]),
@@ -134,6 +127,7 @@ export class RegisterForVaccinationComponent implements OnInit, OnDestroy {
 
       products.forEach(product => {
         this.productCodeToProductMap.set(product.productCode, product);
+        this.productIdToProductCodeMap.set(product.productId, product.productCode);
 
         product.displayNameEn = this.formatDescription(product.displayNameEn);
         product.displayNameJp = this.formatDescription(product.displayNameJp);
@@ -246,7 +240,7 @@ export class RegisterForVaccinationComponent implements OnInit, OnDestroy {
       kitTestSelection: [null], // This will hold the product object
       individualVaccineSelection: this.fb.group(selectVaccineControls),
       individualVaccineAmount: this.fb.group(amountVaccineControls),
-    }, { validators: requireVaccineSelection });
+    }, { validators: this.requireVaccineSelection() });
   }
 
   addPet(): void {
@@ -399,10 +393,10 @@ export class RegisterForVaccinationComponent implements OnInit, OnDestroy {
       const dialogRef = this.dialog.open(ConfirmationDialogComponent, {
         width: '400px',
         data: {
-          title: 'Recommendation',
-          message: 'You have selected both Rabies Shot and Mixed vaccines individually. Would you like to switch to Dセット combo for potential cost savings?',
-          confirmText: 'Switch to Dセット',
-          cancelText: 'Keep Selection'
+          title: this.translate.instant('dialog.recommendation.title'),
+          message: this.translate.instant('dialog.recommendation.message'),
+          confirmText: this.translate.instant('dialog.recommendation.confirmText'),
+          cancelText: this.translate.instant('dialog.recommendation.cancelText')
         }
       });
 
@@ -465,5 +459,40 @@ export class RegisterForVaccinationComponent implements OnInit, OnDestroy {
       rabiesControl?.enable();
       mixedControl?.enable();
     }
+  }
+
+  private requireVaccineSelection(): ValidatorFn {
+    return (control: AbstractControl): ValidationErrors | null => {
+      const comboVaccine = control.get('comboVaccine')?.value;
+      const individualVaccineSelection = control.get('individualVaccineSelection')?.value;
+
+      const hasCombo = !!comboVaccine;
+      const hasIndividual = individualVaccineSelection && Object.values(individualVaccineSelection).some(v => v);
+
+      if (hasCombo && hasIndividual) {
+        if (comboVaccine.productCode === 'SET_D') {
+          const selectedIndividualProductIds = Object.keys(individualVaccineSelection)
+            .filter(id => individualVaccineSelection[id]);
+
+          const allowedProductCodes = ['HEARTWORM_MED', 'PARASITE_PREV'];
+          const allSelectedAreAllowed = selectedIndividualProductIds.every(id => {
+            const productCode = this.productIdToProductCodeMap.get(Number(id));
+            return productCode && allowedProductCodes.includes(productCode);
+          });
+
+          if (allSelectedAreAllowed) {
+            return null; // Allowed: SET_D and some allowed individual vaccines
+          }
+        }
+        // If combo is not SET_D and has individual, or if it is SET_D with non-allowed individual.
+        return { comboAndIndividual: true };
+      }
+
+      if (!hasCombo && !hasIndividual) {
+        return { requireVaccine: true };
+      }
+
+      return null;
+    };
   }
 }

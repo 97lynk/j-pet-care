@@ -96,7 +96,7 @@
     "building": "建物名 / 部屋番号",
     "phone": {
       "label": "電話番号 ",
-      "placeholder": " "
+      "placeholder": "ワンタイムパスワードを受信できる携帯電話番号を入れてください"
     },
     "email": "メールアドレス ",
     "submit": "送信",
@@ -200,7 +200,7 @@
     }
   },
   "kitTestForm": {
-    "name": "検査キット",
+    "name": "フィラリア病検査",
     "sizeLabel": "サイズ",
     "price": "価格(税込)",
     "size": {
@@ -242,6 +242,14 @@
     "total": "合計",
     "step": {
       "complete": "完了しました"
+    }
+  },
+  "dialog": {
+    "recommendation": {
+      "title": "おすすめ",
+      "message": "狂犬病予防接種と混合ワクチンを選択しております。こちらは、単体よりもDセットの方がお安くなっておりますのでDセットをお勧めいたします。",
+      "confirmText": "Dセットへの切り替え",
+      "cancelText": "選択を続けてください"
     }
   }
 }

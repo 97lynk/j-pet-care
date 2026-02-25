@@ -60,13 +60,6 @@
     <mat-card-title>{{ 'kitTestForm.name' | translate }}</mat-card-title>
       @for (row of products; track row.productId) {
         <div>
-          @if (row.rowspan.productCode !== 0) {
-            <mat-divider style="margin-bottom: 1rem"/>
-            <div><b>{{ row.displayNameJp }}</b></div>
-            <div>
-              <pre>{{ row.descriptionJp }}</pre>
-            </div>
-          }
           <div>
             <mat-checkbox
               [checked]="selectedVaccineControl.value?.productId === row.productId"

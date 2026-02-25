@@ -243,5 +243,13 @@
     "step": {
       "complete": "Completed"
     }
+  },
+  "dialog": {
+    "recommendation": {
+      "title": "Recommendation",
+      "message": "You have selected both Rabies Shot and Mixed vaccines individually. Would you like to switch to Dセット combo for potential cost savings?",
+      "confirmText": "Switch to Dセット",
+      "cancelText": "Keep Selection"
+    }
   }
 }
