@@ -3,10 +3,10 @@
 </div>
 
 <mat-stepper headerPosition="top" linear #stepper>
-<!--  <mat-step [stepControl]="customerInfoForm">-->
-<!--    <ng-template matStepLabel>{{ 'customerForm.title' | translate }}</ng-template>-->
-<!--    <app-customer-info-form [form]="customerInfoForm" (onSubmit)="onSubmitCustomerInfo($event, stepper)"></app-customer-info-form>-->
-<!--  </mat-step>-->
+  <mat-step [stepControl]="customerInfoForm">
+    <ng-template matStepLabel>{{ 'customerForm.title' | translate }}</ng-template>
+    <app-customer-info-form [form]="customerInfoForm" (onSubmit)="onSubmitCustomerInfo($event, stepper)"></app-customer-info-form>
+  </mat-step>
 
   <mat-step [stepControl]="petInfoForms">
     <ng-template matStepLabel>{{ 'petForm.title' | translate }}</ng-template>
