@@ -57,9 +57,10 @@
 <!-- Mobile View using new @for and @if syntax -->
 @if (products) {
   <mat-card class="container mobile-view">
-    <mat-card-title>{{ 'kitTestForm.name' | translate }}</mat-card-title>
       @for (row of products; track row.productId) {
         <div>
+          <mat-card-title>{{ row.displayNameJp }}</mat-card-title>
+          <mat-divider style="margin-bottom: 1rem"/>
           <div>
             <mat-checkbox
               [checked]="selectedVaccineControl.value?.productId === row.productId"

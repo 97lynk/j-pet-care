@@ -110,8 +110,7 @@
     "verifyButton": "Verify Phone / Email",
     "verifyTitle": "Verify Contact Information",
     "cancel": "Cancel",
-    "confirm": "Confirm",
-    "spamHint": "If you don't see the email in your inbox, please check your spam folder."
+    "confirm": "Confirm"
   },
   "petForm": {
     "title": "Pet Information",

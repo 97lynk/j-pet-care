@@ -107,11 +107,10 @@
     "verificationCode": "確認コード",
     "verify": "確認",
     "verified": "確認済み！",
-    "verifyButton": "電話番号 / メールアドレスを確認",
+    "verifyButton": "電話番号を確認",
     "verifyTitle": "連絡先の確認",
     "cancel": "キャンセル",
-    "confirm": "確認",
-    "spamHint": "（受信トレイ）に届いていない場合は、迷惑メールフォルダをご確認ください。"
+    "confirm": "確認"
   },
   "petForm": {
     "title": "ペット情報",
