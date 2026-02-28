@@ -248,7 +248,11 @@
       "title": "Recommendation",
       "message": "You have selected both Rabies Shot and Mixed vaccines individually. Would you like to switch to Dセット combo for potential cost savings?",
       "confirmText": "Switch to Dセット",
-      "cancelText": "Keep Selection"
+      "cancelText": "Keep Selection",
+      "setBWithRabies": "You have selected the Rabies vaccination and the combination vaccine. Please note that the D set is more cost-effective than purchasing these individually; therefore, we recommend the A set.",
+      "setCWithMixed": "You have selected the Rabies vaccination and the combination vaccine. Please note that the D set is more cost-effective than purchasing these individually; therefore, we recommend the A set.",
+      "switchToSetA": "Switch to A Set",
+      "keepSelection": "Continue with current selection"
     }
   }
 }

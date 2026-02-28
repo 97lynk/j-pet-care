@@ -91,14 +91,13 @@ export class RegisterForVaccinationComponent implements OnInit, OnDestroy {
 
   petInfoForms: FormGroup;
 
-  private rabiesShotProductId: number | null = null;
-  private mixedProductId: number | null = null;
-  private setDComboProducts: DisplayProductDto[] = [];
+
   private productCodeToProductMap: Map<string, VaccineProductDto> = new Map();
   private productIdToProductCodeMap: Map<number, string> = new Map();
   private ngUnsubscribe = new Subject<void>();
   private declinedRecommendationIndices = new Set<number>();
-  private isDialogOpened = false;
+  private isRecommendationDialogOpened = false; // Renamed from isDialogOpened
+  private declinedSpecificRecommendationIndices = new Set<number>(); // New
 
 
   constructor(
@@ -117,7 +116,6 @@ export class RegisterForVaccinationComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.pets.valueChanges.pipe(takeUntil(this.ngUnsubscribe)).subscribe(() => {
       this.recalculateTotal();
-      this.checkVaccineRecommendation();
     });
 
     this.productService.getAllProduct().subscribe((products: VaccineProductDto[]) => {
@@ -126,7 +124,6 @@ export class RegisterForVaccinationComponent implements OnInit, OnDestroy {
       const kitTestProducts: VaccineProductDto[] = [];
 
       products.forEach(product => {
-        this.productCodeToProductMap.set(product.productCode, product);
         this.productIdToProductCodeMap.set(product.productId, product.productCode);
 
         product.displayNameEn = this.formatDescription(product.displayNameEn);
@@ -134,11 +131,13 @@ export class RegisterForVaccinationComponent implements OnInit, OnDestroy {
         product.descriptionEn = this.formatDescription(product.descriptionEn);
         product.descriptionJp = this.formatDescription(product.descriptionJp);
         if (product.isKitTest) {
+          this.productCodeToProductMap.set(product.productCode + ':' + product.petSize, product);
           kitTestProducts.push(product);
         } else {
           if (product.isCombo) {
             comboProducts.push(product);
           } else {
+            this.productCodeToProductMap.set(product.productCode + ':' + product.petSize, product);
             singleProducts.push(product);
           }
         }
@@ -149,10 +148,9 @@ export class RegisterForVaccinationComponent implements OnInit, OnDestroy {
       this.kitTestProducts = this.populateRowspan(kitTestProducts, 'productCode');
       this.singleProducts.forEach(product => this.singleProductPrice[product.productId] = product.price);
 
-      // Identify specific products for recommendation logic
-      this.rabiesShotProductId = this.productCodeToProductMap.get('RABIES_SHOT')?.productId || null;
-      this.mixedProductId = this.productCodeToProductMap.get('MIXED')?.productId || null;
-      this.setDComboProducts = this.comboProducts.filter(p => p.productCode === 'SET_D');
+      this.comboProducts.forEach(product => {
+        this.productCodeToProductMap.set(product.productCode + ':' + product.petSize, product);
+      });
 
       this.addPet();
     });
@@ -251,7 +249,17 @@ export class RegisterForVaccinationComponent implements OnInit, OnDestroy {
     newPetGroup.get('comboVaccine')?.valueChanges
       .pipe(takeUntil(this.ngUnsubscribe))
       .subscribe(selectedCombo => {
+        // enable / disable individual base on selected combo
         this.handleComboChange(newPetGroup, selectedCombo);
+      });
+
+    //
+    newPetGroup.get('individualVaccineSelection')?.valueChanges
+      .pipe(takeUntil(this.ngUnsubscribe))
+      .subscribe(_ => {
+        // show recommendation
+        this.checkVaccineSetDRecommendation(newPetGroup);
+        this.checkVaccineSetARecommendation(newPetGroup);
       });
   }
 
@@ -262,6 +270,7 @@ export class RegisterForVaccinationComponent implements OnInit, OnDestroy {
       // For simplicity, we can clear the set or try to adjust.
       // Clearing is safer to avoid wrong suppression.
       this.declinedRecommendationIndices.clear();
+      this.declinedSpecificRecommendationIndices.clear(); // New
     }
   }
 
@@ -356,40 +365,32 @@ export class RegisterForVaccinationComponent implements OnInit, OnDestroy {
     return total;
   }
 
-  private checkVaccineRecommendation(): void {
-    if (!this.rabiesShotProductId || !this.mixedProductId || this.setDComboProducts.length === 0 || this.isDialogOpened) {
-      return; // Products not yet loaded or identified or dialog open
-    }
+  private checkVaccineSetDRecommendation(petFormGroup: FormGroup): void {
+    const petSize = petFormGroup.get('size')?.value;
 
-    let targetPetIndex = -1;
-    let targetPetGroup: FormGroup | null = null;
-    let targetIndividualSelection: FormGroup | null = null;
+    const rabiesShotProductId = this.productCodeToProductMap.get(`RABIES_SHOT:${petSize}`)?.productId
+      || this.productCodeToProductMap.get('RABIES_SHOT:ALL')?.productId;
+    const mixedProductId = this.productCodeToProductMap.get(`MIXED:${petSize}`)?.productId
+      || this.productCodeToProductMap.get('MIXED:ALL')?.productId;
+    const setDProduct = this.productCodeToProductMap.get(`SET_D:${petSize}`)
+      || this.productCodeToProductMap.get('SET_D:ALL');
 
-    for (let i = 0; i < this.pets.controls.length; i++) {
-      const petFormGroup = this.pets.controls[i] as FormGroup;
-      const individualSelection = petFormGroup.get('individualVaccineSelection') as FormGroup;
-      const comboVaccineControl = petFormGroup.get('comboVaccine');
+    const individualSelection = petFormGroup.get('individualVaccineSelection') as FormGroup;
+    const individualAmount = petFormGroup.get('individualVaccineAmount') as FormGroup;
+    const comboVaccineControl = petFormGroup.get('comboVaccine');
 
-      const isRabiesSelected = individualSelection.get(this.rabiesShotProductId!.toString())?.value;
-      const isMixedSelected = individualSelection.get(this.mixedProductId!.toString())?.value;
-      const isSetDSelected = this.setDComboProducts.some(p => p.productId === comboVaccineControl?.value?.productId);
+    const rabiesControl = individualSelection.get(`${rabiesShotProductId}`);
+    const mixedControl = individualSelection.get(`${mixedProductId}`);
+    //
+    const rabiesAmountControl = individualAmount.get(`${rabiesShotProductId}`);
+    const mixedAmountControl = individualAmount.get(`${mixedProductId}`);
 
-      if (isRabiesSelected && isMixedSelected && !isSetDSelected) {
-        if (!this.declinedRecommendationIndices.has(i)) {
-          targetPetIndex = i;
-          targetPetGroup = petFormGroup;
-          targetIndividualSelection = individualSelection;
-          break; // Found a candidate, stop searching
-        }
-      } else {
-        // If condition is no longer met (e.g. user deselected one), reset the declined state
-        // so they can be prompted again if they re-select.
-        this.declinedRecommendationIndices.delete(i);
-      }
-    }
+    const isRabiesSelected = individualSelection.get(rabiesShotProductId!.toString())?.value;
+    const isMixedSelected = individualSelection.get(mixedProductId!.toString())?.value;
+    const isSetDSelected = setDProduct?.productId === comboVaccineControl?.value?.productId;
 
-    if (targetPetIndex !== -1 && targetPetGroup && targetIndividualSelection) {
-      this.isDialogOpened = true;
+    if (isRabiesSelected && isMixedSelected && !isSetDSelected) {
+      this.isRecommendationDialogOpened = true;
       const dialogRef = this.dialog.open(ConfirmationDialogComponent, {
         width: '400px',
         data: {
@@ -401,64 +402,197 @@ export class RegisterForVaccinationComponent implements OnInit, OnDestroy {
       });
 
       dialogRef.afterClosed().subscribe(result => {
-        this.isDialogOpened = false;
+        this.isRecommendationDialogOpened = false;
         if (result) {
-          this.applySetDRecommendation(targetPetGroup!, targetIndividualSelection!);
-        } else {
-          this.declinedRecommendationIndices.add(targetPetIndex);
+          console.log(setDProduct)
+          this.applySetDRecommendation(petFormGroup, setDProduct, rabiesControl, rabiesAmountControl, mixedControl, mixedAmountControl);
         }
       });
     }
   }
 
-  private applySetDRecommendation(petFormGroup: FormGroup, individualSelection: FormGroup): void {
+  private checkVaccineSetARecommendation(petFormGroup: FormGroup): void {
     const petSize = petFormGroup.get('size')?.value;
-    const setDForPet = this.setDComboProducts.find(p => p.petSize === petSize);
 
-    if (setDForPet) {
-      // Set SET_D combo
-      petFormGroup.get('comboVaccine')?.setValue(setDForPet);
+    const rabiesShotProductId = this.productCodeToProductMap.get(`RABIES_SHOT:${petSize}`)?.productId
+      || this.productCodeToProductMap.get('RABIES_SHOT:ALL')?.productId;
+    const mixedProductId = this.productCodeToProductMap.get(`MIXED:${petSize}`)?.productId
+      || this.productCodeToProductMap.get('MIXED:ALL')?.productId;
+    const setAProduct = this.productCodeToProductMap.get(`SET_A:${petSize}`)
+      || this.productCodeToProductMap.get('SET_A:ALL');
 
-      // Deselect individual RABIES_SHOT and MIXED
-      individualSelection.get(this.rabiesShotProductId!.toString())?.setValue(false);
-      individualSelection.get(this.mixedProductId!.toString())?.setValue(false);
+    const individualSelection = petFormGroup.get('individualVaccineSelection') as FormGroup;
+    const individualAmount = petFormGroup.get('individualVaccineAmount') as FormGroup;
+    const comboVaccineControl = petFormGroup.get('comboVaccine');
 
-      // Set amounts to 0 for deselected individual vaccines
-      const individualAmount = petFormGroup.get('individualVaccineAmount') as FormGroup;
-      individualAmount.get(this.rabiesShotProductId!.toString())?.setValue(0);
-      individualAmount.get(this.mixedProductId!.toString())?.setValue(0);
+    const rabiesControl = individualSelection.get(`${rabiesShotProductId}`);
+    const mixedControl = individualSelection.get(`${mixedProductId}`);
+    //
+    const rabiesAmountControl = individualAmount.get(`${rabiesShotProductId}`);
+    const mixedAmountControl = individualAmount.get(`${mixedProductId}`);
 
-      // Trigger recalculation and form updates
-      petFormGroup.updateValueAndValidity();
-      this.recalculateTotal();
+    const isRabiesSelected = individualSelection.get(rabiesShotProductId!.toString())?.value;
+    const isMixedSelected = individualSelection.get(mixedProductId!.toString())?.value;
+
+    let shouldRecommendSetA = false;
+    let conflictingIndividualControl: AbstractControl | null;
+    let conflictingIndividualAmountControl: AbstractControl | null;
+    let messageKey: string = '';
+
+    if (comboVaccineControl?.value?.productCode === 'SET_B' && isRabiesSelected) {
+      shouldRecommendSetA = true;
+      conflictingIndividualControl = rabiesControl;
+      conflictingIndividualAmountControl = rabiesAmountControl;
+      messageKey = 'dialog.recommendation.setBWithRabies'; // New translation key
+    } else if (comboVaccineControl?.value?.productCode === 'SET_C' && isMixedSelected) {
+      shouldRecommendSetA = true;
+      conflictingIndividualControl = mixedControl;
+      conflictingIndividualAmountControl = mixedAmountControl;
+      messageKey = 'dialog.recommendation.setCWithMixed'; // New translation key
     }
+
+    if (!shouldRecommendSetA) {
+      return;
+    }
+
+    this.isRecommendationDialogOpened = true;
+    const dialogRef = this.dialog.open(ConfirmationDialogComponent, {
+      width: '400px',
+      data: {
+        title: this.translate.instant('dialog.recommendation.title'),
+        message: this.translate.instant(messageKey),
+        confirmText: this.translate.instant('dialog.recommendation.switchToSetA'), // New translation key
+        cancelText: this.translate.instant('dialog.recommendation.keepSelection') // New translation key
+      }
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      this.isRecommendationDialogOpened = false;
+      if (result) {
+        this.applySetARecommendation(petFormGroup, setAProduct, conflictingIndividualControl, conflictingIndividualAmountControl);
+      }
+    });
+
+  }
+
+  private applySetARecommendation(petFormGroup: FormGroup, setAProduct: VaccineProductDto | undefined,
+                                  control: AbstractControl | null, amountControl: AbstractControl | null): void {
+    if (!setAProduct) {
+      return;
+    }
+    // Set SET_A combo
+    petFormGroup.get('comboVaccine')?.setValue(setAProduct);
+
+    // Deselect the conflicting individual vaccine
+    this.disableIndividualVaccine(control, amountControl);
+
+    // Trigger recalculation and form updates
+    petFormGroup.updateValueAndValidity();
+    this.recalculateTotal();
+
+  }
+
+  private applySetDRecommendation(petFormGroup: FormGroup, setDProduct: VaccineProductDto | undefined,
+                                  rabiesControl: AbstractControl | null, rabiesAmountControl: AbstractControl | null,
+                                  mixedControl: AbstractControl | null, mixedAmountControl: AbstractControl | null): void {
+    if (!setDProduct) {
+      return
+    }
+
+    // Set SET_D combo
+    petFormGroup.get('comboVaccine')?.setValue(setDProduct);
+    console.log(setDProduct)
+
+    // Deselect individual RABIES_SHOT and MIXED
+    this.disableIndividualVaccine(rabiesControl, rabiesAmountControl);
+    this.disableIndividualVaccine(mixedControl, mixedAmountControl);
+
+    // Trigger recalculation and form updates
+    petFormGroup.updateValueAndValidity();
+    this.recalculateTotal();
   }
 
   private handleComboChange(petFormGroup: FormGroup, selectedCombo: DisplayProductDto | null): void {
-    if (!this.rabiesShotProductId || !this.mixedProductId) return;
+    // if (!this.rabiesShotProductId || !this.mixedProductId || !this.heartwormMedProductId) return;
+    const petSize = petFormGroup.get('size')?.value;
+
+    let parasitePrevProduct = this.productCodeToProductMap.get(`PARASITE_PREV:${petSize}`)
+      || this.productCodeToProductMap.get('PARASITE_PREV:ALL');
+
+    const rabiesShotProductId = this.productCodeToProductMap.get(`RABIES_SHOT:${petSize}`)?.productId
+      || this.productCodeToProductMap.get('RABIES_SHOT:ALL')?.productId;
+    const mixedProductId = this.productCodeToProductMap.get(`MIXED:${petSize}`)?.productId
+      || this.productCodeToProductMap.get('MIXED:ALL')?.productId;
+    const heartwormMedProductId = this.productCodeToProductMap.get(`HEARTWORM_MED:${petSize}`)?.productId
+      || this.productCodeToProductMap.get('HEARTWORM_MED:ALL')?.productId;
+    const parasitePrevProductId = parasitePrevProduct?.productId;
 
     const individualSelection = petFormGroup.get('individualVaccineSelection') as FormGroup;
     const individualAmount = petFormGroup.get('individualVaccineAmount') as FormGroup;
 
-    const rabiesControl = individualSelection.get(this.rabiesShotProductId.toString());
-    const mixedControl = individualSelection.get(this.mixedProductId.toString());
-    const rabiesAmountControl = individualAmount.get(this.rabiesShotProductId.toString());
-    const mixedAmountControl = individualAmount.get(this.mixedProductId.toString());
+    const rabiesControl = individualSelection.get(`${rabiesShotProductId}`);
+    const mixedControl = individualSelection.get(`${mixedProductId}`);
+    const heartwormControl = individualSelection.get(`${heartwormMedProductId}`);
+    const parasitePrevControl = individualSelection.get(`${parasitePrevProductId}`);
+    //
+    const rabiesAmountControl = individualAmount.get(`${rabiesShotProductId}`);
+    const mixedAmountControl = individualAmount.get(`${mixedProductId}`);
+    const heartwormAmountControl = individualAmount.get(`${heartwormMedProductId}`);
+    const parasitePrevAmountControl = individualAmount.get(`${parasitePrevProductId}`);
 
-    if (selectedCombo && this.setDComboProducts.some(p => p.productId === selectedCombo.productId)) {
-      // User selected SET_D, so clear and disable individual selections
-      rabiesControl?.setValue(false);
-      rabiesControl?.disable();
-      mixedControl?.setValue(false);
-      mixedControl?.disable();
+    // Reset all individual controls to enabled state first (unless petSize specific)
+    rabiesControl?.enable();
+    mixedControl?.enable();
+    heartwormControl?.enable();
+    parasitePrevControl?.enable();
 
-      rabiesAmountControl?.setValue(0);
-      mixedAmountControl?.setValue(0);
-    } else {
-      // User deselected SET_D or chose another combo, so re-enable the controls
-      rabiesControl?.enable();
-      mixedControl?.enable();
+    if (selectedCombo) {
+      switch (selectedCombo.productCode) {
+        case 'SET_A':
+          this.changeMinMaxValidation(parasitePrevAmountControl, parasitePrevProduct, 1, 9);
+          this.disableIndividualVaccine(mixedControl, mixedAmountControl);
+          this.disableIndividualVaccine(heartwormControl, heartwormAmountControl);
+          this.disableIndividualVaccine(rabiesControl, rabiesAmountControl);
+          break;
+        case 'SET_B':
+          this.changeMinMaxValidation(parasitePrevAmountControl, parasitePrevProduct, 1, 9);
+          this.disableIndividualVaccine(mixedControl, mixedAmountControl);
+          this.disableIndividualVaccine(heartwormControl, heartwormAmountControl);
+          break;
+        case 'SET_C':
+          this.changeMinMaxValidation(parasitePrevAmountControl, parasitePrevProduct, 1, 9);
+          this.disableIndividualVaccine(rabiesControl, rabiesAmountControl);
+          this.disableIndividualVaccine(heartwormControl, heartwormAmountControl);
+          break;
+        case 'SET_D':
+          this.changeMinMaxValidation(parasitePrevAmountControl, parasitePrevProduct, 1, 12);
+          this.disableIndividualVaccine(rabiesControl, rabiesAmountControl);
+          this.disableIndividualVaccine(mixedControl, mixedAmountControl);
+          break;
+        default:
+          // If another combo is selected or combo deselected, re-enable
+          // (already handled by initial enable calls)
+          break;
+      }
     }
+  }
+
+  private changeMinMaxValidation(amountControl: AbstractControl | null, product: VaccineProductDto | null | undefined, min: number, max: number) {
+    amountControl?.setValidators([Validators.min(min), Validators.max(max)]);
+
+    if (!product || !product.validations) {
+      return;
+    }
+
+    product.validations['minAmount'] = min;
+    product.validations['maxAmount'] = max;
+  }
+
+  private disableIndividualVaccine(selectControl: AbstractControl | null, amountControl: AbstractControl | null) {
+    selectControl?.setValue(false);
+    selectControl?.disable();
+    amountControl?.setValue(0);
+    amountControl?.disable()
   }
 
   private requireVaccineSelection(): ValidatorFn {
@@ -469,24 +603,24 @@ export class RegisterForVaccinationComponent implements OnInit, OnDestroy {
       const hasCombo = !!comboVaccine;
       const hasIndividual = individualVaccineSelection && Object.values(individualVaccineSelection).some(v => v);
 
-      if (hasCombo && hasIndividual) {
-        if (comboVaccine.productCode === 'SET_D') {
-          const selectedIndividualProductIds = Object.keys(individualVaccineSelection)
-            .filter(id => individualVaccineSelection[id]);
-
-          const allowedProductCodes = ['HEARTWORM_MED', 'PARASITE_PREV'];
-          const allSelectedAreAllowed = selectedIndividualProductIds.every(id => {
-            const productCode = this.productIdToProductCodeMap.get(Number(id));
-            return productCode && allowedProductCodes.includes(productCode);
-          });
-
-          if (allSelectedAreAllowed) {
-            return null; // Allowed: SET_D and some allowed individual vaccines
-          }
-        }
-        // If combo is not SET_D and has individual, or if it is SET_D with non-allowed individual.
-        return { comboAndIndividual: true };
-      }
+      // if (hasCombo && hasIndividual) {
+      //   if (comboVaccine.productCode === 'SET_D') {
+      //     const selectedIndividualProductIds = Object.keys(individualVaccineSelection)
+      //       .filter(id => individualVaccineSelection[id]);
+      //
+      //     const allowedProductCodes = ['HEARTWORM_MED', 'PARASITE_PREV'];
+      //     const allSelectedAreAllowed = selectedIndividualProductIds.every(id => {
+      //       const productCode = this.productIdToProductCodeMap.get(Number(id));
+      //       return productCode && allowedProductCodes.includes(productCode);
+      //     });
+      //
+      //     if (allSelectedAreAllowed) {
+      //       return null; // Allowed: SET_D and some allowed individual vaccines
+      //     }
+      //   }
+      //   // If combo is not SET_D and has individual, or if it is SET_D with non-allowed individual.
+      //   return { comboAndIndividual: true };
+      // }
 
       if (!hasCombo && !hasIndividual) {
         return { requireVaccine: true };
