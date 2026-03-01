@@ -21,7 +21,7 @@
       <!-- NAME -->
       <mat-form-field appearance="outline" class="full">
         <mat-label>{{ 'petForm.petName' | translate }}</mat-label>
-        <input matInput formControlName="petName">
+        <input matInput formControlName="petName" #petNameInput style="scroll-margin-top: 80px;">
         @if (petForm.get('petName')?.hasError('required')) {
           <mat-error>{{ 'validation.required' | translate }}</mat-error>
         }

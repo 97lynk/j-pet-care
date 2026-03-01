@@ -1,4 +1,4 @@
-import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
+import {Component, EventEmitter, Input, OnInit, Output, ElementRef, ViewChild, AfterViewInit} from '@angular/core';
 import {AbstractControl, FormGroup, ReactiveFormsModule, UntypedFormBuilder, Validators} from '@angular/forms';
 import moment from 'moment/moment';
 import {MatFormFieldModule} from '@angular/material/form-field';
@@ -46,12 +46,14 @@ import {JP_DATE_FORMATS} from "../../../date-format";
     { provide: MAT_DATE_FORMATS, useValue: JP_DATE_FORMATS },
   ]
 })
-export class PetInfoFormComponent implements OnInit {
+export class PetInfoFormComponent implements OnInit, AfterViewInit {
   @Input() form!: AbstractControl | null;
   @Input() index!: number;
   maxDate = moment().toDate();
 
   @Output() onRemove = new EventEmitter<number>();
+  @ViewChild('petNameInput') petNameInput!: ElementRef;
+
   constructor(private fb: UntypedFormBuilder) {}
 
   ngOnInit(): void {
@@ -72,6 +74,13 @@ export class PetInfoFormComponent implements OnInit {
         }),
         healthCommitment: [false, Validators.requiredTrue]
       });
+    }
+  }
+
+  ngAfterViewInit(): void {
+    if (this.petNameInput) {
+      this.petNameInput.nativeElement.focus();
+      this.petNameInput.nativeElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
     }
   }
 
