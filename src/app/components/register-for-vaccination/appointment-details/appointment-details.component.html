@@ -34,7 +34,7 @@
             @for (group of groupedLocations; track group.date) {
               <mat-optgroup [label]="group.date || ''">
                 @for (item of group.locations; track item.id) {
-                  <mat-option [value]="item.id">
+                  <mat-option [value]="item.id" class="location-option">
                     {{ item.venue }} - {{ item.name }} - {{ item.address }}
                   </mat-option>
                 }
