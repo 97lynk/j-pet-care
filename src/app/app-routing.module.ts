@@ -5,6 +5,7 @@ import {
 } from './components/register-for-vaccination/register-for-vaccination.component';
 import {HomeComponent} from './components/home/home.component';
 import {CancelRegistrationComponent} from './components/cancel-registration/cancel-registration.component';
+import { MyRegistrationsComponent } from './components/my-registrations/my-registrations.component';
 
 export const routes: Routes = [
   {
@@ -19,6 +20,10 @@ export const routes: Routes = [
   {
     path: 'cancel',
     component: CancelRegistrationComponent,
+  },
+  {
+    path: 'my-registrations',
+    component: MyRegistrationsComponent,
   },
   {
     path: '**',

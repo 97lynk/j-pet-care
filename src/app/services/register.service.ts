@@ -2,13 +2,18 @@ import {Injectable} from '@angular/core';
 import {HttpClient, HttpParams} from '@angular/common/http';
 import {Observable} from 'rxjs';
 import {environment} from '../../environments/environment';
+import {AppointmentDetailResponse, CustomerInfo, VaccinationOrder} from '../models/registration.model';
+
 
 export interface RegistrationResponse {
   registrationCode: string;
   prefectureName: string;
   locationName: string;
   timeSlotLabel: string;
-  appointmentDate: string; // Comes as an ISO string
+  appointmentDate: string;
+  customerInfo: CustomerInfo;
+  vaccinationOrders: VaccinationOrder[];
+  appointmentInfo: AppointmentDetailResponse;
 }
 
 export interface VerificationResponse {
@@ -35,6 +40,14 @@ export class RegisterService {
 
   confirmCancellation(registrationCode: string, otp: string): Observable<void> {
     return this.http.post<void>(`${this.BASE_API}/cancel/${registrationCode}/confirm`, { otp });
+  }
+
+  sendViewRegistrationOtp(registrationCode: string, phoneNumber: string): Observable<VerificationResponse> {
+    return this.http.post<VerificationResponse>(`${this.BASE_API}/view/${registrationCode}/send-otp`, { phoneNumber });
+  }
+
+  getRegistrationDetails(registrationCode: string, phoneNumber: string, otp: string): Observable<RegistrationResponse> {
+    return this.http.post<RegistrationResponse>(`${this.BASE_API}/view/${registrationCode}/details`, { phoneNumber, otp });
   }
 
   sendVerification(target: string, channel: string): Observable<VerificationResponse> {

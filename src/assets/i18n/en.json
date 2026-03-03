@@ -53,10 +53,45 @@
       "title": "New Vaccination Registration",
       "description": "Book a new vaccination appointment for your pet."
     },
+    "view": {
+      "title": "View My Registrations",
+      "description": "Check the status and details of your existing registration."
+    },
     "cancel": {
       "title": "Cancel Registration",
       "description": "Cancel an existing appointment using your registration code."
     }
+  },
+  "myRegistrations": {
+    "title": "View My Registration",
+    "description": "Please enter your registration code and phone number to find your appointment details.",
+    "registrationCode": "Registration Code",
+    "phone": "Phone Number",
+    "placeholder": "e.g., TOK_A1B2C3D4E5",
+    "otp": "OTP Code",
+    "otpPlaceholder": "Enter the code sent to your email",
+    "search": "Search",
+    "submit": "View Details",
+    "otpSent": "An OTP has been sent to your email address.",
+    "error": "Could not find appointment. Please check the code and try again.",
+    "otpError": "The OTP is incorrect. Please try again.",
+    "backToSearch": "Back to search",
+    "customerInfo": "Customer Information",
+    "fullName": "Full Name",
+    "email": "Email Address",
+    "address": "Address",
+    "appointmentInfo": "Appointment Information",
+    "date": "Date",
+    "time": "Time",
+    "venue": "Venue",
+    "hospital": "Hospital",
+    "petsOrders": "Pets & Orders",
+    "petSize": "Size",
+    "product": "Product",
+    "quantity": "Qty",
+    "price": "Price",
+    "subtotal": "Subtotal",
+    "grandTotal": "Grand Total"
   },
   "cancel": {
     "title": "Cancel Registration",

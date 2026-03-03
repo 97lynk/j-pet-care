@@ -1,0 +1,238 @@
+<div class="my-registrations-container">
+  <!-- Search and OTP Form -->
+  <mat-card *ngIf="!registrationDetails" class="search-card animate__animated animate__fadeIn">
+    <mat-card-header>
+      <div mat-card-avatar class="header-icon">
+        <mat-icon color="primary">search</mat-icon>
+      </div>
+      <mat-card-title>{{ 'myRegistrations.title' | translate }}</mat-card-title>
+      <mat-card-subtitle>{{ 'myRegistrations.description' | translate }}</mat-card-subtitle>
+    </mat-card-header>
+
+    <mat-card-content>
+      <form [formGroup]="viewForm" class="search-form">
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>{{ 'myRegistrations.registrationCode' | translate }}</mat-label>
+          <input matInput formControlName="registrationCode"
+                 placeholder="{{ 'myRegistrations.placeholder' | translate }}"
+                 [readonly]="otpSent">
+          <mat-icon matPrefix>confirmation_number</mat-icon>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>{{ 'myRegistrations.phone' | translate }}</mat-label>
+          <input matInput formControlName="phoneNumber"
+                 [readonly]="otpSent || submitting">
+          <mat-icon matPrefix>phone</mat-icon>
+        </mat-form-field>
+
+        <div *ngIf="otpSent" class="otp-section animate__animated animate__fadeInUp">
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>{{ 'myRegistrations.otp' | translate }}</mat-label>
+            <input matInput formControlName="otp"
+                   [maxlength]="6"
+                   placeholder="{{ 'myRegistrations.otpPlaceholder' | translate }}"
+                   [readonly]="submitting">
+            <mat-icon matPrefix>lock</mat-icon>
+          </mat-form-field>
+        </div>
+
+        <div *ngIf="message" class="message" [class.error]="isError">
+          <mat-icon>{{ isError ? 'error' : 'info' }}</mat-icon>
+          <span>{{ message | translate }}</span>
+        </div>
+      </form>
+    </mat-card-content>
+
+    <mat-card-actions align="end">
+      <button *ngIf="!otpSent"
+              mat-flat-button
+              color="primary"
+              (click)="onSearch()"
+              [disabled]="viewForm.get('registrationCode')?.invalid || viewForm.get('phoneNumber')?.invalid || submitting">
+        <mat-icon>send</mat-icon>
+        {{ 'myRegistrations.search' | translate }}
+      </button>
+
+      <button *ngIf="otpSent"
+              mat-flat-button
+              color="primary"
+              (click)="onConfirm()"
+              [disabled]="viewForm.invalid || submitting">
+        <mat-icon>check_circle</mat-icon>
+        {{ 'myRegistrations.submit' | translate }}
+      </button>
+    </mat-card-actions>
+
+    <mat-progress-bar *ngIf="submitting" mode="indeterminate"></mat-progress-bar>
+  </mat-card>
+
+  <!-- Registration Details View -->
+  <div *ngIf="registrationDetails" class="details-container animate__animated animate__fadeIn">
+    <header class="details-header">
+      <div class="title-row">
+        <button mat-icon-button (click)="backToPrevious()" [matTooltip]="'myRegistrations.backToSearch' | translate">
+          <mat-icon>arrow_back</mat-icon>
+        </button>
+        <h1>{{ 'myRegistrations.title' | translate }}</h1>
+      </div>
+      <div class="registration-badge">
+        <span class="label">{{ 'myRegistrations.registrationCode' | translate }}:</span>
+        <span class="value">{{registrationDetails.registrationCode}}</span>
+      </div>
+    </header>
+
+    <div class="details-grid">
+      <!-- Customer Card -->
+      <mat-card class="info-card customer-card">
+        <mat-card-header>
+          <mat-icon mat-card-avatar color="primary">person</mat-icon>
+          <mat-card-title>{{ 'myRegistrations.customerInfo' | translate }}</mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+          <div class="info-row">
+            <mat-icon>account_circle</mat-icon>
+            <div class="info-content">
+              <label>{{ 'myRegistrations.fullName' | translate }}</label>
+              <span>{{registrationDetails.customerInfo?.fullName}} ({{registrationDetails.customerInfo?.furigana}})</span>
+            </div>
+          </div>
+          <div class="info-row">
+            <mat-icon>email</mat-icon>
+            <div class="info-content">
+              <label>{{ 'myRegistrations.email' | translate }}</label>
+              <span>{{registrationDetails.customerInfo?.email}}</span>
+            </div>
+          </div>
+          <div class="info-row">
+            <mat-icon>phone</mat-icon>
+            <div class="info-content">
+              <label>{{ 'myRegistrations.phone' | translate }}</label>
+              <span>{{registrationDetails.customerInfo?.phoneNumber}}</span>
+            </div>
+          </div>
+          <mat-divider></mat-divider>
+          <div class="info-row">
+            <mat-icon>home</mat-icon>
+            <div class="info-content">
+              <label>{{ 'myRegistrations.address' | translate }}</label>
+              <span>〒{{registrationDetails.customerInfo?.postalCode}}</span>
+              <span>{{registrationDetails.customerInfo?.prefecture}} {{registrationDetails.customerInfo?.municipality}}</span>
+              <span>{{registrationDetails.customerInfo?.address}} {{registrationDetails.customerInfo?.building}}</span>
+            </div>
+          </div>
+        </mat-card-content>
+      </mat-card>
+
+
+      <!-- Appointment Card -->
+      <mat-card class="info-card appointment-card">
+        <mat-card-header>
+          <mat-icon mat-card-avatar color="primary">event</mat-icon>
+          <mat-card-title>{{ 'myRegistrations.appointmentInfo' | translate }}</mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+          <div class="info-row">
+            <mat-icon>calendar_today</mat-icon>
+            <div class="info-content">
+              <label>{{ 'myRegistrations.date' | translate }}</label>
+              <span>{{registrationDetails.appointmentInfo?.appointmentDate | date: 'yyyy年M月d日'}} ({{registrationDetails.appointmentInfo?.dayOfWeek}})</span>
+            </div>
+          </div>
+          <div class="info-row">
+            <mat-icon>schedule</mat-icon>
+            <div class="info-content">
+              <label>{{ 'myRegistrations.time' | translate }}</label>
+              <span>{{registrationDetails.appointmentInfo?.timeSlotLabel}}</span>
+            </div>
+          </div>
+          <mat-divider></mat-divider>
+          <div class="info-row">
+            <mat-icon>location_on</mat-icon>
+            <div class="info-content">
+              <label>{{ 'myRegistrations.venue' | translate }}</label>
+              <strong>{{registrationDetails.appointmentInfo?.venue}}</strong>
+              <span>{{registrationDetails.appointmentInfo?.locationName}}</span>
+              <small>{{registrationDetails.appointmentInfo?.address}}</small>
+              <small>{{registrationDetails.appointmentInfo?.prefectureName}}</small>
+            </div>
+          </div>
+          <div class="info-row" *ngIf="registrationDetails.appointmentInfo?.hospital">
+            <mat-icon>local_hospital</mat-icon>
+            <div class="info-content">
+              <label>{{ 'myRegistrations.hospital' | translate }}</label>
+              <span>{{registrationDetails.appointmentInfo?.hospital}}</span>
+            </div>
+          </div>
+        </mat-card-content>
+      </mat-card>
+    </div>
+
+    <!-- Pets & Orders Section -->
+    <section class="orders-section">
+      <h2 class="section-title">
+        <mat-icon>pets</mat-icon>
+        {{ 'myRegistrations.petsOrders' | translate }}
+      </h2>
+
+      <div class="orders-list">
+        @for (order of registrationDetails.vaccinationOrders; track order) {
+          <mat-card class="pet-order-card">
+            <div class="pet-header">
+              <div class="pet-title">
+                <h3>{{order.petInfo?.petName}}</h3>
+                <span class="pet-subtitle">{{order.petInfo?.breed}} • {{order.petInfo?.gender}} • {{order.petInfo?.weight}}kg</span>
+              </div>
+              <div class="pet-size-badge" [attr.data-size]="order.petInfo?.size">
+                {{ 'myRegistrations.petSize' | translate }}: {{ order.petInfo?.size }}
+              </div>
+            </div>
+
+            <mat-card-content>
+              <table class="order-table">
+                <thead>
+                  <tr>
+                    <th>{{ 'myRegistrations.product' | translate }}</th>
+                    <th class="text-right">{{ 'myRegistrations.quantity' | translate }}</th>
+                    <th class="text-right">{{ 'myRegistrations.price' | translate }}</th>
+                    <th class="text-right">{{ 'myRegistrations.subtotal' | translate }}</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  @for (item of order.vaccinationOrderItems; track item) {
+                    <tr>
+                      <td [attr.data-label]="'myRegistrations.product' | translate">
+                        <div class="product-info">
+                          <span class="product-name">{{item.product?.displayNameJp}}</span>
+                          <small class="product-desc">{{item.product?.descriptionJp}}</small>
+                        </div>
+                      </td>
+                      <td class="text-right" [attr.data-label]="'myRegistrations.quantity' | translate">x{{item.quantity}}</td>
+                      <td class="text-right" [attr.data-label]="'myRegistrations.price' | translate">{{item.price | currency:'JPY':'symbol':'1.0-0'}}</td>
+                      <td class="text-right" [attr.data-label]="'myRegistrations.subtotal' | translate">{{item.total | currency:'JPY':'symbol':'1.0-0'}}</td>
+                    </tr>
+                  }
+                </tbody>
+                <tfoot>
+                  <tr>
+                    <td colspan="3" class="desktop-only"></td>
+                    <td class="text-right" [attr.data-label]="'myRegistrations.subtotal' | translate"><strong>{{ calculateOrderTotal(order) | currency:'JPY':'symbol':'1.0-0' }}</strong></td>
+                  </tr>
+                </tfoot>
+              </table>
+            </mat-card-content>
+          </mat-card>
+        }
+      </div>
+    </section>
+
+    <!-- Footer Summary -->
+    <mat-card class="grand-total-card">
+      <div class="total-row">
+        <span>{{ 'myRegistrations.grandTotal' | translate }}</span>
+        <span class="total-amount">{{ getGrandTotal() | currency:'JPY':'symbol':'1.0-0' }}</span>
+      </div>
+    </mat-card>
+  </div>
+</div>
+
