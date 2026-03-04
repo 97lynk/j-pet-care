@@ -67,7 +67,7 @@
     "description": "予約内容を再確認するには、予約番号と登録された電話番号をご入力ください。",
     "registrationCode": "予約番号",
     "phone": "電話番号",
-    "phonePlaceHolder": "先頭のゼロを除いた電話番号をご入力ください",
+    "phonePlaceholder": "先頭のゼロを除いた電話番号をご入力ください",
     "placeholder": "例：26HA_ABCD1234",
     "otp": "OTPコード",
     "otpPlaceholder": "メールに送信されたコードを入力してください",
