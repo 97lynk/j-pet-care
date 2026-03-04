@@ -8,6 +8,7 @@ import {TranslateModule} from '@ngx-translate/core';
 import {MatCardModule} from '@angular/material/card';
 import {MatDividerModule} from '@angular/material/divider';
 import {MatCheckbox} from "@angular/material/checkbox";
+import {LineBreakPipe} from "../../../pipe/line-break.pipe";
 
 @Component({
   selector: 'app-kit-test-form',
@@ -23,7 +24,8 @@ import {MatCheckbox} from "@angular/material/checkbox";
     TranslateModule,
     MatCardModule,
     MatDividerModule,
-    MatCheckbox
+    MatCheckbox,
+    LineBreakPipe
   ]
 })
 export class KitTestFormComponent {

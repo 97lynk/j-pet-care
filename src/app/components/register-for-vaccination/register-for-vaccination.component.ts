@@ -125,11 +125,6 @@ export class RegisterForVaccinationComponent implements OnInit, OnDestroy {
 
       products.forEach(product => {
         this.productIdToProductCodeMap.set(product.productId, product.productCode);
-
-        product.displayNameEn = this.formatDescription(product.displayNameEn);
-        product.displayNameJp = this.formatDescription(product.displayNameJp);
-        product.descriptionEn = this.formatDescription(product.descriptionEn);
-        product.descriptionJp = this.formatDescription(product.descriptionJp);
         if (product.isKitTest) {
           this.productCodeToProductMap.set(product.productCode + ':' + product.petSize, product);
           kitTestProducts.push(product);
@@ -159,10 +154,6 @@ export class RegisterForVaccinationComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this.ngUnsubscribe.next();
     this.ngUnsubscribe.complete();
-  }
-
-  formatDescription(description: string = ''): string {
-    return description.replace(/\\n/g, '\n');
   }
 
   populateRowspan(data: VaccineProductDto[], column: keyof VaccineProductDto): DisplayProductDto[] {

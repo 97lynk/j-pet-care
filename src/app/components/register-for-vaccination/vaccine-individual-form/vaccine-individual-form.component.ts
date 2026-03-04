@@ -9,6 +9,7 @@ import {CommonModule} from '@angular/common';
 import {TranslateModule} from '@ngx-translate/core';
 import {MatCardModule} from "@angular/material/card";
 import {MatDivider} from "@angular/material/list";
+import {LineBreakPipe} from "../../../pipe/line-break.pipe";
 
 @Component({
   selector: 'app-vaccine-individual-form',
@@ -25,6 +26,7 @@ import {MatDivider} from "@angular/material/list";
     TranslateModule,
     MatCardModule,
     MatDivider,
+    LineBreakPipe,
   ]
 })
 export class VaccineIndividualFormComponent implements OnInit {

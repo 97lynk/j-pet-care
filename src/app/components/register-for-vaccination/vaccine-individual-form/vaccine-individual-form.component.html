@@ -14,7 +14,7 @@
       <ng-container matColumnDef="content">
         <th mat-header-cell *matHeaderCellDef [hidden]="true"></th>
         <td mat-cell *matCellDef="let row" [hidden]="row.rowspan.productCode === 0" [attr.rowspan]="row.rowspan.productCode">
-          <pre>{{ row.descriptionJp }}</pre>
+          <pre>{{ row.descriptionJp | lineBreak }}</pre>
         </td>
       </ng-container>
       <ng-container matColumnDef="size">
@@ -72,7 +72,7 @@
         @if (row.rowspan.productCode !== 0) {
           <mat-divider style="margin-bottom: 1rem"/>
           <div><b>{{ row.displayNameJp }}</b></div>
-          <pre>{{ row.descriptionJp }}</pre>
+          <pre>{{ row.descriptionJp | lineBreak }}</pre>
         }
         <div class="selection-row">
           @if (getSelectionControl(row.productId)) {

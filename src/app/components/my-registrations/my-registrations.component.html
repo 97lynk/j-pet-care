@@ -14,7 +14,6 @@
         <mat-form-field appearance="outline" class="full-width">
           <mat-label>{{ 'myRegistrations.registrationCode' | translate }}</mat-label>
           <input matInput formControlName="registrationCode"
-                 placeholder="{{ 'myRegistrations.placeholder' | translate }}"
                  [readonly]="otpSent">
           <mat-icon matPrefix>confirmation_number</mat-icon>
         </mat-form-field>
@@ -22,6 +21,7 @@
         <mat-form-field appearance="outline" class="full-width">
           <mat-label>{{ 'myRegistrations.phone' | translate }}</mat-label>
           <input matInput formControlName="phoneNumber"
+                 placeholder="{{ 'myRegistrations.phonePlaceholder' | translate }}"
                  [readonly]="otpSent || submitting">
           <mat-icon matPrefix>phone</mat-icon>
         </mat-form-field>
@@ -181,10 +181,11 @@
             <div class="pet-header">
               <div class="pet-title">
                 <h3>{{order.petInfo.petName}}</h3>
-                <span class="pet-subtitle">{{order.petInfo.breed}} • {{order.petInfo.gender}} • {{order.petInfo.weight}}kg</span>
+                <span class="pet-subtitle">{{order.petInfo.breed}} • {{ ('myRegistrations.gender.' + order.petInfo.gender)  | translate }} • {{order.petInfo.weight}}kg</span>
               </div>
               <div class="pet-size-badge" [attr.data-size]="order.petInfo.size">
-                {{ 'myRegistrations.petSize' | translate }}: {{ order.petInfo.size }}
+                {{ 'myRegistrations.petSize' | translate }}
+                : {{ ('myRegistrations.size.' + order.petInfo.size)  | translate }}
               </div>
             </div>
 
@@ -204,7 +205,7 @@
                       <td [attr.data-label]="'myRegistrations.product' | translate">
                         <div class="product-info">
                           <span class="product-name">{{item.product.displayNameJp}}</span>
-                          <small class="product-desc">{{item.product.descriptionJp}}</small>
+                          <pre class="product-desc">{{item.product.descriptionJp | lineBreak }}</pre>
                         </div>
                       </td>
                       <td class="text-right" [attr.data-label]="'myRegistrations.quantity' | translate">x{{item.quantity}}</td>

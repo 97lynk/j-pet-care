@@ -13,6 +13,7 @@ import {MatDivider} from "@angular/material/list";
 import {MatIcon} from "@angular/material/icon";
 import {MatProgressBarModule} from "@angular/material/progress-bar";
 import {MatTooltipModule} from "@angular/material/tooltip";
+import {LineBreakPipe} from "../../pipe/line-break.pipe";
 
 @Component({
   selector: 'app-my-registrations',
@@ -33,7 +34,8 @@ import {MatTooltipModule} from "@angular/material/tooltip";
     MatButton,
     MatIcon,
     MatProgressBarModule,
-    MatTooltipModule
+    MatTooltipModule,
+    LineBreakPipe
   ]
 })
 export class MyRegistrationsComponent {

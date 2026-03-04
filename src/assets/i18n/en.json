@@ -67,6 +67,7 @@
     "description": "Please enter your registration code and phone number to find your appointment details.",
     "registrationCode": "Registration Code",
     "phone": "Phone Number",
+    "phonePlaceHolder": "Please enter your phone number without the leading 0.",
     "placeholder": "e.g., TOK_A1B2C3D4E5",
     "otp": "OTP Code",
     "otpPlaceholder": "Enter the code sent to your email",
@@ -87,6 +88,15 @@
     "hospital": "Hospital",
     "petsOrders": "Pets & Orders",
     "petSize": "Size",
+    "size": {
+      "SMALL": "Small",
+      "MEDIUM": "Medium",
+      "LARGE": "Large"
+    },
+    "gender": {
+      "male": "Male",
+      "female": "Female"
+    },
     "product": "Product",
     "quantity": "Qty",
     "price": "Price",

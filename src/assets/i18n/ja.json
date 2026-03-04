@@ -67,6 +67,7 @@
     "description": "予約内容を再確認するには、予約番号と登録された電話番号をご入力ください。",
     "registrationCode": "予約番号",
     "phone": "電話番号",
+    "phonePlaceHolder": "先頭のゼロを除いた電話番号をご入力ください",
     "placeholder": "例：26HA_ABCD1234",
     "otp": "OTPコード",
     "otpPlaceholder": "メールに送信されたコードを入力してください",
@@ -86,7 +87,16 @@
     "venue": "会場",
     "hospital": "病院",
     "petsOrders": "ペットと注文内容",
-    "petSize": "サイズ",
+    "petSize": "体格",
+    "size": {
+      "SMALL": "小型",
+      "MEDIUM": "中型",
+      "LARGE": "大型"
+    },
+    "gender": {
+      "male": "オス",
+      "female": "メス"
+    },
     "product": "品名",
     "quantity": "数量",
     "price": "金額",
