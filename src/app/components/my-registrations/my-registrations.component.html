@@ -94,21 +94,21 @@
             <mat-icon>account_circle</mat-icon>
             <div class="info-content">
               <label>{{ 'myRegistrations.fullName' | translate }}</label>
-              <span>{{registrationDetails.customerInfo?.fullName}} ({{registrationDetails.customerInfo?.furigana}})</span>
+              <span>{{registrationDetails.customerInfo.fullName}} ({{registrationDetails.customerInfo.furigana}})</span>
             </div>
           </div>
           <div class="info-row">
             <mat-icon>email</mat-icon>
             <div class="info-content">
               <label>{{ 'myRegistrations.email' | translate }}</label>
-              <span>{{registrationDetails.customerInfo?.email}}</span>
+              <span>{{registrationDetails.customerInfo.email}}</span>
             </div>
           </div>
           <div class="info-row">
             <mat-icon>phone</mat-icon>
             <div class="info-content">
               <label>{{ 'myRegistrations.phone' | translate }}</label>
-              <span>{{registrationDetails.customerInfo?.phoneNumber}}</span>
+              <span>{{registrationDetails.customerInfo.phoneNumber}}</span>
             </div>
           </div>
           <mat-divider></mat-divider>
@@ -116,9 +116,9 @@
             <mat-icon>home</mat-icon>
             <div class="info-content">
               <label>{{ 'myRegistrations.address' | translate }}</label>
-              <span>〒{{registrationDetails.customerInfo?.postalCode}}</span>
-              <span>{{registrationDetails.customerInfo?.prefecture}} {{registrationDetails.customerInfo?.municipality}}</span>
-              <span>{{registrationDetails.customerInfo?.address}} {{registrationDetails.customerInfo?.building}}</span>
+              <span>〒{{registrationDetails.customerInfo.postalCode}}</span>
+              <span>{{registrationDetails.customerInfo.prefecture}} {{registrationDetails.customerInfo.municipality}}</span>
+              <span>{{registrationDetails.customerInfo.address}} {{registrationDetails.customerInfo.building}}</span>
             </div>
           </div>
         </mat-card-content>
@@ -136,14 +136,14 @@
             <mat-icon>calendar_today</mat-icon>
             <div class="info-content">
               <label>{{ 'myRegistrations.date' | translate }}</label>
-              <span>{{registrationDetails.appointmentInfo?.appointmentDate | date: 'yyyy年M月d日'}} ({{registrationDetails.appointmentInfo?.dayOfWeek}})</span>
+              <span>{{registrationDetails.appointmentInfo.appointmentDate | date: 'yyyy年M月d日'}} ({{registrationDetails.appointmentInfo.dayOfWeek}})</span>
             </div>
           </div>
           <div class="info-row">
             <mat-icon>schedule</mat-icon>
             <div class="info-content">
               <label>{{ 'myRegistrations.time' | translate }}</label>
-              <span>{{registrationDetails.appointmentInfo?.timeSlotLabel}}</span>
+              <span>{{registrationDetails.appointmentInfo.timeSlotLabel}}</span>
             </div>
           </div>
           <mat-divider></mat-divider>
@@ -151,17 +151,17 @@
             <mat-icon>location_on</mat-icon>
             <div class="info-content">
               <label>{{ 'myRegistrations.venue' | translate }}</label>
-              <strong>{{registrationDetails.appointmentInfo?.venue}}</strong>
-              <span>{{registrationDetails.appointmentInfo?.locationName}}</span>
-              <small>{{registrationDetails.appointmentInfo?.address}}</small>
-              <small>{{registrationDetails.appointmentInfo?.prefectureName}}</small>
+              <strong>{{registrationDetails.appointmentInfo.venue}}</strong>
+              <span>{{registrationDetails.appointmentInfo.locationName}}</span>
+              <small>{{registrationDetails.appointmentInfo.address}}</small>
+              <small>{{registrationDetails.appointmentInfo.prefectureName}}</small>
             </div>
           </div>
-          <div class="info-row" *ngIf="registrationDetails.appointmentInfo?.hospital">
+          <div class="info-row" *ngIf="registrationDetails.appointmentInfo.hospital">
             <mat-icon>local_hospital</mat-icon>
             <div class="info-content">
               <label>{{ 'myRegistrations.hospital' | translate }}</label>
-              <span>{{registrationDetails.appointmentInfo?.hospital}}</span>
+              <span>{{registrationDetails.appointmentInfo.hospital}}</span>
             </div>
           </div>
         </mat-card-content>
@@ -180,11 +180,11 @@
           <mat-card class="pet-order-card">
             <div class="pet-header">
               <div class="pet-title">
-                <h3>{{order.petInfo?.petName}}</h3>
-                <span class="pet-subtitle">{{order.petInfo?.breed}} • {{order.petInfo?.gender}} • {{order.petInfo?.weight}}kg</span>
+                <h3>{{order.petInfo.petName}}</h3>
+                <span class="pet-subtitle">{{order.petInfo.breed}} • {{order.petInfo.gender}} • {{order.petInfo.weight}}kg</span>
               </div>
-              <div class="pet-size-badge" [attr.data-size]="order.petInfo?.size">
-                {{ 'myRegistrations.petSize' | translate }}: {{ order.petInfo?.size }}
+              <div class="pet-size-badge" [attr.data-size]="order.petInfo.size">
+                {{ 'myRegistrations.petSize' | translate }}: {{ order.petInfo.size }}
               </div>
             </div>
 
@@ -203,8 +203,8 @@
                     <tr>
                       <td [attr.data-label]="'myRegistrations.product' | translate">
                         <div class="product-info">
-                          <span class="product-name">{{item.product?.displayNameJp}}</span>
-                          <small class="product-desc">{{item.product?.descriptionJp}}</small>
+                          <span class="product-name">{{item.product.displayNameJp}}</span>
+                          <small class="product-desc">{{item.product.descriptionJp}}</small>
                         </div>
                       </td>
                       <td class="text-right" [attr.data-label]="'myRegistrations.quantity' | translate">x{{item.quantity}}</td>
