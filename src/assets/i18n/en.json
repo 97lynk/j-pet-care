@@ -70,7 +70,7 @@
     "phonePlaceholder": "Please enter your phone number without the leading 0.",
     "placeholder": "e.g., TOK_A1B2C3D4E5",
     "otp": "OTP Code",
-    "otpPlaceholder": "Enter the code sent to your email",
+    "otpPlaceholder": "Enter the code sent to your phone",
     "search": "Search",
     "submit": "View Details",
     "otpSent": "An OTP has been sent to your email address.",
