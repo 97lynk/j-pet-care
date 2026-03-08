@@ -1,6 +1,7 @@
 <div class="my-registrations-container">
   <!-- Search and OTP Form -->
-  <mat-card *ngIf="!registrationDetails" class="search-card animate__animated animate__fadeIn">
+  @if (!registrationDetails) {
+  <mat-card class="search-card animate__animated animate__fadeIn">
     <mat-card-header>
       <div mat-card-avatar class="header-icon">
         <mat-icon color="primary">search</mat-icon>
@@ -25,7 +26,8 @@
           <mat-icon matPrefix>phone</mat-icon>
         </mat-form-field>
 
-        <div *ngIf="otpSent" class="otp-section animate__animated animate__fadeInUp">
+        @if (otpSent) {
+        <div class="otp-section animate__animated animate__fadeInUp">
           <mat-form-field appearance="outline" class="full-width">
             <mat-label>{{ 'myRegistrations.otp' | translate }}</mat-label>
             <input matInput formControlName="otp"
@@ -35,39 +37,48 @@
             <mat-icon matPrefix>lock</mat-icon>
           </mat-form-field>
         </div>
+        }
 
-        <div *ngIf="message" class="message" [class.error]="isError">
+        @if (message) {
+        <div class="message" [class.error]="isError">
           <mat-icon>{{ isError ? 'error' : 'info' }}</mat-icon>
           <span>{{ message | translate }}</span>
         </div>
+        }
       </form>
     </mat-card-content>
 
     <mat-card-actions align="end">
-      <button *ngIf="!otpSent"
-              mat-flat-button
+      @if (!otpSent) {
+      <button mat-flat-button
               color="primary"
               (click)="onSearch()"
               [disabled]="viewForm.get('registrationCode')?.invalid || viewForm.get('phoneNumber')?.invalid || submitting">
         <mat-icon>send</mat-icon>
         {{ 'myRegistrations.search' | translate }}
       </button>
+      }
 
-      <button *ngIf="otpSent"
-              mat-flat-button
+      @if (otpSent) {
+      <button mat-flat-button
               color="primary"
               (click)="onConfirm()"
               [disabled]="viewForm.invalid || submitting">
         <mat-icon>check_circle</mat-icon>
         {{ 'myRegistrations.submit' | translate }}
       </button>
+      }
     </mat-card-actions>
 
-    <mat-progress-bar *ngIf="submitting" mode="indeterminate"></mat-progress-bar>
+    @if (submitting) {
+    <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+    }
   </mat-card>
+  }
 
   <!-- Registration Details View -->
-  <div *ngIf="registrationDetails" class="details-container animate__animated animate__fadeIn">
+  @if (registrationDetails) {
+  <div class="details-container animate__animated animate__fadeIn">
     <header class="details-header">
       <div class="title-row">
         <button mat-icon-button (click)="backToPrevious()" [matTooltip]="'myRegistrations.backToSearch' | translate">
@@ -156,13 +167,15 @@
               <small>{{registrationDetails.appointmentInfo.prefectureName}}</small>
             </div>
           </div>
-          <div class="info-row" *ngIf="registrationDetails.appointmentInfo.hospital">
+          @if (registrationDetails.appointmentInfo.hospital) {
+          <div class="info-row">
             <mat-icon>local_hospital</mat-icon>
             <div class="info-content">
               <label>{{ 'myRegistrations.hospital' | translate }}</label>
               <span>{{registrationDetails.appointmentInfo.hospital}}</span>
             </div>
           </div>
+          }
         </mat-card-content>
       </mat-card>
     </div>
@@ -234,5 +247,6 @@
       </div>
     </mat-card>
   </div>
+  }
 </div>
 
