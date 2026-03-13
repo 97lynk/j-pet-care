@@ -62,7 +62,7 @@ export class PetInfoFormComponent implements OnInit, AfterViewInit {
       this.form = this.fb.group({
         petName: ['', Validators.required],
         petBreed: ['', Validators.required],
-        birthDate: [moment().toDate()],
+        birthDate: [null, Validators.required],
         gender: ['', Validators.required],
         furColor: ['', Validators.required],
         weight: [1, Validators.required],

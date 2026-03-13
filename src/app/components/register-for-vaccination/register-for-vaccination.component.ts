@@ -214,7 +214,7 @@ export class RegisterForVaccinationComponent implements OnInit, OnDestroy {
       petType: ['DOG', Validators.required],
       petName: ['', Validators.required],
       petBreed: ['', Validators.required],
-      birthDate: [moment().toDate(), Validators.required],
+      birthDate: [null, Validators.required],
       gender: ['male', Validators.required],
       furColor: ['', Validators.required],
       weight: ['', [Validators.required, Validators.min(1)]],
