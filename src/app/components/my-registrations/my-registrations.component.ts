@@ -73,7 +73,7 @@ export class MyRegistrationsComponent {
       this.message = null;
       this.isError = false;
       const code = this.viewForm.value.registrationCode!;
-      const phone = this.viewForm.value.phoneNumber!;
+      const phone = this.formatPhoneNumber(this.viewForm.value.phoneNumber!);
 
       this.registerService.sendViewRegistrationOtp(code, phone).pipe(
         finalize(() => this.submitting = false)
@@ -99,7 +99,7 @@ export class MyRegistrationsComponent {
       this.message = null;
       this.isError = false;
       const code = this.viewForm.value.registrationCode!;
-      const phone = this.viewForm.value.phoneNumber!;
+      const phone = this.formatPhoneNumber(this.viewForm.value.phoneNumber!);
       const otp = this.viewForm.value.otp!;
 
       this.registerService.getRegistrationDetails(code, phone, otp).pipe(
@@ -121,5 +121,10 @@ export class MyRegistrationsComponent {
   protected backToPrevious() {
     this.registrationDetails = null;
     this.otpSent = false;
+  }
+
+  private formatPhoneNumber(phone: string): string {
+    if (!phone) return '';
+    return phone.replace(/^0+/, '');
   }
 }
