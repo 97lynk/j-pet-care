@@ -1,37 +1,49 @@
 @if (registrationCode && appointmentDetails) {
   <div class="success-wrapper">
-    <mat-card class="success-card mat-elevation-z3">
+    <div>
+      <mat-card class="success-card mat-elevation-z3">
 
-      <!-- CODE -->
-      <mat-card-title class="code">
-        <span>{{ 'registerSuccess.code' | translate }} <b>{{ registrationCode }}</b></span>
-        <button mat-icon-button [cdkCopyToClipboard]="registrationCode" [attr.aria-label]="'registerSuccess.copyCode' | translate">
-          <mat-icon>content_copy</mat-icon>
-        </button>
-      </mat-card-title>
+        <!-- CODE -->
+        <mat-card-title class="code">
+          <span>{{ 'registerSuccess.code' | translate }} <b>{{ registrationCode }}</b></span>
+          <button mat-icon-button [cdkCopyToClipboard]="registrationCode"
+                  [attr.aria-label]="'registerSuccess.copyCode' | translate">
+            <mat-icon>content_copy</mat-icon>
+          </button>
+        </mat-card-title>
 
-      <!-- QR CODE -->
-      <div class="qr">
-        <qrcode
-          [qrdata]="registrationCode"
-          [width]="180">
-        </qrcode>
+        <!-- QR CODE -->
+        <div class="qr">
+          <qrcode
+            [qrdata]="registrationCode"
+            [width]="180">
+          </qrcode>
+        </div>
+
+
+        <!-- INFO -->
+        <mat-card-content class="info">
+          <div><b>{{ 'registerSuccess.appointment' | translate }}</b></div>
+          <pre class="register-appointment">{{ appointmentDetails }}</pre>
+        </mat-card-content>
+
+        <!-- MESSAGE -->
+        <mat-card-footer class="message">
+          {{ 'registerSuccess.successMessage' | translate }}
+        </mat-card-footer>
+
+      </mat-card>
+
+      <!-- NOTE -->
+      <div class="note">
+        <p>{{ 'registerSuccess.noteEmail' | translate }}</p>
+        <p>{{ 'registerSuccess.noteScreenshot' | translate }}</p>
+        <p>{{ 'registerSuccess.noteLink' | translate }}</p>
+        <a [href]="myRegistrationsUrl" target="_blank" rel="noopener noreferrer">{{ myRegistrationsUrl }}</a>
       </div>
-
-
-      <!-- INFO -->
-      <mat-card-content class="info">
-        <div><b>{{ 'registerSuccess.appointment' | translate }}</b></div>
-        <pre class="register-appointment">{{ appointmentDetails }}</pre>
-      </mat-card-content>
-
-      <!-- MESSAGE -->
-      <mat-card-footer class="message">
-        {{ 'registerSuccess.successMessage' | translate }}
-      </mat-card-footer>
-
-    </mat-card>
+    </div>
   </div>
+
 } @else {
   <div class="success-wrapper">
     <mat-card class="success-card mat-elevation-z3">

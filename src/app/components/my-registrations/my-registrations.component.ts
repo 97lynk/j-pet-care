@@ -14,6 +14,7 @@ import {MatIcon} from "@angular/material/icon";
 import {MatProgressBarModule} from "@angular/material/progress-bar";
 import {MatTooltipModule} from "@angular/material/tooltip";
 import {LineBreakPipe} from "../../pipe/line-break.pipe";
+import {QRCodeComponent} from "angularx-qrcode";
 
 @Component({
   selector: 'app-my-registrations',
@@ -35,7 +36,8 @@ import {LineBreakPipe} from "../../pipe/line-break.pipe";
     MatIcon,
     MatProgressBarModule,
     MatTooltipModule,
-    LineBreakPipe
+    LineBreakPipe,
+    QRCodeComponent
   ]
 })
 export class MyRegistrationsComponent {

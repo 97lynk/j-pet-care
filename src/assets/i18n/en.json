@@ -272,7 +272,10 @@
     "copyCode": "Copy registration code",
     "appointment": "Appointment:",
     "successMessage": "Your vaccine appointment was registered successfully!",
-    "processing": "Processing your registration..."
+    "processing": "Processing your registration...",
+    "noteEmail": "Depending on your email provider or settings, the confirmation email may not be delivered correctly.",
+    "noteScreenshot": "We recommend saving a screenshot of this screen just in case.",
+    "noteLink": "You can check your appointment details via the link below."
   },
   "register": {
     "healthCheckTitle": "Health Status & Vaccination History Confirmation",

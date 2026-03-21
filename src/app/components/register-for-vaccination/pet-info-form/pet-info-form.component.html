@@ -46,14 +46,15 @@
       <!-- BIRTH DATE -->
       <mat-form-field appearance="outline" class="full">
         <mat-label>{{ 'petForm.birthDate' | translate }}</mat-label>
+        <mat-datepicker-toggle matPrefix [for]="picker"></mat-datepicker-toggle>
         <input
           readonly
           matInput
           [max]="maxDate"
           [matDatepicker]="picker"
           formControlName="birthDate"
+          placeholder="←こちら"
         >
-        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
         <mat-datepicker #picker />
         @if (petForm.get('birthDate')?.hasError('required')) {
           <mat-error>{{ 'validation.required' | translate }}</mat-error>

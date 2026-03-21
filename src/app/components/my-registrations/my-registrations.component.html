@@ -90,6 +90,10 @@
         <span class="label">{{ 'myRegistrations.registrationCode' | translate }}:</span>
         <span class="value">{{registrationDetails.registrationCode}}</span>
       </div>
+
+      <div style="display:inline-block; border:1px solid #e0e0e0; border-radius:8px; padding:8px; line-height:0;">
+        <qrcode [qrdata]="registrationDetails.registrationCode" [width]="180" [errorCorrectionLevel]="'M'"></qrcode>
+      </div>
     </header>
 
     <div class="details-grid">

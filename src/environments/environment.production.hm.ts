@@ -3,5 +3,6 @@ export const environment = {
   useMock: false,
   tenantId: 'HM',
   apiUrl: 'https://yoyaku.petclinic.co.jp',
-  showLanguageSwitcher: false
+  showLanguageSwitcher: false,
+  myRegistrationsUrl: 'https://yoyakukakunin.petclinic.co.jp/my-registrations'
 };
