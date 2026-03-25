@@ -86,8 +86,8 @@
       </mat-form-field>
 
       <mat-form-field class="full">
-        <mat-label>{{ 'customerForm.email' | translate }}</mat-label>
-        <input matInput formControlName="email">
+        <mat-label>{{ 'customerForm.email.label' | translate }}</mat-label>
+        <input matInput placeholder="{{ 'customerForm.email.placeholder' | translate }}" formControlName="email">
         @if (isEmailVerified) {
           <span matSuffix class="verified-postfix">{{ 'customerForm.verified' | translate }}</span>
         }

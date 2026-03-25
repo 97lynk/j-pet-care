@@ -143,7 +143,10 @@
       "label": "Phone Number",
       "placeholder": " "
     },
-    "email": "Email Address",
+    "email": {
+      "label": "Email Address",
+      "placeholder": "OTPSMSが届かない場合は、メールのOTP認証をご利用ください"
+    },
     "submit": "Submit",
     "verifyMethod": "Verification Method",
     "verifySms": "SMS",

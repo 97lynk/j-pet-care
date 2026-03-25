@@ -143,7 +143,10 @@
       "label": "電話番号 ",
       "placeholder": "ワンタイムパスワードを受信できる携帯電話番号を入れてください"
     },
-    "email": "メールアドレス ",
+    "email": {
+      "label": "メールアドレス ",
+      "placeholder": "OTPSMSが届かない場合は、メールのOTP認証をご利用ください"
+    },
     "submit": "送信",
     "verifyMethod": "確認方法",
     "verifySms": "SMS",
