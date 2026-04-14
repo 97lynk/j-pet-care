@@ -72,7 +72,7 @@ export class RegisterForVaccinationComponent implements OnInit, OnDestroy {
     municipality: ['', Validators.required],
     address: ['', Validators.required],
     building: [''],
-    phone: ['', Validators.required],
+    phone: ['', [Validators.required, Validators.pattern(/^0\d{9,10}$/)]],
     email: ['', [Validators.required, Validators.email]],
     verificationMethod: ['', Validators.required],
     verificationCode: [''],
@@ -300,9 +300,7 @@ export class RegisterForVaccinationComponent implements OnInit, OnDestroy {
     });
 
     const customerInfo = this.customerInfoForm.getRawValue();
-    if (customerInfo.verificationMethod === 'sms') {
-      customerInfo.phone = this.formatPhoneNumber(customerInfo.phone);
-    }
+    customerInfo.phone = this.formatPhoneNumber(customerInfo.phone);
 
     const request = {
       customerInfo: customerInfo,
