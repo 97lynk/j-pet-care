@@ -20,6 +20,10 @@
 .code {
   margin-top: 16px;
   font-size: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px; /* Adds a small space between the code and the button */
 }
 
 .info {
@@ -34,4 +38,27 @@
   font-size: 15px;
   color: #2e7d32;
   font-weight: 600;
+}
+
+.register-appointment {
+  white-space: pre-wrap;
+  word-wrap: break-word;
+}
+
+.note {
+  margin-top: 16px;
+  max-width: 360px;
+  width: 100%;
+  font-size: 13px;
+  color: #555;
+  line-height: 1.6;
+  text-align: left;
+
+  p {
+    margin: 0 0 4px;
+  }
+
+  a {
+    word-break: break-all;
+  }
 }

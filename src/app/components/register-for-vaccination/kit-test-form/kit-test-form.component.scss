@@ -1,0 +1,33 @@
+@use "../../../style/common";
+
+.table {
+  overflow: auto;
+  padding-left: 1rem;
+  padding-right: 1rem;
+}
+
+.disable-cell {
+  color: #ddd;
+}
+
+/* Default: Show mobile, hide desktop */
+.desktop-view {
+  display: none;
+  margin-bottom: 1.5rem;
+}
+
+.mobile-view {
+  display: block;
+  margin-top: 1.5rem;
+}
+
+/* Show desktop on larger screens, hide mobile */
+@media screen and (min-width: 768px) {
+  .desktop-view {
+    display: block;
+  }
+
+  .mobile-view {
+    display: none;
+  }
+}

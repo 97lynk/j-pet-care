@@ -15,19 +15,42 @@
   }
 }
 
-.sticky-panel {
-  background: #f8f8f5;
-  position: sticky;
-  top: 0;
-  z-index: 1;
-}
-
-
 .button-group {
+  position: sticky;
+  bottom: 0;
+  background: white;
+  padding: 1rem;
+  border-top: 1px solid #e0e0e0;
+  z-index: 10;
   display: flex;
-  justify-content: space-between;
-  gap: 1rem;
+  flex-direction: column;
+  gap: 0.5rem;
 }
+
+.total-row {
+  text-align: right;
+  font-size: 1.2rem;
+  font-weight: bold;
+}
+
+.actions-row {
+  display: flex;
+  justify-content: flex-end; /* Default to right-align for desktop */
+  gap: 1rem; /* Gap between buttons on desktop */
+  width: 100%;
+}
+
+/* Mobile-specific styles for the action row */
+@media (max-width: 600px) {
+  .actions-row {
+    justify-content: space-between; /* Spread buttons apart on mobile */
+  }
+
+  .actions-row .submit-all-button {
+    flex-grow: 1; /* Make the submit button take up more space */
+  }
+}
+
 
 .mat-horizontal-stepper-header-container {
   position: sticky;
@@ -36,3 +59,15 @@
   top: 0;
 }
 
+.loading-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(255, 255, 255, 0.7);
+  z-index: 9999;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}

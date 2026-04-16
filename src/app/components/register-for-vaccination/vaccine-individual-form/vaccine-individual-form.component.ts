@@ -7,6 +7,9 @@ import {MatFormFieldModule} from '@angular/material/form-field';
 import {MatInputModule} from '@angular/material/input';
 import {CommonModule} from '@angular/common';
 import {TranslateModule} from '@ngx-translate/core';
+import {MatCardModule} from "@angular/material/card";
+import {MatDivider} from "@angular/material/list";
+import {LineBreakPipe} from "../../../pipe/line-break.pipe";
 
 @Component({
   selector: 'app-vaccine-individual-form',
@@ -20,7 +23,10 @@ import {TranslateModule} from '@ngx-translate/core';
     MatCheckboxModule,
     MatFormFieldModule,
     MatInputModule,
-    TranslateModule
+    TranslateModule,
+    MatCardModule,
+    MatDivider,
+    LineBreakPipe,
   ]
 })
 export class VaccineIndividualFormComponent implements OnInit {
@@ -44,30 +50,39 @@ export class VaccineIndividualFormComponent implements OnInit {
 
           if (selectionControl && amountControl) {
             amountControl.disable();
+            selectionControl.disable();
             if (product.petSize === 'ALL' || product.petSize === size) {
               selectionControl.enable();
-            } else {
-              selectionControl.disable();
             }
           }
         });
       });
+
+      this.petSize.setValue('SMALL');
     }
   }
 
   onSelectVaccine(productId: number): void {
     const amountControl = this.getAmountControl(productId);
     const selectionControl = this.getSelectionControl(productId);
+    const product = this.getProductById(productId);
 
     if (selectionControl?.value) {
       amountControl?.enable();
-      if (amountControl?.value < 1) {
+      if (product && product.validations && product.validations.minAmount === product.validations.maxAmount) {
+        amountControl?.setValue(product.validations.minAmount);
+        amountControl?.disable();
+      } else if (amountControl?.value < 1) {
         amountControl?.setValue(1);
       }
     } else {
       amountControl?.setValue(0);
       amountControl?.disable();
     }
+  }
+
+  getProductById(productId: number): DisplayProductDto | undefined {
+    return this.products.find(p => p.productId === productId);
   }
 
   getSelectionControl(productId: number): FormControl | null {

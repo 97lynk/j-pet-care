@@ -48,13 +48,86 @@
     "kagoshima": "鹿児島県",
     "okinawa": "沖縄県"
   },
+  "home": {
+    "register": {
+      "title": "予防接種の予約はこちら",
+      "description": ""
+    },
+    "view": {
+      "title": "登録内容の確認",
+      "description": "既存の登録のステータスと詳細を確認します。"
+    },
+    "cancel": {
+      "title": "予防接種の予約キャンセルはこちら",
+      "description": "登録コードを使用して既存の予約をキャンセルします。"
+    }
+  },
+  "myRegistrations": {
+    "title": "ご予約の確認",
+    "description": "予約内容を再確認するには、予約番号と登録された電話番号をご入力ください。",
+    "registrationCode": "予約番号",
+    "phone": "電話番号",
+    "phonePlaceholder": "先頭のゼロを除いた電話番号をご入力ください",
+    "placeholder": "例：26HA_ABCD1234",
+    "otp": "OTPコード",
+    "otpPlaceholder": "携帯に送信されたコードを入力してください",
+    "search": "検索",
+    "submit": "次の画面へ進む",
+    "otpSent": "OTPが携帯に送信されました。ご確認ください。",
+    "error": "予約が見つかりませんでした。コードを確認してもう一度お試しください。",
+    "otpError": "OTPが正しくありません。もう一度お試しください。",
+    "backToSearch": "検索に戻る",
+    "customerInfo": "飼主様の情報",
+    "fullName": "氏名",
+    "email": "メールアドレス",
+    "address": "住所",
+    "appointmentInfo": "予約情報",
+    "date": "日付",
+    "time": "時間",
+    "venue": "会場",
+    "hospital": "病院",
+    "petsOrders": "ペットと注文内容",
+    "petSize": "体格",
+    "size": {
+      "SMALL": "小型",
+      "MEDIUM": "中型",
+      "LARGE": "大型"
+    },
+    "gender": {
+      "male": "オス",
+      "female": "メス"
+    },
+    "product": "品名",
+    "quantity": "数量",
+    "price": "金額",
+    "subtotal": "合計",
+    "grandTotal": "合計金額"
+  },
+  "cancel": {
+    "title": "予約のキャンセル",
+    "description": "予約のキャンセルは、予約完了メールに記載の【予約番号】を下記へ入力してください。",
+    "registrationCode": "予約番号を入力",
+    "submit": "キャンセルを確定する",
+    "success": "予約は正常にキャンセルされました。",
+    "error": "予約が見つかりませんでした。コードを確認してもう一度お試しください。",
+    "placeholder": "例：TOK_A1B2C3D4E5",
+    "otp": "OTPコード",
+    "otpPlaceholder": "メールに送信されたコードを入力してください",
+    "otpSent": "OTPがメールアドレスに送信されました。",
+    "otpError": "OTPが正しくありません。もう一度お試しください。",
+    "search": "キャンセル"
+  },
   "customerForm": {
-    "title": "お客様情報の詳細",
-    "fullName": "氏名（フルネーム）",
-    "furigana": "フリガナ ",
+    "note": "入力した情報を基に証明書類を発行いたします。ご住所等の番地・部屋番号まで必ず入力してください。",
+    "title": "飼主様の情報",
+    "fullName": "飼主名(フルネーム) ",
+    "furigana": {
+      "label": "フリガナ ",
+      "placeholder": "スペースなし"
+    },
     "postalCode": {
       "label": "郵便番号 ",
-      "placeholder": "郵便番号（半角数字）000-0000"
+      "placeholder": "英数字で入力 000-0000"
     },
     "prefecture": "都道府県",
     "municipality": {
@@ -68,10 +141,24 @@
     "building": "建物名 / 部屋番号",
     "phone": {
       "label": "電話番号 ",
-      "placeholder": "00-0000-0000"
+      "placeholder": "ワンタイムパスワードを受信できる携帯電話番号を入れてください"
     },
-    "email": "メールアドレス ",
-    "submit": "送信"
+    "email": {
+      "label": "メールアドレス ",
+      "placeholder": "OTPSMSが届かない場合は、メールのOTP認証をご利用ください"
+    },
+    "submit": "送信",
+    "verifyMethod": "確認方法",
+    "verifySms": "SMS",
+    "verifyEmail": "メール",
+    "sendCode": "確認コードを送信",
+    "verificationCode": "確認コード",
+    "verify": "確認",
+    "verified": "確認済み！",
+    "verifyButton": "次の画面へ進む",
+    "verifyTitle": "連絡先の確認",
+    "cancel": "キャンセル",
+    "confirm": "確認"
   },
   "petForm": {
     "title": "ペット情報",
@@ -79,47 +166,63 @@
     "dog": "犬",
     "cat": "猫",
     "petName": "ペットの名前",
-    "petBreed": "犬種 / 猫種",
+    "petBreed": "犬種",
     "birthDate": "生年月日",
     "gender": "性別",
     "male": "オス",
     "female": "メス",
     "furColor": "毛の色",
-    "weight": "体重 (kg)",
+    "weight": {
+      "label": "体重 (kg)",
+      "placeholder": "数字のみ"
+    },
     "size": "サイズ",
-    "sizeHint": "10kg未満: 小 · 10〜20kg: 中 · 20kg以上: 大",
+    "sizeHint": "10kg未満: 小 · 10〜19.9kg: 中 · 20kgから: 大",
     "sizeSmall": "小型",
     "sizeMedium": "中型",
     "sizeLarge": "大型",
     "sizeSmallHint": "10kg未満",
-    "sizeMediumHint": "10〜20kg",
-    "sizeLargeHint": "20kg以上",
-    "healthStatus": "健康状態",
-    "healthy": "健康",
-    "eatingWell": "よく食べる",
-    "digestionGood": "排泄良好",
-    "healthCommitment": "現在ペットは健康です。予防接種の登録をお願いします",
+    "sizeMediumHint": "10〜19.9kg",
+    "sizeLargeHint": "20kgから",
+    "healthStatus": "問 診",
+    "healthy": "元気がいい",
+    "eatingWell": "食欲がある",
+    "digestionGood": "糞尿状態が良い",
+    "healthCommitment": "現在、下記のような症状は認められないので予防接種をお願いします。",
     "submit": "登録",
-    "addPet": "ペットを追加",
+    "addPet": "2頭以上の予約はこちら",
     "remove": "削除",
-    "submitAll": "全てのペットを登録"
+    "submitAll": "予約する",
+    "healthCheckInstruction": "該当する□にレ点をお願い致します。"
   },
   "appointmentDetailFrom": {
-    "title": "予約情報",
+    "title": "予約する会場を選んでください",
     "prefecture": {
       "label": "都道府県",
       "required": "Prefecture is required"
     },
     "location": {
-      "label": "場所",
+      "label": "会場一覧",
       "required": "Location is required"
     },
     "timeSlot": {
-      "label": "時間帯"
+      "label": "ご予約時間"
     },
     "date": {
       "label": "日付",
       "required": "Date is required"
+    },
+    "timeSlotType": {
+      "label": "希望時間帯",
+      "morning": "午前",
+      "afternoon": "午後",
+      "allday": "全日"
+    },
+    "summary": {
+      "time": "時間",
+      "date": "日付",
+      "venue": "会場",
+      "address": "住所"
     }
   },
   "vaccineComboForm": {
@@ -141,6 +244,66 @@
       "MEDIUM": "中型",
       "LARGE": "大型",
       "ALL": "全サイズ共通"
+    }
+  },
+  "kitTestForm": {
+    "name": "フィラリア病検査",
+    "sizeLabel": "サイズ",
+    "price": "価格(税込)",
+    "size": {
+      "SMALL": "小型",
+      "MEDIUM": "中型",
+      "LARGE": "大型",
+      "ALL": "全サイズ共通"
+    }
+  },
+  "validation": {
+    "required": "この項目は必須です。",
+    "email": "有効なメールアドレスを入力してください。",
+    "pattern": "要求された形式に合わせてください。",
+    "postalCodePattern": "有効な郵便番号を入力してください (例: 123-4567)。",
+    "requiredTrue": "予防接種が出来ない状況なのでかかりつけの動物病院へ受診することをお勧めします。",
+    "minLength": "少なくとも{{min}}文字入力してください。",
+    "min": "最小値は{{min}}です。",
+    "max": "最大値は{{max}}です。",
+    "invalidCode": "入力されたコードが正しくありません。",
+    "requireVaccine": "少なくとも1つのワクチンまたはお薬を選択してください。",
+    "comboAndIndividual": "セットメニューと単体メニューの両方を選択することはできません。"
+  },
+  "registerSuccess": {
+    "code": "コード:",
+    "copyCode": "登録コードをコピー",
+    "appointment": "予約:",
+    "successMessage": "予約完了です、後ほどご登録いただいたメールアドレスへQRコードをお送りいたします。",
+    "processing": "登録を処理しています...",
+    "noteEmail": "ご利用のプロバイダーやメール設定により, 予約完了メールが正しく届かない場合がございます。",
+    "noteScreenshot": "念のため, この画面をスクリーンショット等で保存していただくようお願いいたします。",
+    "noteLink": "ご予約内容は, 下記のリンクよりご確認いただけます。"
+  },
+  "register": {
+    "healthCheckTitle": "健康状態・ワクチン接種歴に関する確認事項",
+    "healthCheckList": {
+      "1": "狂犬病または混合ワクチンを一度も接種したことがない",
+      "2": "現在、愛犬の体調に悪いところがある（元気がない、下痢、嘔吐、せき、散歩中に倒れるなど）",
+      "3": "現在、病気・治療中、あるいは妊娠中・授乳中である",
+      "4": "過去にフィラリア症予防薬や予防注射で調子が悪くなったことがある（下痢、嘔吐、顔の腫れ、元気がないなど）",
+      "5": "1ヶ月以内に狂犬病または混合ワクチンの接種を受けた"
+    },
+    "total": "合計",
+    "step": {
+      "complete": "完了しました"
+    }
+  },
+  "dialog": {
+    "recommendation": {
+      "title": "おすすめ",
+      "message": "狂犬病予防接種と混合ワクチンを単体で選択しております。こちらはDセットの方が安価となりますのでDセットをお勧めします。",
+      "confirmText": "Dセットへの切り替え",
+      "cancelText": "選択を続けてください",
+      "setBWithRabies": "セットと単体を選択しております。こちらは、Aセットの方が安価となりますのでAセットをお勧めします。",
+      "setCWithMixed": "セットと単体を選択しております。こちらは、Aセットの方が安価となりますのでAセットをお勧めします。",
+      "switchToSetA": "Aセットへの切り替え",
+      "keepSelection": "選択を続けてください"
     }
   }
 }

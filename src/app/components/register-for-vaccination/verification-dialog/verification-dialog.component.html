@@ -1,0 +1,46 @@
+<h2 mat-dialog-title>{{ 'customerForm.verifyTitle' | translate }}</h2>
+<mat-dialog-content>
+  <form [formGroup]="verificationForm" class="dialog-form">
+
+    @if (!isVerified) {
+      <mat-radio-group formControlName="method" class="radio-group">
+        <mat-radio-button value="sms" [disabled]="isVerificationSent">
+          {{ 'customerForm.verifySms' | translate }} ({{ data.phone }})
+        </mat-radio-button>
+        <mat-radio-button value="email" [disabled]="isVerificationSent">
+          {{ 'customerForm.verifyEmail' | translate }} ({{ data.email }})
+        </mat-radio-button>
+      </mat-radio-group>
+
+      @if (isVerificationSent) {
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>{{ 'customerForm.verificationCode' | translate }}</mat-label>
+          <input matInput formControlName="code">
+          @if (verificationForm.get('code')?.hasError('invalidCode')) {
+            <mat-error>{{ 'validation.invalidCode' | translate }}</mat-error>
+          }
+        </mat-form-field>
+      }
+    } @else {
+      <p class="verified-message-dialog">{{ 'customerForm.verified' | translate }}</p>
+    }
+
+  </form>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+  <button mat-button type="button" (click)="onClose()">{{ 'customerForm.cancel' | translate }}</button>
+
+  @if (!isVerified && !isVerificationSent) {
+    <button mat-raised-button color="primary" type="button" (click)="sendCode()">
+      {{ 'customerForm.sendCode' | translate }}
+    </button>
+  } @else if (!isVerified && isVerificationSent) {
+    <button mat-raised-button color="primary" type="button" (click)="verifyCode()">
+      {{ 'customerForm.verify' | translate }}
+    </button>
+  } @else {
+    <button mat-raised-button color="primary" type="button" (click)="onConfirmAndClose()">
+      {{ 'customerForm.confirm' | translate }}
+    </button>
+  }
+</mat-dialog-actions>

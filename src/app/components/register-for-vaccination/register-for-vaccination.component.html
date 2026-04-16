@@ -1,12 +1,6 @@
-<div>
-  <div class="sticky-panel">
-    <mat-button-toggle-group>
-      <mat-button-toggle checked (click)="useLanguage('ja')">🇯🇵 Japanese</mat-button-toggle>
-      <mat-button-toggle (click)="useLanguage('en')">🇬🇧 English</mat-button-toggle>
-    </mat-button-toggle-group>
-  </div>
+<div class="loading-overlay" *ngIf="loading">
+  <mat-spinner diameter="50"></mat-spinner>
 </div>
-
 
 <mat-stepper headerPosition="top" linear #stepper>
   <mat-step [stepControl]="customerInfoForm">
@@ -19,51 +13,71 @@
 
     <form [formGroup]="petInfoForms">
       <div formArrayName="pets">
-        <div *ngFor="let pet of pets.controls; let i = index" [formGroupName]="i">
-          <div class="pet-step-grid">
-            <!-- LEFT: Pet info -->
-            <div class="left">
-              <app-pet-info-form [form]="pet" [index]="i" (onRemove)="removePet(i)" />
-            </div>
+        @for (pet of pets.controls; track i; let i = $index) {
+          <div [formGroupName]="i">
+            <div class="pet-step-grid">
+              <!-- LEFT: Pet info -->
+              <div class="left">
+                <app-pet-info-form [form]="pet" [index]="i" (onRemove)="removePet(i)" />
+              </div>
 
-            <!-- RIGHT: Vaccine selection -->
-            <div class="right">
-              <app-vaccine-combo-form
-                [products]="comboProducts"
-                [selectedVaccine]="getPetControl(i, 'comboVaccine')"
-                [petSize]="getPetControl(i, 'size')"/>
-              <app-vaccine-individual-form
-                [products]="singleProducts"
-                [selectedVaccine]="getPetFormGroup(i, 'individualVaccineSelection')"
-                [amountVaccine]="getPetFormGroup(i, 'individualVaccineAmount')"
-                [petSize]="getPetControl(i, 'size')"/>
+              <!-- RIGHT: Vaccine selection -->
+              <div class="right">
+                <app-vaccine-combo-form
+                  [products]="comboProducts"
+                  [selectedVaccine]="getPetControl(i, 'comboVaccine')"
+                  [petSize]="getPetControl(i, 'size')"/>
+
+                <app-kit-test-form
+                  [products]="kitTestProducts"
+                  [selectedVaccine]="getPetFormGroup(i, 'kitTestSelection')"
+                  [petSize]="getPetControl(i, 'size')"/>
+
+
+                <app-vaccine-individual-form
+                  [products]="singleProducts"
+                  [selectedVaccine]="getPetFormGroup(i, 'individualVaccineSelection')"
+                  [amountVaccine]="getPetFormGroup(i, 'individualVaccineAmount')"
+                  [petSize]="getPetControl(i, 'size')"/>
+
+                @if (pet.hasError('requireVaccine')) {
+                  <mat-error>{{ 'validation.requireVaccine' | translate }}</mat-error>
+                }
+                @if (pet.hasError('comboAndIndividual')) {
+                  <mat-error>{{ 'validation.comboAndIndividual' | translate }}</mat-error>
+                }
+              </div>
             </div>
+            <mat-divider style="padding: 1rem"></mat-divider>
+
           </div>
-
-          <mat-divider style="padding: 1rem"></mat-divider>
-
-        </div>
+        }
       </div>
 
     </form>
-
-    <div class="button-group">
-      <div></div>
-      <div>
-        <button mat-raised-button color="accent" type="button" (click)="addPet()" style="margin-right: 1rem">
-          <mat-icon>add</mat-icon> {{ 'petForm.addPet' | translate }}
-        </button>
-
-        <button mat-raised-button [disabled]="customerInfoForm.invalid || petInfoForms.invalid" color="primary" type="submit" (click)="onSubmitPetInfo(stepper)">
-          <mat-icon>check</mat-icon> {{ 'petForm.submitAll' | translate }}
-        </button>
-      </div>
-      <div>Total: ¥{{ total | number }}</div>
-    </div>
   </mat-step>
 
   <mat-step>
-    <ng-template matStepLabel>完了しました</ng-template>
-    <app-register-success/>
+    <ng-template matStepLabel>{{ 'register.step.complete' | translate }}</ng-template>
+    <app-register-success
+      [registrationCode]="finalRegistrationCode"
+      [appointmentDetails]="finalAppointmentDetails"
+    />
   </mat-step>
 </mat-stepper>
+
+@if (stepper.selectedIndex === 1) {
+  <div class="button-group">
+    <div class="total-row">
+      <span>{{ 'register.total' | translate }}: ¥{{ total | number }}</span>
+    </div>
+    <div class="actions-row">
+      <button mat-raised-button color="accent" type="button" (click)="addPet()" class="add-pet-button" [disabled]="loading">
+        <mat-icon>add</mat-icon> {{ 'petForm.addPet' | translate }}
+      </button>
+      <button mat-raised-button [disabled]="customerInfoForm.invalid || petInfoForms.invalid || loading" color="primary" type="submit" (click)="onSubmitPetInfo(stepper)" class="submit-all-button">
+        <mat-icon>check</mat-icon> {{ 'petForm.submitAll' | translate }}
+      </button>
+    </div>
+  </div>
+}

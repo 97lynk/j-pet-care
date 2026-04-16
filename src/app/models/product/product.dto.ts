@@ -1,6 +1,7 @@
-export interface VaccineMixtureDto {
-  mixtureId: number;
-  quantityPerUnit: number;
+
+export interface ValidationDto {
+  minAmount: number;
+  maxAmount: number;
 }
 
 export interface VaccineProductDto {
@@ -13,8 +14,9 @@ export interface VaccineProductDto {
   descriptionJp?: string;
   descriptionEn?: string;
   isCombo: boolean;
+  isKitTest: boolean;
   priority: number;
-  mixtures: VaccineMixtureDto[];
+  validations: ValidationDto;
 }
 
 /**

@@ -1,68 +1,102 @@
-<div class="desktop-view" *ngIf="selectedVaccine && amountVaccine && petSize">
-  <table mat-table [dataSource]="products" class="mat-elevation-z1 container">
+@if (selectedVaccine && amountVaccine && petSize) {
+  <!-- Desktop View -->
+  <div class="desktop-view">
+    <table mat-table [dataSource]="products" class="mat-elevation-z1 container">
+      <!-- Table columns -->
+      <ng-container matColumnDef="name">
+        <th mat-header-cell *matHeaderCellDef colspan="2" style="text-align: center">
+          <b>{{ 'vaccineIndividualForm.name' | translate }}</b>
+        </th>
+        <td mat-cell *matCellDef="let row" [hidden]="row.rowspan.productCode === 0" [attr.rowspan]="row.rowspan.productCode">
+          <b>{{ row.displayNameJp }}</b>
+        </td>
+      </ng-container>
+      <ng-container matColumnDef="content">
+        <th mat-header-cell *matHeaderCellDef [hidden]="true"></th>
+        <td mat-cell *matCellDef="let row" [hidden]="row.rowspan.productCode === 0" [attr.rowspan]="row.rowspan.productCode">
+          <pre>{{ row.descriptionJp | lineBreak }}</pre>
+        </td>
+      </ng-container>
+      <ng-container matColumnDef="size">
+        <th mat-header-cell *matHeaderCellDef>
+          <b>{{ 'vaccineIndividualForm.sizeLabel' | translate }}</b>
+        </th>
+        <td mat-cell *matCellDef="let row" [class.disable-cell]="row.petSize !== 'ALL' && petSize.value !== row.petSize">
+          {{ 'vaccineIndividualForm.size.' + row.petSize | translate }}
+        </td>
+      </ng-container>
+      <ng-container matColumnDef="price">
+        <th mat-header-cell *matHeaderCellDef>
+          <b>{{ 'vaccineIndividualForm.price' | translate }}</b>
+        </th>
+        <td mat-cell *matCellDef="let row" [class.disable-cell]="row.petSize !== 'ALL' && petSize.value !== row.petSize">
+          ¥{{ row.price | number }}
+        </td>
+      </ng-container>
+      <ng-container matColumnDef="select">
+        <th mat-header-cell *matHeaderCellDef></th>
+        <td mat-cell *matCellDef="let row">
+          @if (getSelectionControl(row.productId)) {
+            <mat-checkbox
+              [formControl]="getSelectionControl(row.productId)!"
+              (change)="onSelectVaccine(row.productId)"/>
+          }
+        </td>
+      </ng-container>
+      <ng-container matColumnDef="amount">
+        <th mat-header-cell *matHeaderCellDef></th>
+        <td mat-cell *matCellDef="let row">
+          @if (getAmountControl(row.productId)) {
+            <mat-form-field style="margin-top: 1rem">
+              <input matInput [formControl]="getAmountControl(row.productId)!" type="number"/>
+              @if (getAmountControl(row.productId)?.hasError('min')) {
+                <mat-error>{{ 'validation.min' | translate: {min: row.validations.minAmount} }}</mat-error>
+              }
+              @if (getAmountControl(row.productId)?.hasError('max')) {
+                <mat-error>{{ 'validation.max' | translate: {max: row.validations.maxAmount} }}</mat-error>
+              }
+            </mat-form-field>
+          }
+        </td>
+      </ng-container>
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+    </table>
+  </div>
 
-    <!-- Individual name -->
-    <ng-container matColumnDef="name">
-      <th mat-header-cell *matHeaderCellDef colspan="2" style="text-align: center">
-        <b>{{ 'vaccineIndividualForm.name' | translate }}</b>
-      </th>
-      <td [hidden]="row?.rowspan?.productCode === 0" [attr.rowspan]="row?.rowspan?.productCode" mat-cell *matCellDef="let row">
-        <b>{{ row.displayNameJp }}</b>
-      </td>
-    </ng-container>
-
-    <!-- Service -->
-    <ng-container matColumnDef="content">
-      <th mat-header-cell *matHeaderCellDef [hidden]="true"></th>
-      <td mat-cell [hidden]="row?.rowspan?.productCode === 0" [attr.rowspan]="row?.rowspan?.productCode" *matCellDef="let row">
-        <pre> {{ row.descriptionJp }}</pre>
-      </td>
-    </ng-container>
-
-    <!-- Size -->
-    <ng-container matColumnDef="size">
-      <th mat-header-cell *matHeaderCellDef>
-        <b>{{ 'vaccineIndividualForm.sizeLabel' | translate }}</b>
-      </th>
-      <td mat-cell *matCellDef="let row"
-          [class.disable-cell]="row.petSize !== 'ALL' && petSize.value !== row.petSize">
-        {{ 'vaccineIndividualForm.size.' + row.petSize | translate }}
-      </td>
-    </ng-container>
-
-    <!-- Price -->
-    <ng-container matColumnDef="price">
-      <th mat-header-cell *matHeaderCellDef>
-        <b>{{ 'vaccineIndividualForm.price' | translate }}</b>
-      </th>
-      <td mat-cell *matCellDef="let row"
-          [class.disable-cell]="row.petSize !== 'ALL' && petSize.value !== row.petSize">
-        ¥{{ row.price | number }}
-      </td>
-    </ng-container>
-
-    <ng-container matColumnDef="select">
-      <th mat-header-cell *matHeaderCellDef></th>
-      <td mat-cell *matCellDef="let row">
-        <mat-checkbox *ngIf="getSelectionControl(row.productId)"
-                      [formControl]="getSelectionControl(row.productId)!"
-                      (change)="onSelectVaccine(row.productId)"/>
-      </td>
-    </ng-container>
-
-    <ng-container matColumnDef="amount">
-      <th mat-header-cell *matHeaderCellDef></th>
-      <td mat-cell *matCellDef="let row">
-        <mat-form-field style="margin-top: 1rem" *ngIf="getAmountControl(row.productId)">
-          <input matInput [formControl]="getAmountControl(row.productId)!" type="number"/>
-          <mat-error *ngIf="getAmountControl(row.productId)?.hasError('min')">
-            The minimum amount is 1.
-          </mat-error>
-        </mat-form-field>
-      </td>
-    </ng-container>
-
-    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-    <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
-  </table>
-</div>
+  <!-- Mobile View -->
+  <mat-card class="container mobile-view">
+    <mat-card-title>{{ 'vaccineIndividualForm.name' | translate }}</mat-card-title>
+    @for (row of products; track row.productId) {
+      <div class="name-vaccine">
+        @if (row.rowspan.productCode !== 0) {
+          <mat-divider style="margin-bottom: 1rem"/>
+          <div><b>{{ row.displayNameJp }}</b></div>
+          <pre>{{ row.descriptionJp | lineBreak }}</pre>
+        }
+        <div class="selection-row">
+          @if (getSelectionControl(row.productId)) {
+            <mat-checkbox
+              [formControl]="getSelectionControl(row.productId)!"
+              (change)="onSelectVaccine(row.productId)">
+              {{ 'vaccineIndividualForm.size.' + row.petSize | translate }} - ¥{{ row.price | number }}
+            </mat-checkbox>
+          }
+        </div>
+        <div>
+          @if (getAmountControl(row.productId)) {
+            <mat-form-field class="amount-field">
+              <input matInput [formControl]="getAmountControl(row.productId)!" type="number"/>
+              @if (getAmountControl(row.productId)?.hasError('min')) {
+                <mat-error>{{ 'validation.min' | translate: {min: row.validations.minAmount} }}</mat-error>
+              }
+              @if (getAmountControl(row.productId)?.hasError('max')) {
+                <mat-error>{{ 'validation.max' | translate: {max: row.validations.maxAmount} }}</mat-error>
+              }
+            </mat-form-field>
+          }
+        </div>
+      </div>
+    }
+  </mat-card>
+}

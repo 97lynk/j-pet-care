@@ -48,10 +48,83 @@
     "kagoshima": "Kagoshima",
     "okinawa": "Okinawa"
   },
+  "home": {
+    "register": {
+      "title": "New Vaccination Registration",
+      "description": "Book a new vaccination appointment for your pet."
+    },
+    "view": {
+      "title": "View My Registrations",
+      "description": "Check the status and details of your existing registration."
+    },
+    "cancel": {
+      "title": "Cancel Registration",
+      "description": "Cancel an existing appointment using your registration code."
+    }
+  },
+  "myRegistrations": {
+    "title": "View My Registration",
+    "description": "Please enter your registration code and phone number to find your appointment details.",
+    "registrationCode": "Registration Code",
+    "phone": "Phone Number",
+    "phonePlaceholder": "Please enter your phone number without the leading 0.",
+    "placeholder": "e.g., TOK_A1B2C3D4E5",
+    "otp": "OTP Code",
+    "otpPlaceholder": "Enter the code sent to your phone",
+    "search": "Search",
+    "submit": "View Details",
+    "otpSent": "An OTP has been sent to your email address.",
+    "error": "Could not find appointment. Please check the code and try again.",
+    "otpError": "The OTP is incorrect. Please try again.",
+    "backToSearch": "Back to search",
+    "customerInfo": "Customer Information",
+    "fullName": "Full Name",
+    "email": "Email Address",
+    "address": "Address",
+    "appointmentInfo": "Appointment Information",
+    "date": "Date",
+    "time": "Time",
+    "venue": "Venue",
+    "hospital": "Hospital",
+    "petsOrders": "Pets & Orders",
+    "petSize": "Size",
+    "size": {
+      "SMALL": "Small",
+      "MEDIUM": "Medium",
+      "LARGE": "Large"
+    },
+    "gender": {
+      "male": "Male",
+      "female": "Female"
+    },
+    "product": "Product",
+    "quantity": "Qty",
+    "price": "Price",
+    "subtotal": "Subtotal",
+    "grandTotal": "Grand Total"
+  },
+  "cancel": {
+    "title": "Cancel Registration",
+    "description": "Please enter your registration code to find and cancel your appointment.",
+    "registrationCode": "Registration Code",
+    "submit": "Confirm Cancellation",
+    "success": "Your appointment has been successfully cancelled.",
+    "error": "Could not find appointment. Please check the code and try again.",
+    "placeholder": "e.g., TOK_A1B2C3D4E5",
+    "otp": "OTP Code",
+    "otpPlaceholder": "Enter the code sent to your email",
+    "otpSent": "An OTP has been sent to your email address.",
+    "otpError": "The OTP is incorrect. Please try again.",
+    "search": "Search"
+  },
   "customerForm": {
+    "note": "Certificates will be issued based on the information provided. Please ensure you include your full address, including house and apartment numbers.",
     "title": "Customer Information Details",
     "fullName": "Full Name",
-    "furigana": "Furigana",
+    "furigana": {
+      "label": "Furigana",
+      "placeholder": "No space required"
+    },
     "postalCode": {
       "label": "Postal Code",
       "placeholder": "Format 000-0000"
@@ -68,10 +141,24 @@
     "building": "Building / Room Number",
     "phone": {
       "label": "Phone Number",
-      "placeholder": "00-0000-0000"
+      "placeholder": " "
     },
-    "email": "Email Address",
-    "submit": "Submit"
+    "email": {
+      "label": "Email Address",
+      "placeholder": "OTPSMSが届かない場合は、メールのOTP認証をご利用ください"
+    },
+    "submit": "Submit",
+    "verifyMethod": "Verification Method",
+    "verifySms": "SMS",
+    "verifyEmail": "Email",
+    "sendCode": "Send Verification Code",
+    "verificationCode": "Verification Code",
+    "verify": "Verify",
+    "verified": "Verified!",
+    "verifyButton": "Verify Phone / Email",
+    "verifyTitle": "Verify Contact Information",
+    "cancel": "Cancel",
+    "confirm": "Confirm"
   },
   "petForm": {
     "title": "Pet Information",
@@ -85,15 +172,18 @@
     "male": "Male",
     "female": "Female",
     "furColor": "Fur Color",
-    "weight": "Weight (kg)",
+    "weight": {
+      "label": "Weight (kg)",
+      "placeholder": "Number only"
+    },
     "size": "Size",
-    "sizeHint": "Under 10kg: Small · 10–20kg: Medium · Over 20kg: Large",
+    "sizeHint": "Under 10kg: Small · 10–19.9kg: Medium · 20kg and over: Large",
     "sizeSmall": "Small",
     "sizeMedium": "Medium",
     "sizeLarge": "Large",
     "sizeSmallHint": "Under 10kg",
-    "sizeMediumHint": "10 – 20kg",
-    "sizeLargeHint": "Over 20kg",
+    "sizeMediumHint": "10 – 19.9kg",
+    "sizeLargeHint": "20kg and over",
     "healthStatus": "Health Status",
     "healthy": "Healthy",
     "eatingWell": "Eating Well",
@@ -102,7 +192,8 @@
     "submit": "Register",
     "addPet": "Add Another Pet",
     "remove": "Remove",
-    "submitAll": "Submit All Pets"
+    "submitAll": "Submit All Pets",
+    "healthCheckInstruction": "Please check the applicable boxes."
   },
   "appointmentDetailFrom": {
     "title": "Appointment Details",
@@ -120,6 +211,18 @@
     "date": {
       "label": "Date",
       "required": "Date is required"
+    },
+    "timeSlotType": {
+      "label": "Time Preference",
+      "morning": "Morning",
+      "afternoon": "Afternoon",
+      "allday": "All Day"
+    },
+    "summary": {
+      "time": "Time",
+      "date": "Date",
+      "venue": "Venue",
+      "address": "Address"
     }
   },
   "vaccineComboForm": {
@@ -141,6 +244,66 @@
       "MEDIUM": "Medium",
       "LARGE": "Large",
       "ALL": "All"
+    }
+  },
+  "kitTestForm": {
+    "name": "Test Kits",
+    "sizeLabel": "Size",
+    "price": "Price incl. tax",
+    "size": {
+      "SMALL": "Small",
+      "MEDIUM": "Medium",
+      "LARGE": "Large",
+      "ALL": "All"
+    }
+  },
+  "validation": {
+    "required": "This field is required.",
+    "email": "Please enter a valid email address.",
+    "pattern": "Please match the requested format.",
+    "postalCodePattern": "Please enter a valid postal code (e.g., 123-4567).",
+    "requiredTrue": "This box must be checked to proceed.",
+    "minLength": "Please enter at least {{min}} characters.",
+    "min": "Minimum value is {{min}}.",
+    "max": "Maximum value is {{max}}.",
+    "invalidCode": "The code you entered is incorrect.",
+    "requireVaccine": "Please select at least one vaccine.",
+    "comboAndIndividual": "Please select either a combo or individual vaccine, not both."
+  },
+  "registerSuccess": {
+    "code": "Code:",
+    "copyCode": "Copy registration code",
+    "appointment": "Appointment:",
+    "successMessage": "Your vaccine appointment was registered successfully!",
+    "processing": "Processing your registration...",
+    "noteEmail": "Depending on your email provider or settings, the confirmation email may not be delivered correctly.",
+    "noteScreenshot": "We recommend saving a screenshot of this screen just in case.",
+    "noteLink": "You can check your appointment details via the link below."
+  },
+  "register": {
+    "healthCheckTitle": "Health Status & Vaccination History Confirmation",
+    "healthCheckList": {
+      "1": "Never received rabies or mixed vaccine",
+      "2": "Currently has health issues (lethargy, diarrhea, vomiting, coughing, collapsing during walks, etc.)",
+      "3": "Currently sick/under treatment, or pregnant/nursing",
+      "4": "Has had adverse reactions to heartworm prevention or vaccinations in the past (diarrhea, vomiting, facial swelling, lethargy, etc.)",
+      "5": "Received rabies or mixed vaccine within the last month"
+    },
+    "total": "Total",
+    "step": {
+      "complete": "Completed"
+    }
+  },
+  "dialog": {
+    "recommendation": {
+      "title": "Recommendation",
+      "message": "You have selected both Rabies Shot and Mixed vaccines individually. Would you like to switch to Dセット combo for potential cost savings?",
+      "confirmText": "Switch to Dセット",
+      "cancelText": "Keep Selection",
+      "setBWithRabies": "You have selected the Rabies vaccination and the combination vaccine. Please note that the D set is more cost-effective than purchasing these individually; therefore, we recommend the A set.",
+      "setCWithMixed": "You have selected the Rabies vaccination and the combination vaccine. Please note that the D set is more cost-effective than purchasing these individually; therefore, we recommend the A set.",
+      "switchToSetA": "Switch to A Set",
+      "keepSelection": "Continue with current selection"
     }
   }
 }

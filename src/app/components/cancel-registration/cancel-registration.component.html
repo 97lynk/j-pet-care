@@ -1,0 +1,49 @@
+<div class="cancel-container">
+  <mat-card>
+    <mat-card-title>{{ 'cancel.title' | translate }}</mat-card-title>
+    <mat-card-content>
+      <p>{{ 'cancel.description' | translate }}</p>
+      <form [formGroup]="cancelForm">
+        <mat-form-field class="full-width">
+          <mat-label>{{ 'cancel.registrationCode' | translate }}</mat-label>
+          <input matInput formControlName="registrationCode" placeholder="{{ 'cancel.placeholder' | translate }}" [readonly]="otpSent">
+          @if (cancelForm.get('registrationCode')?.hasError('required')) {
+            <mat-error>{{ 'validation.required' | translate }}</mat-error>
+          }
+          @if (cancelForm.get('registrationCode')?.hasError('minlength')) {
+            <mat-error>{{ 'validation.minLength' | translate: { min: 10 } }}</mat-error>
+          }
+        </mat-form-field>
+
+        @if (otpSent) {
+          <mat-form-field class="full-width">
+            <mat-label>{{ 'cancel.otp' | translate }}</mat-label>
+            <input matInput formControlName="otp" placeholder="{{ 'cancel.otpPlaceholder' | translate }}">
+            @if (cancelForm.get('otp')?.hasError('required')) {
+              <mat-error>{{ 'validation.required' | translate }}</mat-error>
+            }
+            @if (cancelForm.get('otp')?.hasError('minlength')) {
+              <mat-error>{{ 'validation.minLength' | translate: { min: 6 } }}</mat-error>
+            }
+          </mat-form-field>
+        }
+
+        @if (!otpSent) {
+          <button mat-raised-button color="primary" (click)="onSearch()" [disabled]="cancelForm.get('registrationCode')?.invalid || submitting" class="full-width">
+            {{ 'cancel.search' | translate }}
+          </button>
+        } @else {
+          <button mat-raised-button color="warn" (click)="onConfirm()" [disabled]="cancelForm.invalid || submitting" class="full-width">
+            {{ 'cancel.submit' | translate }}
+          </button>
+        }
+
+        @if (message) {
+          <div class="message" [class.error]="isError" [class.success]="!isError">
+            {{ message | translate }}
+          </div>
+        }
+      </form>
+    </mat-card-content>
+  </mat-card>
+</div>

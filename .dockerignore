@@ -1,0 +1,16 @@
+# Dependencies and logs
+node_modules
+npm-debug.log
+
+# Git and Docker files
+.git
+.gitignore
+Dockerfile
+
+# IDE and OS files
+.idea/
+.vscode/
+.DS_Store
+
+# Environment variables (should be passed in at runtime, not built into the image)
+.env

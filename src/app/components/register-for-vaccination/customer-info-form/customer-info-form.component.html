@@ -1,69 +1,127 @@
-<mat-card class="container" *ngIf="form">
-  <mat-card-title>{{ 'customerForm.title' | translate }}</mat-card-title>
+@if (form) {
+  <mat-card class="container">
+    <div class="disclaimer-note">{{ 'customerForm.note' | translate }}</div>
 
-  <form [formGroup]="customerForm" autocomplete="off">
+    <mat-card-title>{{ 'customerForm.title' | translate }}</mat-card-title>
 
-    <mat-form-field floatLabel="always" class="full">
-      <mat-label>{{ 'customerForm.fullName' | translate }}</mat-label>
-      <input matInput formControlName="fullName">
-    </mat-form-field>
+    <form [formGroup]="customerForm" autocomplete="off">
 
-    <mat-form-field class="full">
-      <mat-label>{{ 'customerForm.furigana' | translate }}</mat-label>
-      <input matInput formControlName="furigana">
-    </mat-form-field>
+      <mat-form-field floatLabel="always" class="full">
+        <mat-label>{{ 'customerForm.fullName' | translate }}</mat-label>
+        <input matInput formControlName="fullName">
+        @if (customerForm.get('fullName')?.hasError('required')) {
+          <mat-error>{{ 'validation.required' | translate }}</mat-error>
+        }
+      </mat-form-field>
 
-    <mat-form-field class="full">
-      <mat-label>{{ 'customerForm.postalCode.label' | translate }}</mat-label>
-      <input matInput placeholder="{{ 'customerForm.postalCode.placeholder' | translate }}"
-             formControlName="postalCode"
-             (input)="onPostalCodeChange()"
-      >
-    </mat-form-field>
+      <mat-form-field class="full">
+        <mat-label>{{ 'customerForm.furigana.label' | translate }}</mat-label>
+        <input matInput formControlName="furigana" placeholder="{{ 'customerForm.furigana.placeholder' | translate }}">
+        @if (customerForm.get('furigana')?.hasError('required')) {
+          <mat-error>{{ 'validation.required' | translate }}</mat-error>
+        }
+        @if (customerForm.get('furigana')?.hasError('pattern')) {
+          <mat-error>{{ 'validation.pattern' | translate }}</mat-error>
+        }
+      </mat-form-field>
 
-    <mat-form-field class="full">
-      <mat-label>{{ 'customerForm.prefecture' | translate }}</mat-label>
-      <mat-select formControlName="prefecture">
-        <mat-option *ngFor="let p of prefectureOptions" [value]="p.value">
-          {{ p.label | translate }}
-        </mat-option>
-      </mat-select>
-    </mat-form-field>
+      <mat-form-field class="full">
+        <mat-label>{{ 'customerForm.postalCode.label' | translate }}</mat-label>
+        <input matInput placeholder="{{ 'customerForm.postalCode.placeholder' | translate }}"
+               formControlName="postalCode"
+               (input)="onPostalCodeChange()"
+        >
+        @if (customerForm.get('postalCode')?.hasError('required')) {
+          <mat-error>{{ 'validation.required' | translate }}</mat-error>
+        }
+        @if (customerForm.get('postalCode')?.hasError('pattern')) {
+          <mat-error>{{ 'validation.postalCodePattern' | translate }}</mat-error>
+        }
+      </mat-form-field>
 
-    <mat-form-field class="full">
-      <mat-label>{{ 'customerForm.municipality.label' | translate }}</mat-label>
-      <input matInput placeholder="{{ 'customerForm.municipality.placeholder' | translate }}" formControlName="municipality">
-    </mat-form-field>
+      <mat-form-field class="full">
+        <mat-label>{{ 'customerForm.prefecture' | translate }}</mat-label>
+        <mat-select formControlName="prefecture">
+          @for (p of prefectureOptions; track p.value) {
+            <mat-option [value]="p.value">
+              {{ p.label | translate }}
+            </mat-option>
+          }
+        </mat-select>
+        @if (customerForm.get('prefecture')?.hasError('required')) {
+          <mat-error>{{ 'validation.required' | translate }}</mat-error>
+        }
+      </mat-form-field>
 
-    <mat-form-field class="full">
-      <mat-label>{{ 'customerForm.address.label' | translate }}</mat-label>
-      <input matInput placeholder="{{ 'customerForm.address.placeholder' | translate }}" formControlName="address">
-    </mat-form-field>
+      <mat-form-field class="full">
+        <mat-label>{{ 'customerForm.municipality.label' | translate }}</mat-label>
+        <input matInput placeholder="{{ 'customerForm.municipality.placeholder' | translate }}" formControlName="municipality">
+        @if (customerForm.get('municipality')?.hasError('required')) {
+          <mat-error>{{ 'validation.required' | translate }}</mat-error>
+        }
+      </mat-form-field>
 
-    <mat-form-field class="full">
-      <mat-label>{{ 'customerForm.building' | translate }}</mat-label>
-      <input matInput formControlName="building">
-    </mat-form-field>
+      <mat-form-field class="full">
+        <mat-label>{{ 'customerForm.address.label' | translate }}</mat-label>
+        <input matInput placeholder="{{ 'customerForm.address.placeholder' | translate }}" formControlName="address">
+        @if (customerForm.get('address')?.hasError('required')) {
+          <mat-error>{{ 'validation.required' | translate }}</mat-error>
+        }
+      </mat-form-field>
 
-    <mat-form-field class="full">
-      <mat-label>{{ 'customerForm.phone.label' | translate }}</mat-label>
-      <input matInput placeholder="{{ 'customerForm.phone.placeholder' | translate }}" formControlName="phone">
-    </mat-form-field>
+      <mat-form-field class="full">
+        <mat-label>{{ 'customerForm.building' | translate }}</mat-label>
+        <input matInput formControlName="building">
+      </mat-form-field>
 
-    <mat-form-field class="full">
-      <mat-label>{{ 'customerForm.email' | translate }}</mat-label>
-      <input matInput formControlName="email">
-    </mat-form-field>
+      <mat-form-field class="full">
+        <mat-label>{{ 'customerForm.phone.label' | translate }}</mat-label>
+        <input matInput placeholder="{{ 'customerForm.phone.placeholder' | translate }}" formControlName="phone">
+        @if (isPhoneVerified) {
+          <span matSuffix class="verified-postfix">{{ 'customerForm.verified' | translate }}</span>
+        }
+        @if (customerForm.get('phone')?.hasError('required')) {
+          <mat-error>{{ 'validation.required' | translate }}</mat-error>
+        }
+      </mat-form-field>
 
-    <app-appointment-details [form]="customerForm.get('appointment')" />
+      <mat-form-field class="full">
+        <mat-label>{{ 'customerForm.email.label' | translate }}</mat-label>
+        <input matInput placeholder="{{ 'customerForm.email.placeholder' | translate }}" formControlName="email">
+        @if (isEmailVerified) {
+          <span matSuffix class="verified-postfix">{{ 'customerForm.verified' | translate }}</span>
+        }
+        @if (customerForm.get('email')?.hasError('required')) {
+          <mat-error>{{ 'validation.required' | translate }}</mat-error>
+        }
+        @if (customerForm.get('email')?.hasError('email')) {
+          <mat-error>{{ 'validation.email' | translate }}</mat-error>
+        }
+      </mat-form-field>
 
-    <!-- SUBMIT -->
-    <button mat-raised-button color="primary"
-            class="submit"
-            (click)="submit()"
-            [disabled]="form.invalid">
-      {{ 'customerForm.submit' | translate }}
-    </button>
+<!--      <div>error {{ getFormValidationErrors(customerForm) | json  }}</div>-->
 
-  </form>
-</mat-card>
+      @if (!isPhoneVerified && !isEmailVerified) {
+        <button mat-raised-button color="accent"
+                class="submit"
+                (click)="openVerificationDialog()"
+                [disabled]="!isContactInfoValid">
+          {{ 'customerForm.verifyButton' | translate }}
+        </button>
+      }
+
+      @if (isPhoneVerified || isEmailVerified) {
+        <app-appointment-details [form]="customerForm.get('appointment')" />
+
+        <!-- ACTIONS -->
+        <button mat-raised-button color="primary"
+                class="submit"
+                (click)="submit()"
+                [disabled]="form.invalid">
+          {{ 'customerForm.submit' | translate }}
+        </button>
+      }
+
+    </form>
+  </mat-card>
+}
