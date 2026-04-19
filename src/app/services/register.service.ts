@@ -1,5 +1,5 @@
 import {Injectable} from '@angular/core';
-import {HttpClient, HttpParams} from '@angular/common/http';
+import {HttpClient, HttpHeaders, HttpParams} from '@angular/common/http';
 import {Observable, of} from 'rxjs';
 import {environment} from '../../environments/environment';
 import {AppointmentDetailResponse, CustomerInfo, VaccinationOrder} from '../models/registration.model';
@@ -14,6 +14,12 @@ export interface RegistrationResponse {
   customerInfo: CustomerInfo;
   vaccinationOrders: VaccinationOrder[];
   appointmentInfo: AppointmentDetailResponse;
+}
+
+export interface RegistrationDetailsResponse extends RegistrationResponse {
+  editJwt?: string;
+  editLocked: boolean;
+  editLockedReason?: string;
 }
 
 export interface VerificationResponse {
@@ -46,8 +52,31 @@ export class RegisterService {
     return this.http.post<VerificationResponse>(`${this.BASE_API}/view/${registrationCode}/send-otp`, { phoneNumber });
   }
 
-  getRegistrationDetails(registrationCode: string, phoneNumber: string, otp: string): Observable<RegistrationResponse> {
-    return this.http.post<RegistrationResponse>(`${this.BASE_API}/view/${registrationCode}/details`, { phoneNumber, otp });
+  getRegistrationDetails(registrationCode: string, phoneNumber: string, otp: string): Observable<RegistrationDetailsResponse> {
+    return this.http.post<RegistrationDetailsResponse>(`${this.BASE_API}/view/${registrationCode}/details`, { phoneNumber, otp });
+  }
+
+  updateCustomer(regCode: string, body: object, jwt: string): Observable<void> {
+    return this.http.put<void>(
+      `${this.BASE_API}/view/${regCode}/customer`,
+      body,
+      { headers: new HttpHeaders({ Authorization: `Bearer ${jwt}` }) }
+    );
+  }
+
+  updatePet(regCode: string, orderId: number, body: object, jwt: string): Observable<void> {
+    return this.http.put<void>(
+      `${this.BASE_API}/view/${regCode}/orders/${orderId}/pet`,
+      body,
+      { headers: new HttpHeaders({ Authorization: `Bearer ${jwt}` }) }
+    );
+  }
+
+  deleteOrder(regCode: string, orderId: number, jwt: string): Observable<void> {
+    return this.http.delete<void>(
+      `${this.BASE_API}/view/${regCode}/orders/${orderId}`,
+      { headers: new HttpHeaders({ Authorization: `Bearer ${jwt}` }) }
+    );
   }
 
   sendVerification(target: string, channel: string): Observable<VerificationResponse> {

@@ -34,6 +34,7 @@ export interface VaccinationOrderItem {
 }
 
 export interface VaccinationOrder {
+  id: number;
   petInfo: PetInfo;
   vaccinationOrderItems: VaccinationOrderItem[];
 }

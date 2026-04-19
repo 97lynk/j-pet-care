@@ -2,6 +2,20 @@
   <!-- Search and OTP Form -->
   @if (!registrationDetails) {
   <mat-card class="search-card animate__animated animate__fadeIn">
+    <!-- FE-10: session expired banner -->
+    @if (sessionExpired) {
+    <div class="session-expired-banner">
+      <mat-icon>timer_off</mat-icon>
+      <span>{{ 'myRegistrations.sessionExpired' | translate }}</span>
+    </div>
+    }
+    @if (registrationCancelled) {
+    <div class="registration-cancelled-banner">
+      <mat-icon>cancel</mat-icon>
+      <span>{{ 'myRegistrations.registrationCancelled' | translate }}</span>
+    </div>
+    }
+
     <mat-card-header>
       <div mat-card-avatar class="header-icon">
         <mat-icon color="primary">search</mat-icon>
@@ -96,14 +110,82 @@
       </div>
     </header>
 
+    <!-- FE-3: edit locked banner (24h cutoff) -->
+    @if (editLocked) {
+    <div class="edit-locked-banner">
+      <mat-icon>lock_clock</mat-icon>
+      <span>{{ 'myRegistrations.edit.lockedByTime' | translate }}</span>
+    </div>
+    }
+
     <div class="details-grid">
       <!-- Customer Card -->
       <mat-card class="info-card customer-card">
-        <mat-card-header>
-          <mat-icon mat-card-avatar color="primary">person</mat-icon>
-          <mat-card-title>{{ 'myRegistrations.customerInfo' | translate }}</mat-card-title>
-        </mat-card-header>
+        <div class="card-title-row">
+          <mat-card-header>
+            <mat-icon mat-card-avatar color="primary">person</mat-icon>
+            <mat-card-title>{{ 'myRegistrations.customerInfo' | translate }}</mat-card-title>
+          </mat-card-header>
+          <!-- FE-2: show edit button only when not locked -->
+          @if (!editLocked && !customerEditMode) {
+          <button mat-icon-button
+                  [matTooltip]="'myRegistrations.edit.editCustomer' | translate"
+                  (click)="startEditCustomer()">
+            <mat-icon>edit</mat-icon>
+          </button>
+          }
+        </div>
+
         <mat-card-content>
+          <!-- FE-4: inline customer edit form -->
+          @if (customerEditMode) {
+          <form [formGroup]="customerEditForm" class="edit-form animate__animated animate__fadeInUp">
+            <div class="edit-form-grid">
+              <mat-form-field appearance="outline">
+                <mat-label>{{ 'myRegistrations.edit.fullName' | translate }}</mat-label>
+                <input matInput formControlName="fullName">
+              </mat-form-field>
+              <mat-form-field appearance="outline">
+                <mat-label>{{ 'myRegistrations.edit.furigana' | translate }}</mat-label>
+                <input matInput formControlName="furigana">
+              </mat-form-field>
+              <mat-form-field appearance="outline" class="full-span">
+                <mat-label>{{ 'myRegistrations.edit.email' | translate }}</mat-label>
+                <input matInput formControlName="email" type="email">
+              </mat-form-field>
+              <mat-form-field appearance="outline">
+                <mat-label>{{ 'myRegistrations.edit.postalCode' | translate }}</mat-label>
+                <input matInput formControlName="postalCode">
+              </mat-form-field>
+              <mat-form-field appearance="outline">
+                <mat-label>{{ 'myRegistrations.edit.prefecture' | translate }}</mat-label>
+                <input matInput formControlName="prefecture">
+              </mat-form-field>
+              <mat-form-field appearance="outline" class="full-span">
+                <mat-label>{{ 'myRegistrations.edit.municipality' | translate }}</mat-label>
+                <input matInput formControlName="municipality">
+              </mat-form-field>
+              <mat-form-field appearance="outline" class="full-span">
+                <mat-label>{{ 'myRegistrations.edit.address' | translate }}</mat-label>
+                <input matInput formControlName="address">
+              </mat-form-field>
+              <mat-form-field appearance="outline" class="full-span">
+                <mat-label>{{ 'myRegistrations.edit.building' | translate }}</mat-label>
+                <input matInput formControlName="building">
+              </mat-form-field>
+            </div>
+            <div class="edit-actions">
+              <button mat-button type="button" (click)="cancelEditCustomer()">
+                {{ 'myRegistrations.edit.cancel' | translate }}
+              </button>
+              <button mat-flat-button color="primary" type="button"
+                      (click)="saveCustomer()"
+                      [disabled]="customerEditForm.invalid || customerSaving">
+                {{ customerSaving ? ('myRegistrations.edit.saving' | translate) : ('myRegistrations.edit.save' | translate) }}
+              </button>
+            </div>
+          </form>
+          } @else {
           <div class="info-row">
             <mat-icon>account_circle</mat-icon>
             <div class="info-content">
@@ -135,9 +217,9 @@
               <span>{{registrationDetails.customerInfo.address}} {{registrationDetails.customerInfo.building}}</span>
             </div>
           </div>
+          }
         </mat-card-content>
       </mat-card>
-
 
       <!-- Appointment Card -->
       <mat-card class="info-card appointment-card">
@@ -192,20 +274,79 @@
       </h2>
 
       <div class="orders-list">
-        @for (order of registrationDetails.vaccinationOrders; track order) {
+        @for (order of registrationDetails.vaccinationOrders; track order.id) {
           <mat-card class="pet-order-card">
             <div class="pet-header">
               <div class="pet-title">
                 <h3>{{order.petInfo.petName}}</h3>
-                <span class="pet-subtitle">{{order.petInfo.birthDate | date :  'yyyy年M月d日'}} • {{order.petInfo.breed}} • {{ ('myRegistrations.gender.' + order.petInfo.gender)  | translate }} • {{order.petInfo.weight}}kg</span>
+                <span class="pet-subtitle">{{order.petInfo.birthDate | date: 'yyyy年M月d日'}} • {{order.petInfo.breed}} • {{ ('myRegistrations.gender.' + order.petInfo.gender) | translate }} • {{order.petInfo.weight}}kg</span>
               </div>
               <div class="pet-size-badge" [attr.data-size]="order.petInfo.size">
                 {{ 'myRegistrations.petSize' | translate }}
-                : {{ ('myRegistrations.size.' + order.petInfo.size)  | translate }}
+                : {{ ('myRegistrations.size.' + order.petInfo.size) | translate }}
               </div>
+              <!-- FE-2 / FE-6 / FE-7: action buttons, hidden when locked -->
+              @if (!editLocked) {
+              <div class="pet-header-actions">
+                <button mat-icon-button
+                        [matTooltip]="'myRegistrations.edit.editPet' | translate"
+                        [disabled]="petEditMode[order.id]"
+                        (click)="startEditPet(order.id)">
+                  <mat-icon>edit</mat-icon>
+                </button>
+                <!-- last order → tooltip warns registration will be cancelled -->
+                <button mat-icon-button
+                        color="warn"
+                        [matTooltip]="registrationDetails.vaccinationOrders.length === 1
+                          ? ('myRegistrations.edit.deleteLastOrderTooltip' | translate)
+                          : ('myRegistrations.edit.deleteOrder' | translate)"
+                        [disabled]="petEditMode[order.id] || orderDeleting[order.id]"
+                        (click)="deleteOrder(order.id)">
+                  <mat-icon>delete</mat-icon>
+                </button>
+              </div>
+              }
             </div>
 
             <mat-card-content>
+              <!-- FE-5: inline pet edit form -->
+              @if (petEditMode[order.id]) {
+              <div class="pet-edit-form-container animate__animated animate__fadeInUp">
+                <form [formGroup]="petEditForms[order.id]" class="edit-form">
+                  <div class="edit-form-grid">
+                    <mat-form-field appearance="outline">
+                      <mat-label>{{ 'myRegistrations.edit.petName' | translate }}</mat-label>
+                      <input matInput formControlName="petName">
+                    </mat-form-field>
+                    <mat-form-field appearance="outline">
+                      <mat-label>{{ 'myRegistrations.edit.breed' | translate }}</mat-label>
+                      <input matInput formControlName="breed">
+                    </mat-form-field>
+                    <mat-form-field appearance="outline">
+                      <mat-label>{{ 'myRegistrations.edit.furColor' | translate }}</mat-label>
+                      <input matInput formControlName="furColor">
+                    </mat-form-field>
+                    <div class="pet-readonly-field">
+                      <label>{{ 'myRegistrations.edit.weight' | translate }}</label>
+                      <span>{{order.petInfo.weight}}kg &nbsp;·&nbsp; {{ ('myRegistrations.size.' + order.petInfo.size) | translate }}</span>
+                      <small>{{ 'myRegistrations.edit.weightReadonlyHint' | translate }}</small>
+                    </div>
+                  </div>
+                  <div class="edit-actions">
+                    <button mat-button type="button" (click)="cancelEditPet(order.id)">
+                      {{ 'myRegistrations.edit.cancel' | translate }}
+                    </button>
+                    <button mat-flat-button color="primary" type="button"
+                            (click)="savePet(order.id)"
+                            [disabled]="petEditForms[order.id].invalid || petSaving[order.id]">
+                      {{ petSaving[order.id] ? ('myRegistrations.edit.saving' | translate) : ('myRegistrations.edit.save' | translate) }}
+                    </button>
+                  </div>
+                </form>
+                <mat-divider style="margin: 1rem 0;"></mat-divider>
+              </div>
+              }
+
               <table class="order-table">
                 <thead>
                   <tr>
@@ -253,4 +394,3 @@
   </div>
   }
 </div>
-

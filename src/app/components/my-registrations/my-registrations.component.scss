@@ -245,7 +245,119 @@
 }
 .animate__fadeInUp { animation-name: fadeInUp; }
 
-/* Responsive Adjustments */
+/* ── Edit feature styles ─────────────────────────────────────────────────── */
+
+/* registration cancelled banner (inside search card) */
+.registration-cancelled-banner {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  background: #fce4ec;
+  color: #b71c1c;
+  border: 1px solid #ef9a9a;
+  border-radius: 8px;
+  padding: 0.875rem 1rem;
+  margin: 0 1.5rem 1rem;
+  mat-icon { font-size: 20px; width: 20px; height: 20px; flex-shrink: 0; }
+  span { font-size: 0.9rem; }
+}
+
+/* FE-10: session expired banner (inside search card) */
+.session-expired-banner {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  background: #fff3e0;
+  color: #e65100;
+  border: 1px solid #ffcc80;
+  border-radius: 8px;
+  padding: 0.875rem 1rem;
+  margin: 0 1.5rem 1rem;
+  mat-icon { font-size: 20px; width: 20px; height: 20px; flex-shrink: 0; }
+  span { font-size: 0.9rem; }
+}
+
+/* FE-3: edit locked banner (inside details view) */
+.edit-locked-banner {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  background: #fff8e1;
+  color: #f57f17;
+  border: 1px solid #ffe082;
+  border-radius: 8px;
+  padding: 0.875rem 1.25rem;
+  margin-bottom: 1.5rem;
+  mat-icon { font-size: 20px; width: 20px; height: 20px; flex-shrink: 0; }
+}
+
+/* card-title-row: mat-card-header + edit button side-by-side */
+.card-title-row {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  padding-right: 8px;
+}
+
+/* pet-header-actions: edit + delete buttons in pet card header */
+.pet-header-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.1rem;
+  margin-left: auto;
+  flex-shrink: 0;
+}
+
+/* Shared inline edit form */
+.edit-form {
+  padding: 0.25rem 0 0.5rem;
+}
+
+.edit-form-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.5rem 1rem;
+
+  .full-span {
+    grid-column: 1 / -1;
+  }
+}
+
+.edit-actions {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 0.5rem;
+  margin-top: 0.75rem;
+  padding-top: 0.75rem;
+  border-top: 1px solid #f0f0f0;
+}
+
+.pet-edit-form-container {
+  margin-bottom: 0.5rem;
+}
+
+.pet-readonly-field {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 0.5rem 0.75rem;
+  border: 1px solid #e0e0e0;
+  border-radius: 4px;
+  background: #fafafa;
+
+  label {
+    font-size: 0.72rem;
+    color: #90a4ae;
+    text-transform: uppercase;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+  }
+  span { color: #37474f; font-weight: 500; font-size: 0.95rem; }
+  small { color: #b0bec5; font-size: 0.75rem; margin-top: 2px; }
+}
+
+/* ── Responsive Adjustments */
 @media (max-width: 600px) {
   .my-registrations-container { padding: 1rem 0.5rem; }
 
@@ -318,4 +430,11 @@
     padding: 1rem;
     .total-amount { font-size: 1.5rem; }
   }
+
+  .edit-form-grid {
+    grid-template-columns: 1fr;
+    .full-span { grid-column: 1; }
+  }
+
+  .pet-header-actions { gap: 0; }
 }
