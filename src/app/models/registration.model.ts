@@ -49,4 +49,7 @@ export interface AppointmentDetailResponse {
   address: string;
   phone: string;
   hospital: string;
+  prefectureId?: number;
+  locationId?: number;
+  timeSlotId?: number;
 }

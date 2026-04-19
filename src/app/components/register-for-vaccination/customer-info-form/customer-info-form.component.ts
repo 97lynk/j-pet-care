@@ -36,6 +36,8 @@ import {MatIconModule} from '@angular/material/icon';
 export class CustomerInfoFormComponent implements OnInit {
 
   @Input() form!: AbstractControl | null;
+  @Input() addOrderMode = false;
+  @Input() appointmentInfo: any = null;
   @Output() onSubmit = new EventEmitter<any>();
 
   prefectureOptions = PREFECTURE_OPTIONS;

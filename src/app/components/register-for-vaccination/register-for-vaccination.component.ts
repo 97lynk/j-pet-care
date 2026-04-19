@@ -1,4 +1,5 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
+import {Router} from '@angular/router';
 import {TranslateModule, TranslateService} from '@ngx-translate/core';
 import {
   AbstractControl,
@@ -63,6 +64,8 @@ export class RegisterForVaccinationComponent implements OnInit, OnDestroy {
   finalRegistrationCode: string | null = null;
   finalAppointmentDetails: string | null = null;
   loading = false;
+  addOrderMode = false;
+  addOrderState: any = null;
 
   customerInfoForm = this.fb.group({
     fullName: ['', Validators.required],
@@ -106,7 +109,8 @@ export class RegisterForVaccinationComponent implements OnInit, OnDestroy {
     private registerService: RegisterService,
     private datePipe: DatePipe,
     private dialog: MatDialog,
-    private translate: TranslateService
+    private translate: TranslateService,
+    private router: Router,
   ) {
     this.petInfoForms = this.fb.group({
       pets: this.fb.array([]),
@@ -117,6 +121,12 @@ export class RegisterForVaccinationComponent implements OnInit, OnDestroy {
     this.pets.valueChanges.pipe(takeUntil(this.ngUnsubscribe)).subscribe(() => {
       this.recalculateTotal();
     });
+
+    const state = history.state;
+    if (state?.mode === 'ADD_ORDER') {
+      this.addOrderMode = true;
+      this.addOrderState = state;
+    }
 
     this.productService.getAllProduct().subscribe((products: VaccineProductDto[]) => {
       const comboProducts: VaccineProductDto[] = [];
@@ -148,6 +158,10 @@ export class RegisterForVaccinationComponent implements OnInit, OnDestroy {
       });
 
       this.addPet();
+
+      if (this.addOrderMode && this.addOrderState) {
+        this.prefillCustomerForm(this.addOrderState);
+      }
     });
   }
 
@@ -312,17 +326,67 @@ export class RegisterForVaccinationComponent implements OnInit, OnDestroy {
     this.registerService.register(request).subscribe({
       next: (response) => {
         this.loading = false;
+        if (this.addOrderMode) {
+          this.router.navigate(['/my-registrations'], {
+            state: {
+              addedOrder: true,
+              registrationCode: this.addOrderState.registrationCode,
+              registrationDetails: this.addOrderState.registrationDetails,
+              editJwt: this.addOrderState.editJwt,
+              editLocked: this.addOrderState.editLocked,
+            }
+          });
+          return;
+        }
         this.finalRegistrationCode = response.registrationCode;
         const formattedDate = this.datePipe.transform(response.appointmentDate, 'yyyy年M月d日');
         this.finalAppointmentDetails = `日付：${formattedDate}\n時間: ${response.timeSlotLabel}\n会場（店舗名): ${response.locationName}`;
-
-        stepper.next(); // Move to the success step
+        stepper.next();
       },
-      error: () => {
+      error: (err: any) => {
         this.loading = false;
-        // Handle error (e.g., show a snackbar)
+        if (this.addOrderMode) {
+          if (err.status === 401) {
+            this.router.navigate(['/my-registrations'], { queryParams: { reason: 'session_expired' } });
+          } else if (err.status === 423) {
+            this.router.navigate(['/my-registrations'], { queryParams: { reason: 'edit_locked' } });
+          }
+        }
       }
     });
+  }
+
+  private prefillCustomerForm(state: any): void {
+    const ci = state.customerInfo;
+    const ai = state.appointmentInfo;
+    this.customerInfoForm.patchValue({
+      fullName: ci.fullName,
+      furigana: ci.furigana,
+      postalCode: ci.postalCode,
+      prefecture: ci.prefecture,
+      municipality: ci.municipality,
+      address: ci.address,
+      building: ci.building ?? '',
+      phone: `0${ci.phoneNumber}`,
+      email: ci.email,
+      verificationMethod: 'edit_jwt',
+      token: state.editJwt,
+      appointment: {
+        prefectureId: ai?.prefectureId ?? null,
+        locationId: ai?.locationId ?? null,
+        timeSlotId: ai?.timeSlotId ?? null,
+      },
+    });
+    this.customerInfoForm.get('phone')?.disable();
+    this.customerInfoForm.get('email')?.disable();
+    // if IDs are missing from the response, clear validators so the form stays valid
+    if (!ai?.locationId || !ai?.timeSlotId) {
+      const appt = this.customerInfoForm.get('appointment') as FormGroup;
+      ['prefectureId', 'locationId', 'timeSlotId'].forEach(key => {
+        appt.get(key)?.clearValidators();
+        appt.get(key)?.updateValueAndValidity();
+      });
+    }
   }
 
   private formatPhoneNumber(phone: string | null): string {

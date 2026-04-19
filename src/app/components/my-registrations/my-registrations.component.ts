@@ -77,6 +77,9 @@ export class MyRegistrationsComponent implements OnInit {
   // order delete keyed by orderId (FE-6)
   orderDeleting: Record<number, boolean> = {};
 
+  // add-pet flow
+  addOrderSuccess = false;
+
   constructor(
     private fb: FormBuilder,
     private registerService: RegisterService,
@@ -92,6 +95,33 @@ export class MyRegistrationsComponent implements OnInit {
       this.sessionExpired = reason === 'session_expired';
       this.registrationCancelled = reason === 'registration_cancelled';
     });
+    const nav = history.state;
+    if (nav?.addedOrder === true) {
+      this.addOrderSuccess = true;
+      const code: string = nav.registrationCode;
+      const jwt: string = nav.editJwt;
+      if (code && jwt) {
+        this.registerService.getDetailsByEditJwt(code, jwt).subscribe({
+          next: (data) => {
+            this.registrationDetails = data;
+            this.editJwt = data.editJwt ?? jwt;
+            this.editLocked = data.editLocked ?? false;
+            this.editLockedReason = data.editLockedReason ?? null;
+            this.otpSent = true;
+            this.initEditForms(data);
+          },
+          error: () => {
+            if (nav.registrationDetails) {
+              this.registrationDetails = nav.registrationDetails;
+              this.editJwt = jwt;
+              this.editLocked = nav.editLocked ?? false;
+              this.otpSent = true;
+              this.initEditForms(nav.registrationDetails);
+            }
+          }
+        });
+      }
+    }
   }
 
   calculateOrderTotal(order: any): number {
@@ -291,6 +321,25 @@ export class MyRegistrationsComponent implements OnInit {
         },
         error: (err) => this.handleMutationError(err),
       });
+    });
+  }
+
+  // ── add-pet flow ──────────────────────────────────────────────────────────
+
+  onAddPet(): void {
+    const code = this.registrationDetails!.registrationCode;
+    const ci = this.registrationDetails!.customerInfo;
+    const ai = this.registrationDetails!.appointmentInfo;
+    this.router.navigate(['/register'], {
+      state: {
+        mode: 'ADD_ORDER',
+        registrationCode: code,
+        editJwt: this.editJwt,
+        editLocked: this.editLocked,
+        customerInfo: ci,
+        appointmentInfo: ai,
+        registrationDetails: this.registrationDetails,
+      }
     });
   }
 

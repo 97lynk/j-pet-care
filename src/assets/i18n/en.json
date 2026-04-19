@@ -122,7 +122,7 @@
       "petName": "Pet Name",
       "breed": "Breed",
       "furColor": "Fur Color",
-      "weight": "Weight (kg)",
+      "weight": "Weight / Size",
       "derivedSize": "Derived size",
       "fullName": "Full Name",
       "furigana": "Furigana",
@@ -132,9 +132,11 @@
       "municipality": "Municipality",
       "address": "Address",
       "building": "Building / Room",
-      "weight": "Weight / Size",
       "weightReadonlyHint": "Weight and size cannot be changed here — please remove this order and register again."
-    }
+    },
+    "addPet": "Add Pet",
+    "addPetSuccess": "Pet added successfully. Please check your reservation details.",
+    "addPetMaxReached": "A maximum of 5 pets can be registered per reservation"
   },
   "cancel": {
     "title": "Cancel Registration",
@@ -191,7 +193,8 @@
     "verifyButton": "Verify Phone / Email",
     "verifyTitle": "Verify Contact Information",
     "cancel": "Cancel",
-    "confirm": "Confirm"
+    "confirm": "Confirm",
+    "appointment": "Appointment"
   },
   "petForm": {
     "title": "Pet Information",

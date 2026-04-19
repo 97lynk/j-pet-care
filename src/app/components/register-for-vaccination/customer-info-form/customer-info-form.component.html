@@ -101,7 +101,7 @@
 
 <!--      <div>error {{ getFormValidationErrors(customerForm) | json  }}</div>-->
 
-      @if (!isPhoneVerified && !isEmailVerified) {
+      @if (!addOrderMode && !isPhoneVerified && !isEmailVerified) {
         <button mat-raised-button color="accent"
                 class="submit"
                 (click)="openVerificationDialog()"
@@ -110,10 +110,31 @@
         </button>
       }
 
-      @if (isPhoneVerified || isEmailVerified) {
+      @if (addOrderMode) {
+        <div class="appointment-readonly-card">
+          <div class="appointment-readonly-row">
+            <span class="appointment-readonly-label">{{ 'customerForm.appointment' | translate }}</span>
+            <span class="appointment-readonly-value">
+              {{ appointmentInfo?.locationName }}
+              &nbsp;·&nbsp;
+              {{ appointmentInfo?.appointmentDate | date: 'yyyy年M月d日' }}
+              &nbsp;·&nbsp;
+              {{ appointmentInfo?.timeSlotLabel }}
+            </span>
+          </div>
+        </div>
+
+        <button mat-raised-button color="primary"
+                class="submit"
+                (click)="submit()"
+                [disabled]="form.invalid">
+          {{ 'customerForm.submit' | translate }}
+        </button>
+      }
+
+      @if (!addOrderMode && (isPhoneVerified || isEmailVerified)) {
         <app-appointment-details [form]="customerForm.get('appointment')" />
 
-        <!-- ACTIONS -->
         <button mat-raised-button color="primary"
                 class="submit"
                 (click)="submit()"

@@ -122,7 +122,7 @@
       "petName": "ペット名",
       "breed": "犬種",
       "furColor": "毛の色",
-      "weight": "体重 (kg)",
+      "weight": "体重 / 体格",
       "derivedSize": "体格",
       "fullName": "氏名",
       "furigana": "フリガナ",
@@ -132,9 +132,11 @@
       "municipality": "市区町村",
       "address": "番地",
       "building": "建物名 / 部屋番号",
-      "weight": "体重 / 体格",
       "weightReadonlyHint": "体重・体格の変更はクリニックにお問い合わせください。"
-    }
+    },
+    "addPet": "ペットを追加",
+    "addPetSuccess": "ペットが追加されました。予約内容を確認してください。",
+    "addPetMaxReached": "1回の予約に登録できるペットは最大5匹です"
   },
   "cancel": {
     "title": "予約のキャンセル",
@@ -191,7 +193,8 @@
     "verifyButton": "次の画面へ進む",
     "verifyTitle": "連絡先の確認",
     "cancel": "キャンセル",
-    "confirm": "確認"
+    "confirm": "確認",
+    "appointment": "予約情報"
   },
   "petForm": {
     "title": "ペット情報",

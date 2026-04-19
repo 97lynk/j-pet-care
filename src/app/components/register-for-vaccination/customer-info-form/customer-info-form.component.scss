@@ -50,3 +50,31 @@
 .disclaimer-note {
   margin: 10px 0;
 }
+
+.appointment-readonly-card {
+  background: #f1f8e9;
+  border: 1px solid #a5d6a7;
+  border-radius: 8px;
+  padding: 0.875rem 1rem;
+  margin: 1rem 0;
+}
+
+.appointment-readonly-row {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.appointment-readonly-label {
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  color: #558b2f;
+  letter-spacing: 0.04em;
+}
+
+.appointment-readonly-value {
+  font-size: 0.95rem;
+  font-weight: 500;
+  color: #2e7d32;
+}

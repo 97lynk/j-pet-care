@@ -56,6 +56,13 @@ export class RegisterService {
     return this.http.post<RegistrationDetailsResponse>(`${this.BASE_API}/view/${registrationCode}/details`, { phoneNumber, otp });
   }
 
+  getDetailsByEditJwt(registrationCode: string, editJwt: string): Observable<RegistrationDetailsResponse> {
+    return this.http.get<RegistrationDetailsResponse>(
+      `${this.BASE_API}/view/${registrationCode}/details`,
+      { headers: new HttpHeaders({ Authorization: `Bearer ${editJwt}` }) }
+    );
+  }
+
   updateCustomer(regCode: string, body: object, jwt: string): Observable<void> {
     return this.http.put<void>(
       `${this.BASE_API}/view/${regCode}/customer`,
