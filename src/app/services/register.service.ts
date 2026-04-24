@@ -52,8 +52,16 @@ export class RegisterService {
     return this.http.post<VerificationResponse>(`${this.BASE_API}/view/${registrationCode}/send-otp`, { phoneNumber });
   }
 
+  sendViewRegistrationOtpByEmail(registrationCode: string, email: string): Observable<VerificationResponse> {
+    return this.http.post<VerificationResponse>(`${this.BASE_API}/view/${registrationCode}/send-otp`, { email });
+  }
+
   getRegistrationDetails(registrationCode: string, phoneNumber: string, otp: string): Observable<RegistrationDetailsResponse> {
     return this.http.post<RegistrationDetailsResponse>(`${this.BASE_API}/view/${registrationCode}/details`, { phoneNumber, otp });
+  }
+
+  getRegistrationDetailsByEmail(registrationCode: string, email: string, otp: string): Observable<RegistrationDetailsResponse> {
+    return this.http.post<RegistrationDetailsResponse>(`${this.BASE_API}/view/${registrationCode}/details`, { email, otp });
   }
 
   getDetailsByEditJwt(registrationCode: string, editJwt: string): Observable<RegistrationDetailsResponse> {

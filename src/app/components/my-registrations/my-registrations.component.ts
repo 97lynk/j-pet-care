@@ -7,6 +7,7 @@ import { MatCardModule } from '@angular/material/card';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatButton, MatButtonModule } from '@angular/material/button';
+import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { finalize } from 'rxjs/operators';
 
@@ -42,14 +43,18 @@ import { QRCodeComponent } from 'angularx-qrcode';
     LineBreakPipe,
     QRCodeComponent,
     MatDialogModule,
+    MatButtonToggleModule,
   ],
 })
 export class MyRegistrationsComponent implements OnInit {
   viewForm = this.fb.group({
     registrationCode: ['', [Validators.required, Validators.minLength(10)]],
     phoneNumber: ['', [Validators.required, Validators.pattern(/^[0-9+-\s]{10,}$/)]],
+    email: ['', [Validators.email]],
     otp: [''],
   });
+
+  verifyChannel: 'phone' | 'email' = 'phone';
 
   message: string | null = null;
   isError = false;
@@ -141,20 +146,47 @@ export class MyRegistrationsComponent implements OnInit {
     return 'LARGE';
   }
 
+  setChannel(channel: 'phone' | 'email'): void {
+    if (this.verifyChannel === channel) return;
+    this.verifyChannel = channel;
+    this.otpSent = false;
+    this.message = null;
+    this.isError = false;
+    this.viewForm.get('otp')?.clearValidators();
+    this.viewForm.get('otp')?.setValue('');
+    this.viewForm.get('otp')?.updateValueAndValidity();
+    if (channel === 'email') {
+      this.viewForm.get('phoneNumber')?.clearValidators();
+      this.viewForm.get('phoneNumber')?.updateValueAndValidity();
+      this.viewForm.get('email')?.setValidators([Validators.required, Validators.email]);
+      this.viewForm.get('email')?.updateValueAndValidity();
+    } else {
+      this.viewForm.get('email')?.clearValidators();
+      this.viewForm.get('email')?.updateValueAndValidity();
+      this.viewForm.get('phoneNumber')?.setValidators([Validators.required, Validators.pattern(/^[0-9+-\s]{10,}$/)]);
+      this.viewForm.get('phoneNumber')?.updateValueAndValidity();
+    }
+  }
+
   onSearch(): void {
-    if (this.viewForm.get('registrationCode')?.valid && this.viewForm.get('phoneNumber')?.valid && !this.submitting) {
+    const codeValid = this.viewForm.get('registrationCode')?.valid;
+    const channelValid = this.verifyChannel === 'phone'
+      ? this.viewForm.get('phoneNumber')?.valid
+      : this.viewForm.get('email')?.valid;
+    if (codeValid && channelValid && !this.submitting) {
       this.submitting = true;
       this.message = null;
       this.isError = false;
       const code = this.viewForm.value.registrationCode!;
-      const phone = this.formatPhoneNumber(this.viewForm.value.phoneNumber!);
 
-      this.registerService.sendViewRegistrationOtp(code, phone).pipe(
-        finalize(() => this.submitting = false)
-      ).subscribe({
+      const request$ = this.verifyChannel === 'phone'
+        ? this.registerService.sendViewRegistrationOtp(code, this.formatPhoneNumber(this.viewForm.value.phoneNumber!))
+        : this.registerService.sendViewRegistrationOtpByEmail(code, this.viewForm.value.email!);
+
+      request$.pipe(finalize(() => this.submitting = false)).subscribe({
         next: () => {
           this.otpSent = true;
-          this.message = 'myRegistrations.otpSent';
+          this.message = this.verifyChannel === 'phone' ? 'myRegistrations.otpSent' : 'myRegistrations.otpSentEmail';
           this.viewForm.get('otp')?.setValidators([Validators.required, Validators.minLength(6)]);
           this.viewForm.get('otp')?.updateValueAndValidity();
         },
@@ -173,12 +205,13 @@ export class MyRegistrationsComponent implements OnInit {
       this.message = null;
       this.isError = false;
       const code = this.viewForm.value.registrationCode!;
-      const phone = this.formatPhoneNumber(this.viewForm.value.phoneNumber!);
       const otp = this.viewForm.value.otp!;
 
-      this.registerService.getRegistrationDetails(code, phone, otp).pipe(
-        finalize(() => this.submitting = false)
-      ).subscribe({
+      const request$ = this.verifyChannel === 'phone'
+        ? this.registerService.getRegistrationDetails(code, this.formatPhoneNumber(this.viewForm.value.phoneNumber!), otp)
+        : this.registerService.getRegistrationDetailsByEmail(code, this.viewForm.value.email!, otp);
+
+      request$.pipe(finalize(() => this.submitting = false)).subscribe({
         next: (data) => {
           this.registrationDetails = data;
           if (data.editJwt) {

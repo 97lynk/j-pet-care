@@ -39,12 +39,37 @@
           <mat-icon matPrefix>confirmation_number</mat-icon>
         </mat-form-field>
 
+        @if (!otpSent) {
+        <mat-button-toggle-group [value]="verifyChannel" (change)="setChannel($event.value)" class="channel-toggle">
+          <mat-button-toggle value="phone">
+            <mat-icon>phone</mat-icon>
+            {{ 'myRegistrations.channelPhone' | translate }}
+          </mat-button-toggle>
+          <mat-button-toggle value="email">
+            <mat-icon>email</mat-icon>
+            {{ 'myRegistrations.channelEmail' | translate }}
+          </mat-button-toggle>
+        </mat-button-toggle-group>
+        }
+
+        @if (verifyChannel === 'phone') {
         <mat-form-field appearance="outline" class="full-width">
           <mat-label>{{ 'myRegistrations.phone' | translate }}</mat-label>
           <input matInput formControlName="phoneNumber"
                  [readonly]="otpSent || submitting">
           <mat-icon matPrefix>phone</mat-icon>
         </mat-form-field>
+        }
+
+        @if (verifyChannel === 'email') {
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>{{ 'myRegistrations.email' | translate }}</mat-label>
+          <input matInput formControlName="email" type="email"
+                 placeholder="{{ 'myRegistrations.emailPlaceholder' | translate }}"
+                 [readonly]="otpSent || submitting">
+          <mat-icon matPrefix>email</mat-icon>
+        </mat-form-field>
+        }
 
         @if (otpSent) {
         <div class="otp-section animate__animated animate__fadeInUp">
@@ -52,7 +77,7 @@
             <mat-label>{{ 'myRegistrations.otp' | translate }}</mat-label>
             <input matInput formControlName="otp"
                    [maxlength]="6"
-                   placeholder="{{ 'myRegistrations.otpPlaceholder' | translate }}"
+                   placeholder="{{ (verifyChannel === 'email' ? 'myRegistrations.otpPlaceholderEmail' : 'myRegistrations.otpPlaceholder') | translate }}"
                    [readonly]="submitting">
             <mat-icon matPrefix>lock</mat-icon>
           </mat-form-field>
@@ -73,7 +98,7 @@
       <button mat-flat-button
               color="primary"
               (click)="onSearch()"
-              [disabled]="viewForm.get('registrationCode')?.invalid || viewForm.get('phoneNumber')?.invalid || submitting">
+              [disabled]="viewForm.get('registrationCode')?.invalid || (verifyChannel === 'phone' ? viewForm.get('phoneNumber')?.invalid : viewForm.get('email')?.invalid) || submitting">
         <mat-icon>send</mat-icon>
         {{ 'myRegistrations.search' | translate }}
       </button>
